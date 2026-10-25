@@ -13,6 +13,7 @@ from sqlalchemy.orm import Session
 from .. import config
 from .. import models as m
 from .audit import log_event
+from . import matching
 from .reporters import make_fingerprint
 
 FIRST_ACTION = "Acknowledged"
@@ -32,7 +33,7 @@ def _next_number(db: Session, column, prefix: str) -> int:
     return int(last.split("-")[1]) + 1 if last else 1
 
 
-def _receipt(db: Session, case: m.Case, already_received=False, reporter_is_new=False) -> dict:
+def _receipt(db: Session, case: m.Case, already_received=False, reporter_is_new=False, alerts=None) -> dict:
     inst = db.get(m.Institution, case.institution_id) if case.institution_id else None
     return {
         "hub_case_id": case.hub_case_id, "source_case_no": case.source_case_no, "status": case.status,
@@ -41,7 +42,7 @@ def _receipt(db: Session, case: m.Case, already_received=False, reporter_is_new=
         "received_at": case.received_at.isoformat(timespec="seconds"),
         "expected_disposal_date": case.expected_disposal_date.isoformat() if case.expected_disposal_date else None,
         "already_received": already_received, "reporter_is_new": reporter_is_new,
-        "alerts_created": [],  # filled by overlap detection in M6
+        "alerts_created": alerts or [],  # overlap / duplicate / corroboration suggestions made by this complaint
     }
 
 
@@ -100,6 +101,6 @@ def receive_complaint(db: Session, portal: str, data) -> tuple[dict, bool]:
     log_event(db, actor=f"portal:{portal}", action="CASE_RECEIVED", entity_type="case", entity_id=case.hub_case_id,
               detail={"source_case_no": data.source_case_no, "institution_id": institution_id,
                       "resolution_method": resolution})
-    # M6 hook: overlap / duplicate detection runs here and fills `alerts_created`.
+    alerts = matching.detect_for_case(db, case)  # M6: suggestions + alerts, officers decide later
     db.commit()
-    return _receipt(db, case, reporter_is_new=reporter_is_new), True
+    return _receipt(db, case, reporter_is_new=reporter_is_new, alerts=alerts), True

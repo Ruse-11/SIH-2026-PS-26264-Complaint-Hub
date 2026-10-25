@@ -12,7 +12,8 @@
 - **M5 fix** Portal: removed the red error that showed on the "Verify your phone" step. Guided questions: every dropdown now lists all its choices, so you can change State directly; answers that no longer fit are cleared automatically.
 
 ## Next
-- **M6** overlap detection A/B/C + alerts (fills `alerts_created`), then M7 confirm/reject, M8 dashboard.
+- **M6 DONE** Overlap detection A/B/C (TF-IDF baseline), suggestions with reasons, alerts, `alerts_created` in the receipt, `GET /api/matching/links`, `GET /api/alerts`. Dataset is backfilled at seed time. T_A=0.20 and T_B=0.35 are tuned placeholders for the TF-IDF baseline.
+- **Next: M7** officer confirm/reject + audit + priority update, then M8 dashboard.
 
 ## Run (Windows, from the project folder)
 ```

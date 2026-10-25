@@ -16,6 +16,7 @@ from . import models as m
 from .services.auth import DEMO_PASSWORD, hash_password
 from .services.institutions import normalize_name
 from .services.reporters import make_fingerprint
+from .services import matching
 
 # ---- Config tables. These are ASSUMPTIONS about AICTE rules (labelled so in the PPT) and can be edited in the DB. ----
 STANCES = {
@@ -34,8 +35,8 @@ CATEGORY_OWNER = {  # which bureau normally leads a category: regulatory -> RB, 
 }
 SLA_DAYS = {"PGRC": 30, "RB": 45}  # default days to dispose, per bureau
 THRESHOLDS = [  # key, value, description
-    ("T_A", 0.75, "same-reporter duplicate: minimum text similarity"),
-    ("T_B", 0.65, "corroboration: minimum text similarity"),
+    ("T_A", 0.20, "same-reporter duplicate: minimum text similarity (low, because reporter, institution and category already match)"),
+    ("T_B", 0.35, "corroboration: minimum text similarity (TF-IDF baseline; raise after the M12 embeddings upgrade)"),
     ("CONFLICT_WINDOW_DAYS", 30, "enforcing vs closing action in different bureaus within N days = conflict"),
     ("DUPLICATE_ACTION_DAYS", 10, "same kind of action by two bureaus within N days = duplicate action"),
     ("STARVATION_DAYS", 30, "open case with no action for N days = stalled"),
@@ -155,6 +156,8 @@ def run(engine=None) -> dict:
                   "reporters": load_reporters(db)}
         db.flush()  # institutions and reporters must exist before the cases that point to them
         counts["cases"], counts["actions"] = load_cases_and_actions(db)
+        db.flush()
+        counts["suggestions"] = matching.rebuild_all(db)  # M6: overlap suggestions for the loaded cases
         db.commit()
     return counts
 
