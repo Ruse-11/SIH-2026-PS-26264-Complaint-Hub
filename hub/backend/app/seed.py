@@ -13,6 +13,7 @@ from sqlalchemy.orm import Session
 from . import config
 from .db import Base, engine as default_engine
 from . import models as m
+from .services.auth import DEMO_PASSWORD, hash_password
 from .services.institutions import normalize_name
 from .services.reporters import make_fingerprint
 
@@ -50,6 +51,22 @@ def read_csv(name):
 
 def at_time(day: str, hour: int) -> datetime:
     return datetime.combine(date.fromisoformat(day), time(hour, 0))
+
+
+DEMO_USERS = [  # username, role, display name, bureau, region. One account per target user of the PS.
+    ("rb.officer", "rb_officer", "Officer RB-01", "RB", None),
+    ("pgrc.officer", "pgrc_officer", "Officer PGRC-01", "PGRC", None),
+    ("other.bureau", "other_bureau", "Officer OB-01 (Other bureau)", "OTHER", None),
+    ("regional.south", "regional_office", "Regional Office, South", None, "South"),
+    ("senior.mgmt", "senior_management", "Senior Management", None, None),
+    ("competent.authority", "competent_authority", "Competent Authority", None, None),
+]
+
+
+def load_users(db: Session):
+    db.add_all(m.User(username=u, password_hash=hash_password(DEMO_PASSWORD), role=r, display_name=n,
+                      bureau=b, region=g) for u, r, n, b, g in DEMO_USERS)
+    return len(DEMO_USERS)
 
 
 def load_config(db: Session):
@@ -133,6 +150,7 @@ def run(engine=None) -> dict:
     Base.metadata.create_all(engine)
     with Session(engine) as db:
         load_config(db)
+        load_users(db)
         counts = {"institutions": load_institutions(db), "aliases": load_aliases(db),
                   "reporters": load_reporters(db)}
         db.flush()  # institutions and reporters must exist before the cases that point to them

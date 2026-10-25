@@ -8,7 +8,7 @@ Updated after every module.
 | Project scaffold, run_all, health check | hub/backend/app/main.py, run_all.py | hub/frontend/src/App.jsx | DONE (M0) |
 | Models + CSV seed loader | models.py, seed.py, services/institutions.py (normalizer), services/reporters.py (fingerprint) | data/*.csv | DONE (M1) |
 | Institution registry, search, name resolver, guided filters, profile | routers/institutions.py, services/institutions.py | shared/institution-finder.js (UI in M5) | DONE (M2) |
-| Login + roles | routers/auth.py | pages/Login.jsx | TODO (M3, cut to dropdown if behind) |
+| Login + roles (JWT, 6 seeded demo accounts, role permissions) | routers/auth.py, services/auth.py | pages/Login.jsx, src/auth.jsx, App.jsx header | DONE (M3) |
 | Intake API, reporter fingerprint, cases, actions | routers/intake.py, reporters.py, cases.py | – | TODO (M4) |
 | Mock portals + Institution Finder + OTP + token | portal_rb/app.py, portal_pgrc/app.py | shared/institution-finder.js/.css | TODO (M5) (placeholder pages exist) |
 | Matching A/B/C + overlap alert | routers/matching.py, alerts.py, corroboration.py | pages/Overlaps.jsx, Alerts.jsx | TODO (M6) |

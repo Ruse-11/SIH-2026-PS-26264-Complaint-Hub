@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { NavLink, Route, Routes } from "react-router-dom";
+import { Navigate, NavLink, Outlet, Route, Routes } from "react-router-dom";
+import { useAuth } from "./auth.jsx";
 import Login from "./pages/Login.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
 import Cases from "./pages/Cases.jsx";
@@ -43,7 +44,21 @@ function HubStatus() {
   );
 }
 
-export default function App() {
+// Words shown in the header under the user's name: what this role is allowed to see.
+const SCOPE_TEXT = {
+  bureau: "own bureau's cases",
+  assigned: "cases assigned to the bureau",
+  region: "own region only",
+  all: "all cases",
+};
+
+// Permissions that change data. A role with none of them is read-only.
+const ACTIONS = ["can_log_actions", "can_decide_links", "can_transfer", "can_escalate", "can_decide_lead"];
+
+// Sidebar + header around every page after login.
+function Shell() {
+  const { user, logout } = useAuth();
+  const perms = user.permissions;
   return (
     <div className="flex min-h-screen bg-slate-100 text-slate-900">
       <aside className="w-56 shrink-0 bg-slate-900 p-4 text-slate-200">
@@ -62,13 +77,43 @@ export default function App() {
         </nav>
       </aside>
       <div className="flex-1">
-        <header className="flex items-center justify-between border-b bg-white px-6 py-3">
+        <header className="flex items-center justify-between gap-4 border-b bg-white px-6 py-3">
           <span className="text-sm text-slate-500">Officers decide. The system only suggests. (synthetic data)</span>
-          <HubStatus />
+          <div className="flex items-center gap-3">
+            <HubStatus />
+            <div className="text-right leading-tight">
+              <div className="text-sm font-medium">{user.display_name}</div>
+              <div className="text-xs text-slate-500">
+                {user.role_label} · sees {SCOPE_TEXT[perms.view_scope]}
+                {perms.view_scope === "region" ? ` (${user.region})` : ""}
+                {ACTIONS.some((k) => perms[k]) ? "" : " · read-only"}
+              </div>
+            </div>
+            <button onClick={logout} className="rounded border px-3 py-1 text-sm hover:bg-slate-100">Log out</button>
+          </div>
         </header>
         <main className="p-6">
-          <Routes>
-          <Route path="/login" element={<Login />} />
+          <Outlet />
+        </main>
+      </div>
+    </div>
+  );
+}
+
+// Pages after login need a logged-in user; otherwise go to the login page.
+function RequireAuth() {
+  const { user, ready } = useAuth();
+  if (!ready) return <div className="p-8 text-slate-500">Loading…</div>;
+  return user ? <Shell /> : <Navigate to="/login" replace />;
+}
+
+export default function App() {
+  const { user, ready } = useAuth();
+  if (!ready) return <div className="p-8 text-slate-500">Loading…</div>;
+  return (
+    <Routes>
+      <Route path="/login" element={user ? <Navigate to="/" replace /> : <Login />} />
+      <Route element={<RequireAuth />}>
           <Route path="/" element={<Dashboard />} />
           <Route path="/cases" element={<Cases />} />
           <Route path="/cases/:id" element={<CaseDetail />} />
@@ -80,9 +125,7 @@ export default function App() {
           <Route path="/needs-review" element={<NeedsReview />} />
           <Route path="/graph" element={<GraphView />} />
           <Route path="/attention" element={<AttentionIndex />} />
-          </Routes>
-        </main>
-      </div>
-    </div>
+      </Route>
+    </Routes>
   );
 }

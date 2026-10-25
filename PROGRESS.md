@@ -6,9 +6,10 @@
 
 - **M1** 14 tables, CSV loader (`python -m app.seed` from hub/backend): 40 institutions, 212 aliases, 80 reporters, 150 cases, 350 actions, config tables. 3 cases without an institution get status `unverified_institution`.
 - **M2** `GET /api/institutions/search?q=` (resolver), `/filters` (guided questions), `/{id}` (profile). Passes all 45 name tests.
+- **M3** login: `POST /api/auth/login`, `GET /api/auth/me`, 6 demo accounts (password demo123), role rules, login page with one-click role buttons, header shows role and what it can see.
 
 ## Next
-- **M3** login/roles (or role dropdown if behind), then M4 intake, M6 overlap detection, M7 confirm/reject, M8 dashboard.
+- **M4** intake, M6 overlap detection, M7 confirm/reject, M8 dashboard.
 
 ## Run (Windows, from the project folder)
 ```

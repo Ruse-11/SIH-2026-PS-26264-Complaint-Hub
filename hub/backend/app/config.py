@@ -2,7 +2,7 @@
 import os
 from pathlib import Path
 
-VERSION = "0.1.0-m0"
+VERSION = "0.3.0-m3"
 
 # sih-hub/ (this file is sih-hub/hub/backend/app/config.py)
 ROOT = Path(__file__).resolve().parents[3]
@@ -11,7 +11,7 @@ DB_PATH = ROOT / "hub" / "backend" / "hub.db"
 DATABASE_URL = os.getenv("HUB_DATABASE_URL", f"sqlite:///{DB_PATH.as_posix()}")
 
 # Dev-only secrets. Real deployments would read these from the environment.
-JWT_SECRET = os.getenv("HUB_JWT_SECRET", "dev-only-change-me")
+JWT_SECRET = os.getenv("HUB_JWT_SECRET", "dev-only-change-me-dev-only-change-me")
 FINGERPRINT_SECRET = os.getenv("HUB_FINGERPRINT_SECRET", "dev-only-fingerprint-key")  # key for hashing reporter contacts
 PORTAL_API_KEYS = {"RB": "dev-rb-key", "PGRC": "dev-pgrc-key"}  # one key per portal (used from M4)
 
