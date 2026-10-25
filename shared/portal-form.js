@@ -95,7 +95,7 @@
       } }, "Verify")));
     }
     panel.appendChild(otpBox);
-    panel.appendChild(errorBox());
+    if (S.error) panel.appendChild(errorBox());  // errorBox() is null when there is no error
     show(panel);
   }
 

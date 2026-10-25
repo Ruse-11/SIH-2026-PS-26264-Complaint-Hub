@@ -156,18 +156,27 @@ def _programs(inst):
 
 
 def guided_filters(db: Session, state=None, district=None, type=None, area=None, program=None) -> dict:
-    """Narrow the registry by the answers so far. Returns the choices still possible and the matching colleges."""
+    """Narrow the registry by the answers so far.
+
+    Returns the matching colleges and, for each question, the choices that are still possible. The choices for a
+    question ignore that question's own answer, so the reporter can switch from one state to another directly.
+    """
     rows = db.scalars(select(m.Institution).order_by(m.Institution.aicte_id)).all()
-    picked = [i for i in rows
-              if (not state or i.state == state) and (not district or i.district == district)
-              and (not type or i.type == type) and (not area or i.area == area)
-              and (not program or program in _programs(i))]
+    answers = {"state": state, "district": district, "type": type, "area": area, "program": program}
+
+    def fits(inst, skip=None):  # does the college fit every answer except the one named in `skip`?
+        values = {"state": inst.state, "district": inst.district, "type": inst.type, "area": inst.area}
+        return all(a is None or a == "" or k == skip or (a in _programs(inst) if k == "program" else values[k] == a)
+                   for k, a in answers.items())
+
+    def choices(skip, getter):
+        return sorted({v for i in rows if fits(i, skip) for v in getter(i) if v})
+
+    picked = [i for i in rows if fits(i)]
     facets = {
-        "states": sorted({i.state for i in picked if i.state}),
-        "districts": sorted({i.district for i in picked if i.district}),
-        "types": sorted({i.type for i in picked if i.type}),
-        "areas": sorted({i.area for i in picked if i.area}),
-        "programs": sorted({p for i in picked for p in _programs(i)}),
+        "states": choices("state", lambda i: [i.state]), "districts": choices("district", lambda i: [i.district]),
+        "types": choices("type", lambda i: [i.type]), "areas": choices("area", lambda i: [i.area]),
+        "programs": choices("program", _programs),
     }
     names = {i.aicte_id: i.official_name for i in rows}
     return {"count": len(picked), "facets": facets,

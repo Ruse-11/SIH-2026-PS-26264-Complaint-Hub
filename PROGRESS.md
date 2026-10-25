@@ -9,6 +9,7 @@
 - **M3** login: `POST /api/auth/login`, `GET /api/auth/me`, 6 demo accounts (password demo123), role rules, login page with one-click role buttons, header shows role and what it can see.
 - **M4** `POST /api/intake` (X-API-Key per portal): validates the institution ID (never guesses; parent universities rejected), hashes the reporter contact, creates case HUB-nnnn + first action "Acknowledged" + audit row; resending a case number is safe. `GET /api/cases/{id}` shows a case with its history.
 - **M5** RB portal http://localhost:8001 and PGRC portal http://localhost:8002: Institution Finder -> mock OTP -> complaint form -> receipt. Portal case numbers start at 1001 (RB-2026-1001). If the hub is down the complaint waits (sync pending) and is re-sent every 10 s.
+- **M5 fix** Portal: removed the red error that showed on the "Verify your phone" step. Guided questions: every dropdown now lists all its choices, so you can change State directly; answers that no longer fit are cleared automatically.
 
 ## Next
 - **M6** overlap detection A/B/C + alerts (fills `alerts_created`), then M7 confirm/reject, M8 dashboard.

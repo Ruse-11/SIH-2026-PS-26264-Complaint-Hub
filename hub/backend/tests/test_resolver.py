@@ -89,10 +89,19 @@ class ResolverTest(unittest.TestCase):
     def test_api_filters_narrow_step_by_step(self):
         everything = self.client.get("/api/institutions/filters").json()
         self.assertEqual(everything["count"], 40)
-        state = everything["facets"]["states"][0]
-        narrowed = self.client.get("/api/institutions/filters", params={"state": state}).json()
+        states = everything["facets"]["states"]
+        self.assertGreater(len(states), 1)
+        narrowed = self.client.get("/api/institutions/filters", params={"state": states[0]}).json()
         self.assertLess(narrowed["count"], 40)
-        self.assertEqual(narrowed["facets"]["states"], [state])
+        self.assertLess(len(narrowed["facets"]["districts"]), len(everything["facets"]["districts"]))  # other questions shrink
+
+    def test_api_filters_let_you_switch_an_answer_directly(self):
+        states = self.client.get("/api/institutions/filters").json()["facets"]["states"]
+        picked = self.client.get("/api/institutions/filters", params={"state": states[0]}).json()
+        self.assertEqual(picked["facets"]["states"], states)  # the state question still offers every state
+        other = self.client.get("/api/institutions/filters", params={"state": states[1]}).json()
+        self.assertTrue(other["candidates"])
+        self.assertTrue(all(c["state"] == states[1] for c in other["candidates"]))
 
     def test_api_profile(self):
         r = self.client.get("/api/institutions/SYN-0032").json()

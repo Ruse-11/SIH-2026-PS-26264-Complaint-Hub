@@ -136,16 +136,26 @@
     }
 
     // ---------- guided questions ----------
-    function loadGuided() {
+    // Ask the hub what still matches. If changing one answer makes another answer impossible (for example a
+    // district of another state), that answer is dropped automatically and we ask again.
+    function loadGuided(attempt) {
+      attempt = attempt || 0;
       var p = state.guided.picks, qs = Object.keys(p).filter(function (k) { return p[k]; })
         .map(function (k) { return k + "=" + encodeURIComponent(p[k]); }).join("&");
-      getJson("/api/institutions/filters" + (qs ? "?" + qs : "")).then(function (d) { state.guided.data = d; if (state.mode === "guided") render(); })
-        .catch(function () { state.guided.data = { error: true }; render(); });
+      getJson("/api/institutions/filters" + (qs ? "?" + qs : "")).then(function (d) {
+        var stale = GUIDED_FIELDS.filter(function (f) { return p[f[0]] && d.facets[f[2]].indexOf(p[f[0]]) < 0; });
+        if (stale.length && attempt < 5) {
+          stale.forEach(function (f) { delete p[f[0]]; });
+          return loadGuided(attempt + 1);
+        }
+        state.guided.data = d;
+        if (state.mode === "guided") render();
+      }).catch(function () { state.guided.data = { error: true }; render(); });
     }
 
     function renderGuided(box) {
       box.appendChild(h("h2", null, "Let's narrow it down"));
-      box.appendChild(h("p", { class: "hint" }, "Answer what you know, in any order. The list below shrinks as you go."));
+      box.appendChild(h("p", { class: "hint" }, "Answer what you know, in any order. You can change an answer at any time."));
       var d = state.guided.data;
       if (!d) { box.appendChild(h("div", { class: "fmsg" }, "Loading…")); }
       else if (d.error) { box.appendChild(h("div", { class: "error" }, "Cannot reach the institution registry.")); }
