@@ -31,8 +31,10 @@ export default function Dashboard() {
       </div>
 
       <Panel title="Waiting for an officer's decision" right={<Link className="text-sm text-blue-700 hover:underline" to="/overlaps">Open overlaps</Link>}>
-        <div className="grid gap-3 sm:grid-cols-4">
+        <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-6">
           <Mini label="Potential overlapping cases" value={w.cross_bureau} />
+          <Mini label="Conflicting actions" value={w.conflict} tone="red" />
+          <Mini label="Duplicate actions" value={w.duplicate_action} />
           <Mini label="Possible duplicates (same reporter)" value={w.same_reporter} />
           <Mini label="Corroboration suggestions" value={w.corroboration} />
           <Mini label="Open alerts" value={kpi.data.open_alerts} to="/alerts" />
@@ -107,7 +109,7 @@ export default function Dashboard() {
   );
 }
 
-function Mini({ label, value, to }) {
-  const body = <div className="rounded-lg border p-3"><div className="text-2xl font-semibold">{value}</div><div className="text-xs text-slate-500">{label}</div></div>;
+function Mini({ label, value, to, tone }) {
+  const body = <div className="rounded-lg border p-3"><div className={"text-2xl font-semibold " + (tone === "red" && value > 0 ? "text-red-700" : "")}>{value}</div><div className="text-xs text-slate-500">{label}</div></div>;
   return to ? <Link to={to}>{body}</Link> : body;
 }

@@ -15,7 +15,7 @@ Updated after every module.
 | Matching A/B/C + overlap alert | routers/matching.py, alerts.py, services/matching.py, similarity.py | pages/Overlaps.jsx, Alerts.jsx, components/LinkCard.jsx | DONE (M6 API, M8 screens) |
 | Officer confirm/reject, audit, priority | routers/matching.py, audit.py, corroboration.py, services/decisions.py, priority.py | components/LinkCard.jsx, pages/CaseDetail.jsx | DONE (M7 API, M8 buttons); audit screen not built (API only) |
 | Dashboard KPIs, global search, institution profile + history, role scoped views | routers/dashboard.py, search.py, institutions.py, services/dashboard.py | pages/Dashboard, InstitutionProfile, App.jsx header search | DONE (M8) |
-| Conflict rules + lead-bureau suggestion | routers/conflicts.py | – | TODO (M9) |
+| Conflict rules (enforcing vs closing), duplicate action, lead-bureau suggestion + competent authority decision, officers log actions (transfer, escalate, close) | routers/conflicts.py, cases.py, services/conflicts.py, actions.py, matching.py (suggest_lead) | components/LinkCard.jsx, pages/CaseDetail.jsx (Log an action), Overlaps.jsx | DONE (M9) |
 | Starvation / SLA alerts | routers/starvation.py | – | TODO (M10) |
 | Reports + CSV export, Insights panel | routers/reports.py | pages/Reports.jsx, Insights.jsx | TODO (M11) |
 | Embeddings upgrade (fastembed) | services/matching.py | – | TODO (M12, optional) |

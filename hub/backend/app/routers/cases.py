@@ -6,7 +6,7 @@ from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 
 from ..db import get_db
-from ..services import auth, cases as service
+from ..services import actions as action_service, auth, cases as service
 from ._stub import stub_router
 
 router = APIRouter(prefix="/api/cases", tags=["cases"])
@@ -46,6 +46,25 @@ class AssignBody(BaseModel):
 @router.post("/{hub_case_id}/assign-institution")
 def assign_institution(hub_case_id: str, body: AssignBody, db: Session = Depends(get_db), user=Depends(auth.current_user)):
     return service.assign_institution(db, user, hub_case_id, body.institution_id)
+
+
+class ActionBody(BaseModel):
+    action_type: str = Field(max_length=80)
+    remarks: str | None = Field(default=None, max_length=500)
+    doc_ref: str | None = Field(default=None, max_length=200)
+    to_bureau: str | None = Field(default=None, max_length=20)  # only for a transfer
+
+
+@router.get("/action-types")
+def action_types(db: Session = Depends(get_db), user=Depends(auth.current_user)):
+    """The action types the logged-in role may log, with each one's stance (enforcing / requesting / closing / neutral)."""
+    return action_service.allowed_action_types(db, user)
+
+
+@router.post("/{hub_case_id}/actions", status_code=201)
+def log_action(hub_case_id: str, body: ActionBody, db: Session = Depends(get_db), user=Depends(auth.current_user)):
+    """An officer logs an action. Conflicts and duplicate actions with the other bureau are checked straight away."""
+    return action_service.log_action(db, user, hub_case_id, body.action_type, body.remarks, body.doc_ref, body.to_bureau)
 
 
 @router.get("/{hub_case_id}")

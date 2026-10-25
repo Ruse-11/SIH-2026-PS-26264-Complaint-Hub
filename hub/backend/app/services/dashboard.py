@@ -62,6 +62,8 @@ def kpis(db: Session, user: m.User, as_of: date | None = None) -> dict:
         "suggestions_waiting": {"total": len(visible_links),
                                 "cross_bureau": sum(1 for l in visible_links if l.link_type == "CROSS_BUREAU"),
                                 "same_reporter": sum(1 for l in visible_links if l.link_type == "SAME_REPORTER"),
-                                "corroboration": sum(1 for l in visible_links if l.link_type == "CORROBORATION")},
+                                "corroboration": sum(1 for l in visible_links if l.link_type == "CORROBORATION"),
+                                "conflict": sum(1 for l in visible_links if l.link_type == "CONFLICT"),
+                                "duplicate_action": sum(1 for l in visible_links if l.link_type == "DUPLICATE_ACTION")},
         "open_alerts": len(alerts),
     }

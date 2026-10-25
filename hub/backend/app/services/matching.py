@@ -57,10 +57,10 @@ def suggest_lead(db: Session, cases: list[m.Case]) -> dict:
         m.CaseAction.case_id.in_([c.hub_case_id for c in cases]), m.CaseAction.stance == "ENFORCING")))
     if len(enforcing) == 1:
         return {"bureau": enforcing.pop(), "rule": "Rule 2: this bureau already issued an enforcing action", "decided_by": "rules"}
-    if len(enforcing) == 0:
-        oldest = min(cases, key=lambda c: c.received_at)
-        if sum(1 for c in cases if c.received_at == oldest.received_at) == 1:
-            return {"bureau": oldest.assigned_bureau, "rule": "Rule 3: the older open case leads", "decided_by": "rules"}
+    # no enforcing action yet, or both bureaus enforced: tie-break on the older OPEN case
+    open_cases = sorted((c for c in cases if c.status in OPEN_STATUSES), key=lambda c: c.received_at)
+    if open_cases and (len(open_cases) == 1 or open_cases[0].received_at != open_cases[1].received_at):
+        return {"bureau": open_cases[0].assigned_bureau, "rule": "Rule 3: the older open case leads", "decided_by": "rules"}
     return {"bureau": None, "rule": "Rule 4: no lead suggested; refer to the competent authority", "decided_by": "competent_authority"}
 
 
@@ -158,7 +158,10 @@ def _case_brief(c: m.Case) -> dict:
 def link_view(db: Session, link: m.LinkSuggestion) -> dict:
     a, b = db.get(m.Case, link.case_a), db.get(m.Case, link.case_b)
     inst = db.get(m.Institution, a.institution_id)
-    return {"id": link.id, "link_type": link.link_type, "status": link.status, "score": link.score, "reasons": link.reasons,
+    reasons = link.reasons
+    if link.link_type in ("CROSS_BUREAU", "CONFLICT", "DUPLICATE_ACTION"):
+        reasons = {**(reasons or {}), "suggested_lead": suggest_lead(db, [a, b])}  # always from the latest actions
+    return {"id": link.id, "link_type": link.link_type, "status": link.status, "score": link.score, "reasons": reasons,
             "institution": {"aicte_id": inst.aicte_id, "official_name": inst.official_name},
             "cases": [_case_brief(a), _case_brief(b)], "decided_by": link.decided_by,
             "decided_at": link.decided_at.isoformat() if link.decided_at else None,

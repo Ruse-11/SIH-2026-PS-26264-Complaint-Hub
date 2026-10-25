@@ -17,7 +17,7 @@ export default function Alerts() {
       <h1 className="text-xl font-semibold">Alerts</h1>
       <div className="flex flex-wrap items-center gap-4 text-sm">
         <select className="rounded border bg-white px-2 py-1.5" value={type} onChange={(e) => setType(e.target.value)}>
-          <option value="">All types</option><option value="OVERLAP">Overlap</option><option value="DUPLICATE">Duplicate</option><option value="CORROBORATION">Corroboration</option>
+          <option value="">All types</option><option value="OVERLAP">Overlap</option><option value="CONFLICT">Conflict</option><option value="DUPLICATE_ACTION">Duplicate action</option><option value="DUPLICATE">Duplicate complaint</option><option value="CORROBORATION">Corroboration</option>
         </select>
         <label className="flex items-center gap-2"><input type="checkbox" checked={openOnly} onChange={(e) => setOpenOnly(e.target.checked)} /> Not yet acknowledged</label>
       </div>

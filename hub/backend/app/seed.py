@@ -16,7 +16,7 @@ from . import models as m
 from .services.auth import DEMO_PASSWORD, hash_password
 from .services.institutions import normalize_name
 from .services.reporters import make_fingerprint
-from .services import matching, priority
+from .services import conflicts, matching, priority
 
 # ---- Config tables. These are ASSUMPTIONS about AICTE rules (labelled so in the PPT) and can be edited in the DB. ----
 STANCES = {
@@ -158,6 +158,8 @@ def run(engine=None) -> dict:
         counts["cases"], counts["actions"] = load_cases_and_actions(db)
         db.flush()
         counts["suggestions"] = matching.rebuild_all(db)  # M6: overlap suggestions for the loaded cases
+        db.flush()
+        counts["conflict_suggestions"] = conflicts.rebuild_all(db)  # M9: conflicts and duplicate actions
         db.flush()
         priority.recompute_all(db, now=datetime.now())  # M7: priority score for every case
         db.commit()

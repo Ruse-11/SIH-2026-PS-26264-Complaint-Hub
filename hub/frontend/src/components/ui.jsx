@@ -7,16 +7,18 @@ import { useAuth } from "../auth.jsx";
 export function useGet(path) {
   const { api } = useAuth();
   const [state, setState] = useState({ data: null, error: "", loading: true });
+  const latest = useRef(0);  // only the newest request may update the screen (a slow old answer must not overwrite a newer one)
   const load = useCallback(() => {
     if (!path) return;
+    const mine = ++latest.current;
     setState((s) => ({ ...s, loading: true, error: "" }));
     api(path)
       .then(async (r) => {
         const body = await r.json().catch(() => ({}));
         if (!r.ok) throw new Error(body.detail || "Request failed (" + r.status + ")");
-        setState({ data: body, error: "", loading: false });
+        if (mine === latest.current) setState({ data: body, error: "", loading: false });
       })
-      .catch((e) => setState({ data: null, error: e.message, loading: false }));
+      .catch((e) => { if (mine === latest.current) setState({ data: null, error: e.message, loading: false }); });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [path]);
   useEffect(load, [load]);
@@ -78,7 +80,8 @@ export const LINK_TYPE = {
   CROSS_BUREAU: "Cross-bureau overlap",
   SAME_REPORTER: "Same reporter, duplicate",
   CORROBORATION: "Corroboration",
-  CONFLICT: "Conflict",
+  CONFLICT: "Conflicting actions",
+  DUPLICATE_ACTION: "Duplicate action",
 };
 
 export const fmtDate = (d) => (d ? String(d).slice(0, 10) : "–");

@@ -1,9 +1,66 @@
 // One case: details, priority breakdown, chronological action history, linked cases (with confirm / reject).
+import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import { useAuth } from "../auth.jsx";
 import LinkCard from "../components/LinkCard.jsx";
-import { Loading, Panel, StatusBadge, fmtDate, useGet } from "../components/ui.jsx";
+import { Loading, Panel, StatusBadge, fmtDate, send, useGet, useToast } from "../components/ui.jsx";
 
 const STANCE = { ENFORCING: "bg-red-100 text-red-800", REQUESTING: "bg-amber-100 text-amber-800", CLOSING: "bg-green-100 text-green-800", NEUTRAL: "bg-slate-100 text-slate-700" };
+
+// Officers log what they did on the case. The hub then checks for conflicts or duplicate actions with the other bureau.
+function LogAction({ caseData, onDone }) {
+  const { api } = useAuth();
+  const toast = useToast();
+  const types = useGet("/api/cases/action-types");
+  const [type, setType] = useState("");
+  const [remarks, setRemarks] = useState("");
+  const [doc, setDoc] = useState("");
+  const [toBureau, setToBureau] = useState("");
+  const [busy, setBusy] = useState(false);
+  const closed = caseData.status === "Disposed" || caseData.status === "unverified_institution";
+  if (!types.data || types.data.length === 0 || closed) return null;
+  const other = caseData.assigned_bureau === "RB" ? "PGRC" : "RB";
+
+  async function save(e) {
+    e.preventDefault();
+    setBusy(true);
+    try {
+      const done = await send(api, `/api/cases/${caseData.hub_case_id}/actions`, {
+        action_type: type, remarks, doc_ref: doc, to_bureau: type === "Transferred" ? toBureau || other : null });
+      const lines = [`Status is now ${done.status}.`, ...done.alerts_created.map((a) => "⚠ " + a.message)];
+      toast({ tone: done.alerts_created.length ? "error" : "success", title: `✓ Action logged: ${done.action_type}`, lines });
+      setType(""); setRemarks(""); setDoc(""); setToBureau("");
+      onDone();
+    } catch (err) {
+      toast({ tone: "error", title: "Could not log the action", lines: [err.message] });
+    } finally {
+      setBusy(false);
+    }
+  }
+  return (
+    <Panel title="Log an action">
+      <form onSubmit={save} className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <select id="action-type" required value={type} onChange={(e) => setType(e.target.value)} className="rounded border px-2 py-2 text-sm">
+          <option value="">Choose action…</option>
+          {["ENFORCING", "REQUESTING", "CLOSING", "NEUTRAL"].map((st) => (
+            <optgroup key={st} label={st.charAt(0) + st.slice(1).toLowerCase()}>
+              {types.data.filter((t) => t.stance === st).map((t) => <option key={t.action_type}>{t.action_type}</option>)}
+            </optgroup>
+          ))}
+        </select>
+        {type === "Transferred" && (
+          <select value={toBureau || other} onChange={(e) => setToBureau(e.target.value)} className="rounded border px-2 py-2 text-sm">
+            {["RB", "PGRC"].filter((b) => b !== caseData.assigned_bureau).map((b) => <option key={b} value={b}>Transfer to {b}</option>)}
+          </select>
+        )}
+        <input id="action-remarks" value={remarks} maxLength={500} onChange={(e) => setRemarks(e.target.value)} placeholder="Remarks" className="rounded border px-3 py-2 text-sm lg:col-span-2" />
+        <input value={doc} maxLength={200} onChange={(e) => setDoc(e.target.value)} placeholder="Document reference (optional)" className="rounded border px-3 py-2 text-sm" />
+        <button disabled={busy || !type} className="rounded bg-slate-900 px-4 py-2 text-sm text-white disabled:opacity-40">{busy ? "Saving…" : "Log action"}</button>
+      </form>
+      <p className="mt-2 text-xs text-slate-500">Closing actions dispose the case. Enforcing and requesting actions are checked against the other bureau's actions at this college.</p>
+    </Panel>
+  );
+}
 
 export default function CaseDetail() {
   const { id } = useParams();
@@ -63,6 +120,8 @@ export default function CaseDetail() {
           </ol>
         </Panel>
       </div>
+
+      <LogAction caseData={d} onDone={c.reload} />
 
       <Panel title={"Linked and suggested cases (" + d.links.length + ")"}>
         {d.links.length === 0 && <p className="text-sm text-slate-500">No overlaps or duplicates suggested for this case.</p>}

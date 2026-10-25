@@ -23,7 +23,7 @@ export default function Overlaps() {
 
   return (
     <div className="space-y-4">
-      <h1 className="text-xl font-semibold">Overlaps and duplicates</h1>
+      <h1 className="text-xl font-semibold">Overlaps, conflicts and duplicates</h1>
       <p className="text-sm text-slate-600">The system suggests; the officer confirms or rejects. Confirmed corroboration raises priority, rejected pairs are never suggested again.</p>
       <div className="flex flex-wrap items-center gap-2">
         {TABS.map(([k, label]) => (
@@ -31,7 +31,7 @@ export default function Overlaps() {
         ))}
         <select className="ml-auto rounded border bg-white px-2 py-1.5 text-sm" value={type} onChange={(e) => setType(e.target.value)}>
           <option value="">All types</option>
-          {["CROSS_BUREAU", "SAME_REPORTER", "CORROBORATION"].map((t) => <option key={t} value={t}>{LINK_TYPE[t]}</option>)}
+          {["CROSS_BUREAU", "CONFLICT", "DUPLICATE_ACTION", "SAME_REPORTER", "CORROBORATION"].map((t) => <option key={t} value={t}>{LINK_TYPE[t]}</option>)}
         </select>
       </div>
       <Loading state={links} />
