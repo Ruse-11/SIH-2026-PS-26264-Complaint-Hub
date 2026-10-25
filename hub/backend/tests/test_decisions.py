@@ -24,7 +24,7 @@ class DecisionTest(unittest.TestCase):
         self.engine = create_engine(f"sqlite:///{Path(self.tmp.name, 'test.db').as_posix()}",
                                     connect_args={"check_same_thread": False})
         seed.run(self.engine)
-        S = sessionmaker(bind=self.engine)
+        S = sessionmaker(bind=self.engine, autoflush=False)  # same as the real app
 
         def override():
             db = S()
@@ -75,6 +75,8 @@ class DecisionTest(unittest.TestCase):
         r = self.client.post(f"/api/matching/links/{lid}/confirm", json={"note": "same menu problem"}, headers=self.h("rb.officer"))
         self.assertEqual(r.status_code, 200)
         self.assertEqual(r.json()["status"], "CONFIRMED")
+        changed = {c["source_case_no"]: (c["before"], c["after"]) for c in r.json()["priority_changes"]}
+        self.assertEqual(changed["RB-2026-0003"], (before["score"], before["score"] + 5))  # feedback shown to the officer
         after = self.priority("RB-2026-0003")
         self.assertEqual(after["confirmed_corroborators"], 1)
         self.assertEqual(after["score"], before["score"] + 5)
@@ -87,6 +89,16 @@ class DecisionTest(unittest.TestCase):
                for n in ("RB-2026-0003", "PGRC-2026-0003", "RB-2026-0004")}
         self.assertEqual(len(ids), 1)
         self.assertNotIn(None, ids)
+
+    def test_second_confirm_in_an_existing_cluster_still_updates_priority(self):
+        # regression: the cluster already exists, so nothing else flushes the decision before the priority recompute
+        first = self.client.post(f"/api/matching/links/{self.link_id('CORROBORATION', 'RB-2026-0003', 'RB-2026-0004')}/confirm", headers=self.h("rb.officer"))
+        self.assertEqual(len(first.json()["priority_changes"]), 2)
+        second = self.client.post(f"/api/matching/links/{self.link_id('CORROBORATION', 'RB-2026-0003', 'PGRC-2026-0003')}/confirm", headers=self.h("rb.officer"))
+        changed = {c["source_case_no"]: c["after"] - c["before"] for c in second.json()["priority_changes"]}
+        self.assertEqual(changed["RB-2026-0003"], 5)  # now two independent reporters
+        self.assertIn("PGRC-2026-0003", changed)
+        self.assertEqual(self.priority("RB-2026-0003")["confirmed_corroborators"], 2)
 
     def test_reject_changes_no_priority_and_keeps_note(self):
         before = self.priority("RB-2026-0003")["score"]

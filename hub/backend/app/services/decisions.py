@@ -51,12 +51,22 @@ def decide(db: Session, user: m.User, link_id: int, decision: str, note: str | N
     cluster_id = _cluster_on_confirm(db, a, b, link) if decision == "CONFIRMED" else None
     for alert in db.scalars(select(m.Alert).where(m.Alert.link_id == link.id, m.Alert.acknowledged_by.is_(None))):
         alert.acknowledged_by, alert.acknowledged_at = user.username, datetime.now()  # the alert has been dealt with
+    db.flush()  # the app's session does not autoflush: save the decision first so the priority recompute sees it
+    before = {c.hub_case_id: c.priority_score for c in db.scalars(select(m.Case).where(m.Case.institution_id == a.institution_id))}
     priority.recompute_institution(db, a.institution_id)
+    db.flush()
+    changes = [{"hub_case_id": c.hub_case_id, "source_case_no": c.source_case_no, "before": before[c.hub_case_id],
+                "after": c.priority_score}
+               for c in db.scalars(select(m.Case).where(m.Case.institution_id == a.institution_id))
+               if c.priority_score != before[c.hub_case_id]]
     log_event(db, actor=user.username, role=user.role, action=f"LINK_{decision}", entity_type="link_suggestion",
               entity_id=str(link.id), detail={"link_type": link.link_type, "cases": [a.hub_case_id, b.hub_case_id],
                                               "note": link.note, "cluster_id": cluster_id})
     db.commit()
-    return matching.link_view(db, link)
+    view = matching.link_view(db, link)
+    view["priority_changes"] = changes  # shown to the officer as feedback ("priority 48 -> 53")
+    view["cluster_id"] = cluster_id
+    return view
 
 
 def acknowledge_alert(db: Session, user: m.User, alert_id: int) -> dict:

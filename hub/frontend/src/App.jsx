@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import InstitutionSuggest from "./components/InstitutionSuggest.jsx";
+import { ToastProvider } from "./components/ui.jsx";
 import { Navigate, NavLink, Outlet, Route, Routes, useNavigate } from "react-router-dom";
 import { useAuth } from "./auth.jsx";
 import Login from "./pages/Login.jsx";
@@ -60,10 +62,10 @@ function HeaderSearch() {
   const navigate = useNavigate();
   const [text, setText] = useState("");
   return (
-    <form className="flex-1" onSubmit={(e) => { e.preventDefault(); if (text.trim()) navigate("/cases?q=" + encodeURIComponent(text.trim())); }}>
-      <input id="header-search" value={text} onChange={(e) => setText(e.target.value)} placeholder="Search institution, AICTE ID or case ID…"
-        className="w-full max-w-md rounded border px-3 py-1.5 text-sm" />
-    </form>
+    <InstitutionSuggest id="header-search" className="max-w-md flex-1" value={text} onChange={setText}
+      placeholder="Search institution, AICTE ID or case ID…"
+      onPick={(c) => { setText(""); navigate("/cases?institution_id=" + c.aicte_id); }}
+      onSubmit={(t) => t && navigate("/cases?q=" + encodeURIComponent(t))} />
   );
 }
 
@@ -72,6 +74,7 @@ function Shell() {
   const { user, logout } = useAuth();
   const perms = user.permissions;
   return (
+    <ToastProvider>
     <div className="flex min-h-screen bg-slate-100 text-slate-900">
       <aside className="w-56 shrink-0 bg-slate-900 p-4 text-slate-200">
         <div className="mb-6 text-lg font-semibold">Complaint Hub</div>
@@ -110,6 +113,7 @@ function Shell() {
         </main>
       </div>
     </div>
+    </ToastProvider>
   );
 }
 

@@ -37,7 +37,7 @@ class PortalTest(unittest.TestCase):
         tmp = Path(self.tmp.name)
         self.engine = create_engine(f"sqlite:///{(tmp / 'hub.db').as_posix()}", connect_args={"check_same_thread": False})
         seed.run(self.engine)
-        Session_ = sessionmaker(bind=self.engine)
+        Session_ = sessionmaker(bind=self.engine, autoflush=False)  # same as the real app
 
         def override():
             db = Session_()

@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../auth.jsx";
-import { LINK_TYPE, StatusBadge, send } from "./ui.jsx";
+import { LINK_TYPE, StatusBadge, send, useToast } from "./ui.jsx";
 
 const HEADLINE = {
   CROSS_BUREAU: "Potential Overlapping Cases – Coordination Required",
@@ -36,19 +36,33 @@ export default function LinkCard({ link, onChanged, highlight }) {
   const { user, api } = useAuth();
   const [note, setNote] = useState("");
   const [error, setError] = useState("");
-  const [busy, setBusy] = useState(false);
+  const [busy, setBusy] = useState("");
+  const toast = useToast();
   const canDecide = user.permissions.can_decide_links && link.status === "SUGGESTED";
 
   async function decide(kind) {
-    setBusy(true);
+    setBusy(kind);
     setError("");
     try {
-      await send(api, `/api/matching/links/${link.id}/${kind}`, { note });
+      const done = await send(api, `/api/matching/links/${link.id}/${kind}`, { note });
+      const names = done.cases.map((c) => c.source_case_no).join(" and ");
+      const lines = [];
+      if (kind === "confirm") {
+        lines.push(`${names} are now linked.`);
+        if (done.cluster_id) lines.push(`They are part of corroboration cluster #${done.cluster_id}.`);
+        lines.push(done.priority_changes.length
+          ? "Priority: " + done.priority_changes.map((c) => `${c.source_case_no} ${c.before} → ${c.after}`).join(", ")
+          : "No priority change (only confirmed corroboration raises priority).");
+        toast({ tone: "success", title: "✓ Link confirmed", lines: [...lines, "Recorded in the audit trail."] });
+      } else {
+        toast({ tone: "neutral", title: "Suggestion rejected", lines: [`${names} will not be suggested together again.`, "Recorded in the audit trail."] });
+      }
       onChanged && onChanged();
     } catch (e) {
       setError(e.message);
+      toast({ tone: "error", title: "Could not save the decision", lines: [e.message] });
     } finally {
-      setBusy(false);
+      setBusy("");
     }
   }
 
@@ -78,8 +92,8 @@ export default function LinkCard({ link, onChanged, highlight }) {
       {canDecide && (
         <div className="mt-3 flex flex-wrap items-center gap-2">
           <input className="min-w-48 flex-1 rounded border px-3 py-1.5 text-sm" placeholder="Note (optional)" value={note} maxLength={500} onChange={(e) => setNote(e.target.value)} />
-          <button disabled={busy} onClick={() => decide("confirm")} className="rounded bg-green-700 px-3 py-1.5 text-sm text-white disabled:opacity-50">Confirm link</button>
-          <button disabled={busy} onClick={() => decide("reject")} className="rounded border border-slate-400 px-3 py-1.5 text-sm disabled:opacity-50">Reject</button>
+          <button disabled={!!busy} onClick={() => decide("confirm")} className="rounded bg-green-700 px-3 py-1.5 text-sm text-white disabled:opacity-50">{busy === "confirm" ? "Saving…" : "Confirm link"}</button>
+          <button disabled={!!busy} onClick={() => decide("reject")} className="rounded border border-slate-400 px-3 py-1.5 text-sm disabled:opacity-50">{busy === "reject" ? "Saving…" : "Reject"}</button>
         </div>
       )}
       {error && <p className="mt-2 rounded bg-red-100 px-3 py-1 text-sm text-red-800">{error}</p>}

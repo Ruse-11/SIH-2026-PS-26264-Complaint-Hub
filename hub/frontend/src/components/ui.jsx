@@ -1,5 +1,5 @@
 // Small shared pieces for every page: data loading hook, status badge, tiles, labels.
-import { useCallback, useEffect, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../auth.jsx";
 
@@ -82,3 +82,32 @@ export const LINK_TYPE = {
 };
 
 export const fmtDate = (d) => (d ? String(d).slice(0, 10) : "–");
+
+// ---- toast: a message that appears top-right for a few seconds (feedback after Confirm / Reject) ----
+const ToastContext = createContext(() => {});
+export const useToast = () => useContext(ToastContext);
+
+export function ToastProvider({ children }) {
+  const [toast, setToast] = useState(null);
+  const timer = useRef(null);
+  const show = useCallback((t) => {
+    clearTimeout(timer.current);
+    setToast(t);
+    timer.current = setTimeout(() => setToast(null), 9000);
+  }, []);
+  const tones = { success: "border-green-600 bg-green-50", neutral: "border-slate-500 bg-white", error: "border-red-600 bg-red-50" };
+  return (
+    <ToastContext.Provider value={show}>
+      {children}
+      {toast && (
+        <div role="status" id="toast" className={"fixed right-6 top-20 z-50 max-w-sm rounded-lg border-l-4 p-4 shadow-xl " + tones[toast.tone || "success"]}>
+          <div className="flex items-start justify-between gap-3">
+            <div className="font-semibold text-slate-900">{toast.title}</div>
+            <button aria-label="Close" className="text-slate-500 hover:text-slate-900" onClick={() => setToast(null)}>×</button>
+          </div>
+          {(toast.lines || []).map((l, i) => <div key={i} className="mt-1 text-sm text-slate-700">{l}</div>)}
+        </div>
+      )}
+    </ToastContext.Provider>
+  );
+}

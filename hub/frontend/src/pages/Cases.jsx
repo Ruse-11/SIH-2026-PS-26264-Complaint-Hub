@@ -2,6 +2,7 @@
 // so dashboard tiles can link straight to "?status=Pending" and the back button works.
 import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
+import InstitutionSuggest from "../components/InstitutionSuggest.jsx";
 import { Loading, Panel, StatusBadge, fmtDate, useGet } from "../components/ui.jsx";
 
 const PAGE_SIZE = 25;
@@ -28,6 +29,14 @@ export default function Cases() {
     if (k !== "page") next.delete("page");
     setParams(next);
   }
+  // a typed search replaces a picked college (otherwise the two filters would silently combine)
+  function search(text) {
+    const next = new URLSearchParams(params);
+    text ? next.set("q", text) : next.delete("q");
+    next.delete("institution_id");
+    next.delete("page");
+    setParams(next);
+  }
   const o = options.data || { bureaus: [], regions: [], categories: [], statuses: [] };
   const pages = list.data ? Math.max(1, Math.ceil(list.data.total / PAGE_SIZE)) : 1;
 
@@ -35,11 +44,13 @@ export default function Cases() {
     <div className="space-y-4">
       <h1 className="text-xl font-semibold">Cases</h1>
       <Panel title="Search and filter">
-        <form className="flex gap-2" onSubmit={(e) => { e.preventDefault(); set("q", q.trim()); }}>
-          <input id="case-search" className="flex-1 rounded border px-3 py-2" value={q} onChange={(e) => setQ(e.target.value)}
-            placeholder="Institution name, AICTE ID (SYN-0009) or case ID (RB-2026-0003, HUB-0005)" />
-          <button className="rounded bg-slate-900 px-4 py-2 text-white">Search</button>
-        </form>
+        <div className="flex gap-2">
+          <InstitutionSuggest id="case-search" className="flex-1" value={q} onChange={setQ}
+            placeholder="Type a college name (suggestions appear), an AICTE ID (SYN-0009) or a case ID (RB-2026-0003)"
+            onPick={(c) => { const next = new URLSearchParams(params); next.set("institution_id", c.aicte_id); next.delete("q"); next.delete("page"); setQ(""); setParams(next); }}
+            onSubmit={search} />
+          <button className="rounded bg-slate-900 px-4 py-2 text-white" onClick={() => search(q.trim())}>Search</button>
+        </div>
         <div className="mt-3 grid gap-3 sm:grid-cols-3 lg:grid-cols-6">
           <Select label="Bureau" value={get("bureau")} options={o.bureaus} onChange={(v) => set("bureau", v)} />
           <Select label="Region" value={get("region")} options={o.regions} onChange={(v) => set("region", v)} />
@@ -54,7 +65,7 @@ export default function Cases() {
             <select className="rounded border px-2 py-1" value={get("sort") || "priority"} onChange={(e) => set("sort", e.target.value)}>
               <option value="priority">Highest priority</option><option value="received">Newest</option><option value="oldest">Oldest</option><option value="last_action">Last action</option>
             </select></label>
-          {get("institution_id") && <span className="rounded bg-slate-200 px-2 py-1">College {get("institution_id")} <button onClick={() => set("institution_id", "")}>×</button></span>}
+          {get("institution_id") && <span className="rounded bg-slate-200 px-2 py-1">College: {(list.data && list.data.items[0] && list.data.items[0].institution_name) || get("institution_id")} <button onClick={() => set("institution_id", "")}>×</button></span>}
           <button className="text-blue-700 hover:underline" onClick={() => { setQ(""); setParams({}); }}>Clear all</button>
         </div>
       </Panel>

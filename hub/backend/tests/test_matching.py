@@ -34,7 +34,7 @@ class MatchingTest(unittest.TestCase):
         self.engine = create_engine(f"sqlite:///{Path(self.tmp.name, 'test.db').as_posix()}",
                                     connect_args={"check_same_thread": False})
         seed.run(self.engine)
-        S = sessionmaker(bind=self.engine)
+        S = sessionmaker(bind=self.engine, autoflush=False)  # same as the real app
 
         def override():
             db = S()
