@@ -114,12 +114,19 @@
     var sev = h("select", { id: "f-severity" }); [1, 2, 3, 4, 5].forEach(function (n) {
       sev.appendChild(h("option", { value: n }, n + (n === 1 ? " (low)" : n === 5 ? " (very serious)" : ""))); });
     sev.value = "3";
+    // keep what the reporter typed when the form is redrawn after an error
+    var D = S.draft = S.draft || {};
+    [[type, "type"], [cat, "cat"], [title, "title"], [desc, "desc"], [sev, "sev"]].forEach(function (p) {
+      var el = p[0], k = p[1];
+      if (D[k] !== undefined) el.value = D[k];
+      ["input", "change"].forEach(function (ev) { el.addEventListener(ev, function () { D[k] = el.value; }); });
+    });
     var go = h("button", { class: "primary", id: "submit-complaint", onclick: function () {
       if (!cat.value) { S.error = "Please choose a category."; draw(); return; }
       go.disabled = true;
       call("/submit", { institution_token: S.instToken, verification_token: S.verifToken, reporter_type: type.value, category: cat.value,
                         title: title.value, description: desc.value, severity: Number(sev.value) })
-        .then(function (d) { S.receipt = d; S.error = ""; S.step = 4; draw(); pollIfPending(); }).catch(function (e) { go.disabled = false; fail(e); });
+        .then(function (d) { S.receipt = d; S.draft = null; S.error = ""; S.step = 4; draw(); pollIfPending(); }).catch(function (e) { go.disabled = false; fail(e); });
     } }, "Submit complaint");
     show(h("div", { class: "panel" }, h("h2", null, "Complaint details"), banner,
       h("div", { class: "fgrid" }, h("div", null, h("label", null, "You are a"), type), h("div", null, h("label", null, "Category *"), cat)),
