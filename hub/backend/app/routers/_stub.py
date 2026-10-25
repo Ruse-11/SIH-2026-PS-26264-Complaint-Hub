@@ -8,6 +8,7 @@ METHODS = ["GET", "POST", "PUT", "PATCH", "DELETE"]
 def stub_router(name: str, feature: str, module: str, future: bool = False) -> APIRouter:
     """name -> URL prefix /api/<name>. module is the build step (e.g. 'M2'); future=True means later scope."""
     router = APIRouter(prefix=f"/api/{name}", tags=[name])
+    router.is_stub = True  # tests use this to tell placeholders from real routers
     state = "stub" if future else "planned"
     detail = f"{feature}: " + ("future scope, stub only." if future else f"planned, built in {module}.")
 

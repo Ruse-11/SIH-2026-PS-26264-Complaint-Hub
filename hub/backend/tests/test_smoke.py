@@ -25,6 +25,8 @@ class Smoke(unittest.TestCase):
     def test_every_feature_has_a_501_stub(self):
         self.assertEqual(len(ALL), 19)
         for module in ALL:
+            if not getattr(module.router, "is_stub", False):
+                continue  # real routers (built modules) have their own tests
             prefix = module.router.prefix
             for url in (prefix, prefix + "/anything"):
                 r = self.client.get(url)
