@@ -13,7 +13,8 @@
 
 ## Next
 - **M6 DONE** Overlap detection A/B/C (TF-IDF baseline), suggestions with reasons, alerts, `alerts_created` in the receipt, `GET /api/matching/links`, `GET /api/alerts`. Dataset is backfilled at seed time. T_A=0.20 and T_B=0.35 are tuned placeholders for the TF-IDF baseline.
-- **Next: M7** officer confirm/reject + audit + priority update, then M8 dashboard.
+- **M7 DONE** `POST /api/matching/links/{id}/confirm|reject` (note optional), `POST /api/alerts/{id}/acknowledge`, `GET /api/audit` (senior mgmt + competent authority), `GET /api/corroboration/{case_id}` (priority breakdown). Priority = severity x10 + confirmed corroborators (max 4) x5 + age (max 60 days) x0.3; the boost applies only after confirmation.
+- **Next: M8** dashboard screens (KPIs, cases list with search and filters, case detail, institution profile, overlaps, alerts, Needs Review).
 
 ## Run (Windows, from the project folder)
 ```

@@ -3,6 +3,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from .. import models as m
+from . import matching, priority
 
 
 def case_detail(db: Session, hub_case_id: str):
@@ -24,7 +25,9 @@ def case_detail(db: Session, hub_case_id: str):
         "received_at": iso(case.received_at), "status": case.status, "assigned_bureau": case.assigned_bureau,
         "assigned_officer": case.assigned_officer, "severity": case.severity, "priority_score": case.priority_score,
         "expected_disposal_date": iso(case.expected_disposal_date), "last_action_at": iso(case.last_action_at),
-        "last_action": actions[-1].action_type if actions else None,
+        "last_action": actions[-1].action_type if actions else None, "cluster_id": case.cluster_id,
+        "priority": priority.breakdown(db, case),
+        "links": matching.list_links(db, case_id=hub_case_id),
         "actions": [{"seq": a.seq, "action_type": a.action_type, "stance": a.stance, "actor": a.actor,
                      "bureau": a.bureau, "remarks": a.remarks, "doc_ref": a.doc_ref, "at": iso(a.at),
                      "from_bureau": a.from_bureau, "to_bureau": a.to_bureau} for a in actions],

@@ -13,7 +13,7 @@ Updated after every module.
 | Case detail with action history (`GET /api/cases/{id}`; list/search in M8); bureau action sync `POST /api/actions` | routers/cases.py, services/cases.py | pages/CaseDetail.jsx (M8) | detail DONE (M4); actions sync STUB |
 | Mock portals (own DB, own case numbers, retry outbox), Institution Finder widget (search, confirm card + map, guided questions, not-listed), mock OTP, signed 30-min tokens | shared/portal_core.py, portal_rb/app.py, portal_pgrc/app.py | shared/institution-finder.js/.css, shared/portal-form.js, portal_*/static/index.html | DONE (M5) |
 | Matching A/B/C + overlap alert | routers/matching.py, alerts.py, services/matching.py, similarity.py | pages/Overlaps.jsx, Alerts.jsx (UI in M8) | API DONE (M6); screens TODO (M8) |
-| Officer confirm/reject, audit, priority | routers/audit.py | pages/CaseDetail.jsx | TODO (M7) |
+| Officer confirm/reject, audit, priority | routers/matching.py, audit.py, corroboration.py, services/decisions.py, priority.py | pages/CaseDetail.jsx (UI in M8) | API DONE (M7); screens TODO (M8) |
 | Dashboard KPIs, cases list, search/filters, case detail, institution profile, needs review | routers/dashboard.py, search.py | pages/Dashboard, Cases, CaseDetail, InstitutionProfile, NeedsReview | TODO (M8) |
 | Conflict rules + lead-bureau suggestion | routers/conflicts.py | – | TODO (M9) |
 | Starvation / SLA alerts | routers/starvation.py | – | TODO (M10) |
