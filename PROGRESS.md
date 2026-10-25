@@ -7,9 +7,10 @@
 - **M1** 14 tables, CSV loader (`python -m app.seed` from hub/backend): 40 institutions, 212 aliases, 80 reporters, 150 cases, 350 actions, config tables. 3 cases without an institution get status `unverified_institution`.
 - **M2** `GET /api/institutions/search?q=` (resolver), `/filters` (guided questions), `/{id}` (profile). Passes all 45 name tests.
 - **M3** login: `POST /api/auth/login`, `GET /api/auth/me`, 6 demo accounts (password demo123), role rules, login page with one-click role buttons, header shows role and what it can see.
+- **M4** `POST /api/intake` (X-API-Key per portal): validates the institution ID (never guesses; parent universities rejected), hashes the reporter contact, creates case HUB-nnnn + first action "Acknowledged" + audit row; resending a case number is safe. `GET /api/cases/{id}` shows a case with its history.
 
 ## Next
-- **M4** intake, M6 overlap detection, M7 confirm/reject, M8 dashboard.
+- **M5** portals + Institution Finder + mock OTP + token, then M6 overlap detection.
 
 ## Run (Windows, from the project folder)
 ```

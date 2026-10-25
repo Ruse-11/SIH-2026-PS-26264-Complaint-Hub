@@ -7,6 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from . import config, models  # noqa: F401  (models must be imported so the tables are registered)
 from .db import Base, engine
 from .routers import ALL
+from .routers.cases import actions_router
 
 @asynccontextmanager
 async def lifespan(_app):
@@ -28,5 +29,6 @@ def health():
     return {"status": "ok", "service": "hub", "version": config.VERSION}
 
 
+app.include_router(actions_router)  # POST /api/actions placeholder
 for module in ALL:  # every feature has a router; unbuilt ones answer 501 "planned"
     app.include_router(module.router)
