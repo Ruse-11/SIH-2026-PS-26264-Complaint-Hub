@@ -14,6 +14,13 @@ def search(q: str = Query("", max_length=200), db: Session = Depends(get_db)):
     return service.resolve(db, q)
 
 
+@router.get("/suggest")
+def suggest(q: str = Query("", max_length=100), limit: int = Query(8, ge=1, le=20), db: Session = Depends(get_db),
+            _user=Depends(auth.current_user)):
+    """Search-box suggestions for officers: partial words, typos, place names and universities all match. Needs login."""
+    return service.suggest(db, q, limit)
+
+
 @router.get("/filters")
 def filters(state: str | None = None, district: str | None = None, type: str | None = None,
             area: str | None = None, program: str | None = None, db: Session = Depends(get_db)):

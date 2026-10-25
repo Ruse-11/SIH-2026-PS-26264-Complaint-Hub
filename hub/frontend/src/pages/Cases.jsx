@@ -22,6 +22,7 @@ export default function Cases() {
   query.set("page_size", PAGE_SIZE);
   const list = useGet("/api/cases?" + query);
   const options = useGet("/api/cases/filters");
+  const picked = useGet(get("institution_id") ? "/api/institutions/" + get("institution_id") : null);
 
   function set(k, v) {
     const next = new URLSearchParams(params);
@@ -65,7 +66,7 @@ export default function Cases() {
             <select className="rounded border px-2 py-1" value={get("sort") || "priority"} onChange={(e) => set("sort", e.target.value)}>
               <option value="priority">Highest priority</option><option value="received">Newest</option><option value="oldest">Oldest</option><option value="last_action">Last action</option>
             </select></label>
-          {get("institution_id") && <span className="rounded bg-slate-200 px-2 py-1">College: {(list.data && list.data.items[0] && list.data.items[0].institution_name) || get("institution_id")} <button onClick={() => set("institution_id", "")}>×</button></span>}
+          {get("institution_id") && <span className="rounded bg-slate-200 px-2 py-1">College: {(picked.data && picked.data.official_name) || get("institution_id")}{picked.data && picked.data.children && picked.data.children.length > 0 ? " (and its colleges)" : ""} <button onClick={() => set("institution_id", "")}>×</button></span>}
           <button className="text-blue-700 hover:underline" onClick={() => { setQ(""); setParams({}); }}>Clear all</button>
         </div>
       </Panel>

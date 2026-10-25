@@ -47,7 +47,14 @@ def _institution_ids_for_name(db: Session, q: str) -> set:
     like = f"%{n}%"
     ids = set(db.scalars(select(m.Institution.aicte_id).where(m.Institution.name_normalized.like(like))))
     ids |= set(db.scalars(select(m.InstitutionAlias.institution_id).where(m.InstitutionAlias.alias_normalized.like(like))))
-    return ids
+    return _with_children(db, ids)
+
+
+def _with_children(db: Session, ids: set) -> set:
+    """A university stands for its constituent colleges too: searching it also finds their cases."""
+    if not ids:
+        return ids
+    return ids | set(db.scalars(select(m.Institution.aicte_id).where(m.Institution.parent_id.in_(list(ids)))))
 
 
 def list_cases(db: Session, user: m.User, q=None, bureau=None, region=None, category=None, status=None,
@@ -64,8 +71,10 @@ def list_cases(db: Session, user: m.User, q=None, bureau=None, region=None, cate
         if ids:
             conds.append(m.Case.institution_id.in_(ids))
         stmt = stmt.where(or_(*conds))
+    if institution_id:
+        stmt = stmt.where(m.Case.institution_id.in_(_with_children(db, {institution_id})))  # a university includes its colleges
     for column, value in ((m.Case.assigned_bureau, bureau), (m.Institution.region, region), (m.Case.category, category),
-                          (m.Case.status, status), (m.Case.institution_id, institution_id)):
+                          (m.Case.status, status)):
         if value:
             stmt = stmt.where(column == value)
     if date_from:

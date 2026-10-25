@@ -215,3 +215,71 @@ def history(db: Session, user, aicte_id: str):
     data["links"] = matching.list_links(db, institution_id=aicte_id, visible=visible)
     data["alerts"] = alert_service.list_alerts(db, institution_id=aicte_id, visible=visible)
     return data
+
+
+# ---- officer search suggestions (M8 follow-up) ----
+# The reporter-facing resolver above is strict on purpose (never guess, show colleges instead of a university).
+# Officers are searching their own registry, so this one is looser: every typed word must match part of a word in the
+# college's name, alias, or place; universities are included; typos of 4+ letters are forgiven.
+def suggest(db: Session, query: str, limit: int = 8) -> list[dict]:
+    q = (query or "").strip()
+    qn = normalize_name(q)
+    if len(q) < 2 or not qn:
+        return []
+    tokens = qn.split()
+    aliases: dict[str, list] = {}
+    for iid, a in db.execute(select(m.InstitutionAlias.institution_id, m.InstitutionAlias.alias_normalized)):
+        aliases.setdefault(iid, []).append(a)
+    insts = db.scalars(select(m.Institution)).all()
+    by_id = {i.aicte_id: i for i in insts}
+    n_children: dict[str, int] = {}
+    for i in insts:
+        if i.parent_id:
+            n_children[i.parent_id] = n_children.get(i.parent_id, 0) + 1
+
+    def word_score(t: str, words: list[str], weight: float) -> float:
+        best = 0.0
+        for w in words:
+            if w == t:
+                s = 100
+            elif w.startswith(t):
+                s = 92
+            elif len(t) >= 3 and t in w:
+                s = 70
+            elif len(t) >= 4 and fuzz.ratio(t, w) >= WORD_MATCH:
+                s = 62  # a typo
+            else:
+                continue
+            best = max(best, s * weight)
+        return best
+
+    scored = []
+    for i in insts:
+        if q.upper() in i.aicte_id:  # typed part of an AICTE ID
+            scored.append((95, i))
+            continue
+        name_words = i.name_normalized.split()
+        alias_words = [w for a in aliases.get(i.aicte_id, []) for w in a.split()]
+        place_words = normalize_name(f"{i.area or ''} {i.district or ''} {i.state or ''}").split()
+        total = 0.0
+        for t in tokens:
+            s = max(word_score(t, name_words, 1.0), word_score(t, alias_words, 0.9), word_score(t, place_words, 0.8))
+            if s == 0:
+                total = 0
+                break  # every typed word must match something
+            total += s
+        if total == 0:
+            continue
+        score = total / len(tokens)
+        if i.name_normalized.startswith(qn):
+            score += 8  # typed the beginning of the name
+        elif any(a.startswith(qn) for a in aliases.get(i.aicte_id, [])):
+            score += 6
+        scored.append((score, i))
+    scored.sort(key=lambda x: (-x[0], x[1].official_name))
+    out = []
+    for score, i in scored[:limit]:
+        c = card(i, by_id[i.parent_id].official_name if i.parent_id else None, score, "SUGGEST")
+        c["colleges"] = n_children.get(i.aicte_id, 0)  # >0 means a university with that many constituent colleges
+        out.append(c)
+    return out

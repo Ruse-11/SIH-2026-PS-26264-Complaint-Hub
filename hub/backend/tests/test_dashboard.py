@@ -158,6 +158,36 @@ class DashboardTest(unittest.TestCase):
         s0040 = self.get("/api/institutions/SYN-0040/history")
         self.assertEqual(s0040["cases"], [])
 
+    # ---- search suggestions for officers ----
+    def suggest(self, q, user="rb.officer"):
+        return [c["official_name"] for c in self.get(f"/api/institutions/suggest?q={q}", user)]
+
+    def test_suggestions_find_partial_words_universities_and_places(self):
+        vale = self.suggest("Vale")
+        self.assertIn("Southern Vale University", vale)
+        self.assertIn("Meridian Vale Technical Institute", vale)
+        self.assertTrue(all("Vale" in n for n in vale[:4]))  # real name matches come first
+        self.assertEqual(set(vale[4:]), {"Orbelis College of Technology", "Quoralis Institute of Engineering",
+                                         "Zenvora College of Architecture"})  # then colleges of Southern Vale University (via aliases)
+        self.assertEqual(self.suggest("Souther")[0], "Southern Vale University")  # a half-typed word
+        self.assertEqual(self.suggest("Orbelis Chennai")[0], "Orbelis College of Technology")  # name + place
+        self.assertEqual(self.suggest("Zenvra")[0].split()[0], "Zenvora")  # a typo
+        self.assertEqual(self.suggest("SYN-0009")[0], "Eastern Meridian University")  # AICTE ID
+        self.assertEqual(self.suggest("qqqqzz"), [])
+        self.assertEqual(self.suggest("a"), [])  # too short
+        cards = self.get("/api/institutions/suggest?q=Southern Vale", "senior.mgmt")
+        self.assertEqual((cards[0]["aicte_id"], cards[0]["colleges"]), ("SYN-0001", 3))  # a university with 3 colleges
+        self.assertEqual(self.client.get("/api/institutions/suggest?q=vale").status_code, 401)
+        self.assertEqual(len(self.get("/api/institutions/suggest?q=college&limit=3")), 3)
+
+    def test_picking_a_university_also_shows_its_colleges_cases(self):
+        own = self.db_count(m.Case.institution_id == "SYN-0001")
+        group = self.db_count(m.Case.institution_id.in_(["SYN-0001", "SYN-0002", "SYN-0003", "SYN-0004"]))
+        self.assertGreater(group, own)
+        self.assertEqual(self.get("/api/cases?institution_id=SYN-0001&page_size=100")["total"], group)
+        self.assertEqual(self.get("/api/cases?institution_id=SYN-0002&page_size=100")["total"], self.db_count(m.Case.institution_id == "SYN-0002"))
+        self.assertEqual(self.get("/api/cases?q=Souther&page_size=100")["total"], group)
+
     # ---- Needs Review ----
     def test_needs_review_and_assigning_a_college_learns_the_alias(self):
         r = self.client.post("/api/intake", headers=PORTAL("PGRC"), json=complaint(
