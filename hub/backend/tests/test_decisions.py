@@ -61,7 +61,7 @@ class DecisionTest(unittest.TestCase):
             return db.scalars(select(m.Case).where(m.Case.source_case_no == source_no)).one().hub_case_id
 
     def priority(self, source_no):
-        return self.client.get(f"/api/cases/{self.hub_id(source_no)}", headers=self.h("rb.officer")).json()["priority"]
+        return self.client.get(f"/api/cases/{self.hub_id(source_no)}", headers=self.h("senior.mgmt")).json()["priority"]
 
     def test_every_case_has_a_priority_score(self):
         with Session(self.engine) as db:
@@ -83,7 +83,7 @@ class DecisionTest(unittest.TestCase):
         for a, b in [("RB-2026-0003", "PGRC-2026-0003"), ("PGRC-2026-0003", "RB-2026-0004")]:
             self.client.post(f"/api/matching/links/{self.link_id('CORROBORATION', a, b)}/confirm", headers=self.h("competent.authority"))
         self.assertEqual(self.priority("RB-2026-0004")["confirmed_corroborators"], 2)
-        ids = {self.client.get(f"/api/cases/{self.hub_id(n)}", headers=self.h("rb.officer")).json()["cluster_id"]
+        ids = {self.client.get(f"/api/cases/{self.hub_id(n)}", headers=self.h("senior.mgmt")).json()["cluster_id"]
                for n in ("RB-2026-0003", "PGRC-2026-0003", "RB-2026-0004")}
         self.assertEqual(len(ids), 1)
         self.assertNotIn(None, ids)

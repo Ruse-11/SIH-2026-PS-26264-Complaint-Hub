@@ -202,3 +202,16 @@ def profile(db: Session, aicte_id: str):
     data["children"] = [{"aicte_id": c.aicte_id, "official_name": c.official_name} for c in children]
     data["cases"] = {"total": sum(by_status.values()), "by_status": by_status, "by_bureau": by_bureau}
     return data
+
+
+def history(db: Session, user, aicte_id: str):
+    """Profile + the complaint history of one institution, as far as `user` may see it (M8)."""
+    from . import alerts as alert_service, cases as case_service, matching, scope  # local import: avoids a circular import
+    data = profile(db, aicte_id)
+    if data is None:
+        return None
+    visible = scope.visible_case_ids(db, user)
+    data["cases"] = case_service.list_cases(db, user, institution_id=aicte_id, sort="oldest", page_size=100)["items"]
+    data["links"] = matching.list_links(db, institution_id=aicte_id, visible=visible)
+    data["alerts"] = alert_service.list_alerts(db, institution_id=aicte_id, visible=visible)
+    return data

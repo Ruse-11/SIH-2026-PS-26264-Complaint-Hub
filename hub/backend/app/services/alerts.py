@@ -5,12 +5,17 @@ from sqlalchemy.orm import Session
 from .. import models as m
 
 
-def list_alerts(db: Session, type=None, institution_id=None, open_only=False, limit=200) -> list[dict]:
+def list_alerts(db: Session, type=None, institution_id=None, open_only=False, limit=200, visible=None) -> list[dict]:
     q = select(m.Alert).order_by(m.Alert.id.desc()).limit(limit)
     if type:
         q = q.where(m.Alert.type == type)
     if institution_id:
         q = q.where(m.Alert.institution_id == institution_id)
+    if visible is not None:
+        # an alert is visible if its case, or either case of its link, is visible (the RB officer must see an
+        # overlap raised by a new PGRC complaint)
+        linked = select(m.LinkSuggestion.id).where(m.LinkSuggestion.case_a.in_(visible) | m.LinkSuggestion.case_b.in_(visible))
+        q = q.where(m.Alert.case_id.in_(visible) | m.Alert.link_id.in_(linked))
     if open_only:
         q = q.where(m.Alert.acknowledged_by.is_(None))
     out = []

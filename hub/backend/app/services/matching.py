@@ -165,12 +165,15 @@ def link_view(db: Session, link: m.LinkSuggestion) -> dict:
             "created_at": link.created_at.isoformat(timespec="seconds")}
 
 
-def list_links(db: Session, status=None, link_type=None, institution_id=None, case_id=None, limit=200) -> list[dict]:
+def list_links(db: Session, status=None, link_type=None, institution_id=None, case_id=None, limit=200, visible=None) -> list[dict]:
+    """visible: set of case IDs the caller may see (None = all). A link is shown if it involves a visible case."""
     q = select(m.LinkSuggestion).order_by(m.LinkSuggestion.id.desc()).limit(limit)
     if status:
         q = q.where(m.LinkSuggestion.status == status)
     if link_type:
         q = q.where(m.LinkSuggestion.link_type == link_type)
+    if visible is not None:
+        q = q.where(m.LinkSuggestion.case_a.in_(visible) | m.LinkSuggestion.case_b.in_(visible))
     if case_id:
         q = q.where((m.LinkSuggestion.case_a == case_id) | (m.LinkSuggestion.case_b == case_id))
     if institution_id:

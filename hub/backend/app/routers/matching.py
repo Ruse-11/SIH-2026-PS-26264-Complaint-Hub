@@ -5,23 +5,26 @@ from sqlalchemy.orm import Session
 
 from .. import models as m
 from ..db import get_db
-from ..services import auth, decisions, matching
+from ..services import auth, decisions, matching, scope
 
 router = APIRouter(prefix="/api/matching", tags=["matching"])
 
 
 @router.get("/links")
 def links(status: str | None = None, link_type: str | None = None, institution_id: str | None = None,
-          case_id: str | None = None, db: Session = Depends(get_db), _user=Depends(auth.current_user)):
+          case_id: str | None = None, db: Session = Depends(get_db), user=Depends(auth.current_user)):
     """Suggested links, newest first. Filters: status (SUGGESTED/CONFIRMED/REJECTED), link_type, institution_id, case_id."""
-    return matching.list_links(db, status, link_type, institution_id, case_id)
+    return matching.list_links(db, status, link_type, institution_id, case_id, visible=scope.visible_case_ids(db, user))
 
 
 @router.get("/links/{link_id}")
-def link(link_id: int, db: Session = Depends(get_db), _user=Depends(auth.current_user)):
+def link(link_id: int, db: Session = Depends(get_db), user=Depends(auth.current_user)):
     row = db.get(m.LinkSuggestion, link_id)
     if row is None:
         raise HTTPException(404, f"No link suggestion {link_id}")
+    visible = scope.visible_case_ids(db, user)
+    if visible is not None and row.case_a not in visible and row.case_b not in visible:
+        raise HTTPException(403, "This link is outside your view")
     return matching.link_view(db, row)
 
 
