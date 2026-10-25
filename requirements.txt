@@ -1,0 +1,11 @@
+# Python dependencies (pinned). Install once:  pip install -r requirements.txt
+# M0 needs only the first block; the rest is pinned now so later modules need no re-install.
+fastapi==0.115.6
+uvicorn==0.34.0
+pydantic==2.10.4
+SQLAlchemy==2.0.36
+httpx==0.28.1
+# used from M2 / M3 onward
+rapidfuzz==3.11.0
+PyJWT==2.10.1
+# fastembed (M12, optional) is NOT pinned here on purpose; we add it only if the embeddings upgrade fits the time.

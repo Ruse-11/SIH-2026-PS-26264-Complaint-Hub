@@ -1,0 +1,351 @@
+source_case_no,action_seq,action_date,bureau,officer,action_type,remarks,doc_ref
+PGRC-2026-0001,1,2026-08-10,PGRC,Officer PGRC-09,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0001.pdf
+PGRC-2026-0001,2,2026-08-26,PGRC,Officer PGRC-09,Reply Sought from Institution,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0002.pdf
+PGRC-2026-0002,1,2026-08-12,PGRC,Officer PGRC-05,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0003.pdf
+PGRC-2026-0002,2,2026-08-16,PGRC,Officer PGRC-05,Reply Sought from Institution,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0004.pdf
+PGRC-2026-0003,1,2026-07-06,PGRC,Officer PGRC-04,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0005.pdf
+PGRC-2026-0003,2,2026-07-11,PGRC,Officer PGRC-04,Documents Sought,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0006.pdf
+PGRC-2026-0004,1,2026-06-12,PGRC,Officer PGRC-12,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0007.pdf
+PGRC-2026-0004,2,2026-06-15,PGRC,Officer PGRC-12,Closed - No Action,Planted S4 scenario: related complaints received conflicting outcomes.,synthetic_action_0008.pdf
+PGRC-2026-0005,1,2026-07-06,PGRC,Officer PGRC-06,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0010.pdf
+PGRC-2026-0005,2,2026-07-08,PGRC,Officer PGRC-06,Documents Sought,Planted S5 scenario: request for the same institution's supporting records.,synthetic_action_0011.pdf
+PGRC-2026-0005,3,2026-07-17,PGRC,Officer PGRC-06,Under Review,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0012.pdf
+PGRC-2026-0006,1,2026-05-23,PGRC,Officer PGRC-02,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0013.pdf
+PGRC-2026-0006,2,2026-06-05,PGRC,Officer PGRC-02,Reply Sought from Institution,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0014.pdf
+PGRC-2026-0007,1,2026-06-18,PGRC,Officer PGRC-02,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0015.pdf
+PGRC-2026-0007,2,2026-06-25,PGRC,Officer PGRC-02,Reply Sought from Institution,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0016.pdf
+PGRC-2026-0008,1,2026-07-15,PGRC,Officer PGRC-06,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0017.pdf
+PGRC-2026-0008,2,2026-08-04,PGRC,Officer PGRC-06,Inspection Ordered,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0018.pdf
+PGRC-2026-0009,1,2026-10-01,PGRC,Officer PGRC-04,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0019.pdf
+PGRC-2026-0009,2,2026-10-06,PGRC,Officer PGRC-04,Inspection Ordered,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0020.pdf
+PGRC-2026-0010,1,2026-08-07,PGRC,Officer PGRC-12,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0021.pdf
+PGRC-2026-0010,2,2026-08-08,PGRC,Officer PGRC-12,Under Review,Receiving bureau recorded follow-up for the transferred complaint.,synthetic_action_0022.pdf
+PGRC-2026-0010,3,2026-08-25,PGRC,Officer PGRC-12,Reply Sought from Institution,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0023.pdf
+PGRC-2026-0011,1,2026-09-10,PGRC,Officer PGRC-08,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0024.pdf
+PGRC-2026-0011,2,2026-09-12,PGRC,Officer PGRC-08,Escalated to Competent Authority,Planted S12 scenario: referred to the competent authority for review.,synthetic_action_0025.pdf
+PGRC-2026-0011,3,2026-09-16,PGRC,Officer PGRC-08,Documents Sought,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0026.pdf
+PGRC-2026-0012,1,2026-08-20,PGRC,Officer PGRC-10,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0027.pdf
+PGRC-2026-0012,2,2026-08-29,PGRC,Officer PGRC-10,Under Review,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0028.pdf
+PGRC-2026-0013,1,2026-07-22,PGRC,Officer PGRC-08,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0029.pdf
+PGRC-2026-0013,2,2026-08-10,PGRC,Officer PGRC-08,Reply Sought from Institution,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0030.pdf
+PGRC-2026-0014,1,2026-04-05,PGRC,Officer PGRC-10,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0031.pdf
+PGRC-2026-0014,2,2026-04-20,PGRC,Officer PGRC-10,Inspection Ordered,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0032.pdf
+PGRC-2026-0014,3,2026-04-23,PGRC,Officer PGRC-02,Disposed - Action Taken,Synthetic final disposal of the complaint.,synthetic_action_0302.pdf
+PGRC-2026-0015,1,2026-05-15,PGRC,Officer PGRC-10,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0033.pdf
+PGRC-2026-0015,2,2026-05-24,PGRC,Officer PGRC-10,Inspection Ordered,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0034.pdf
+PGRC-2026-0016,1,2026-06-04,PGRC,Officer PGRC-03,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0035.pdf
+PGRC-2026-0016,2,2026-06-07,PGRC,Officer PGRC-03,Under Review,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0036.pdf
+PGRC-2026-0017,1,2026-07-04,PGRC,Officer PGRC-12,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0037.pdf
+PGRC-2026-0017,2,2026-07-13,PGRC,Officer PGRC-12,Inspection Ordered,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0038.pdf
+PGRC-2026-0018,1,2026-07-24,PGRC,Officer PGRC-09,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0039.pdf
+PGRC-2026-0018,2,2026-07-25,PGRC,Officer PGRC-09,Under Review,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0040.pdf
+PGRC-2026-0019,1,2026-08-03,PGRC,Officer PGRC-08,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0041.pdf
+PGRC-2026-0019,2,2026-08-17,PGRC,Officer PGRC-08,Documents Sought,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0042.pdf
+PGRC-2026-0020,1,2026-08-13,PGRC,Officer PGRC-05,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0043.pdf
+PGRC-2026-0020,2,2026-08-28,PGRC,Officer PGRC-05,Documents Sought,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0044.pdf
+PGRC-2026-0021,1,2026-08-23,PGRC,Officer PGRC-05,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0045.pdf
+PGRC-2026-0021,2,2026-09-05,PGRC,Officer PGRC-05,Under Review,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0046.pdf
+PGRC-2026-0022,1,2026-09-12,PGRC,Officer PGRC-08,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0047.pdf
+PGRC-2026-0022,2,2026-09-27,PGRC,Officer PGRC-08,Under Review,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0048.pdf
+PGRC-2026-0023,1,2026-09-15,PGRC,Officer PGRC-05,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0049.pdf
+PGRC-2026-0023,2,2026-10-04,PGRC,Officer PGRC-05,Documents Sought,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0050.pdf
+PGRC-2026-0024,1,2026-08-07,PGRC,Officer PGRC-08,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0051.pdf
+PGRC-2026-0024,2,2026-08-19,PGRC,Officer PGRC-08,Reply Sought from Institution,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0052.pdf
+PGRC-2026-0025,1,2026-06-09,PGRC,Officer PGRC-05,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0053.pdf
+PGRC-2026-0025,2,2026-06-24,PGRC,Officer PGRC-05,Inspection Ordered,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0054.pdf
+PGRC-2026-0025,3,2026-06-26,PGRC,Officer PGRC-05,Escalated to Competent Authority,Synthetic escalation to the competent authority.,synthetic_action_0303.pdf
+PGRC-2026-0026,1,2026-08-31,PGRC,Officer PGRC-08,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0055.pdf
+PGRC-2026-0026,2,2026-09-13,PGRC,Officer PGRC-08,Inspection Ordered,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0056.pdf
+PGRC-2026-0027,1,2026-04-21,PGRC,Officer PGRC-08,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0057.pdf
+PGRC-2026-0027,2,2026-05-04,PGRC,Officer PGRC-08,Under Review,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0058.pdf
+PGRC-2026-0028,1,2026-05-09,PGRC,Officer PGRC-11,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0059.pdf
+PGRC-2026-0028,2,2026-05-27,PGRC,Officer PGRC-11,Documents Sought,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0060.pdf
+PGRC-2026-0028,3,2026-05-30,PGRC,Officer PGRC-10,Disposed - Action Taken,Synthetic final disposal of the complaint.,synthetic_action_0306.pdf
+PGRC-2026-0029,1,2026-05-16,PGRC,Officer PGRC-12,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0061.pdf
+PGRC-2026-0029,2,2026-05-24,PGRC,Officer PGRC-12,Under Review,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0062.pdf
+PGRC-2026-0030,1,2026-08-06,PGRC,Officer PGRC-10,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0063.pdf
+PGRC-2026-0030,2,2026-08-11,PGRC,Officer PGRC-10,Reply Sought from Institution,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0064.pdf
+PGRC-2026-0031,1,2026-05-28,PGRC,Officer PGRC-04,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0065.pdf
+PGRC-2026-0031,2,2026-06-15,PGRC,Officer PGRC-04,Documents Sought,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0066.pdf
+PGRC-2026-0032,1,2026-08-16,PGRC,Officer PGRC-11,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0067.pdf
+PGRC-2026-0032,2,2026-08-25,PGRC,Officer PGRC-11,Inspection Ordered,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0068.pdf
+PGRC-2026-0032,3,2026-08-28,PGRC,Officer PGRC-03,Disposed - Unsubstantiated,Synthetic final disposal of the complaint.,synthetic_action_0308.pdf
+PGRC-2026-0033,1,2026-09-16,PGRC,Officer PGRC-10,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0069.pdf
+PGRC-2026-0033,2,2026-09-23,PGRC,Officer PGRC-10,Under Review,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0070.pdf
+PGRC-2026-0033,3,2026-09-26,PGRC,Officer PGRC-01,Transferred,Synthetic transfer from PGRC to RB.,synthetic_action_0309.pdf
+PGRC-2026-0034,1,2026-10-22,PGRC,Officer PGRC-03,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0071.pdf
+PGRC-2026-0035,1,2026-10-14,PGRC,Officer PGRC-06,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0072.pdf
+PGRC-2026-0035,2,2026-10-19,PGRC,Officer PGRC-06,Reply Sought from Institution,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0073.pdf
+PGRC-2026-0036,1,2026-09-28,PGRC,Officer PGRC-12,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0074.pdf
+PGRC-2026-0036,2,2026-09-29,PGRC,Officer PGRC-12,Inspection Ordered,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0075.pdf
+PGRC-2026-0037,1,2026-06-05,PGRC,Officer PGRC-06,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0076.pdf
+PGRC-2026-0037,2,2026-06-11,PGRC,Officer PGRC-06,Inspection Ordered,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0077.pdf
+PGRC-2026-0037,3,2026-06-14,PGRC,Officer PGRC-02,Disposed - Action Taken,Synthetic final disposal of the complaint.,synthetic_action_0312.pdf
+PGRC-2026-0038,1,2026-08-09,PGRC,Officer PGRC-07,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0078.pdf
+PGRC-2026-0038,2,2026-08-24,PGRC,Officer PGRC-07,Under Review,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0079.pdf
+PGRC-2026-0039,1,2026-06-25,PGRC,Officer PGRC-11,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0080.pdf
+PGRC-2026-0039,2,2026-07-12,PGRC,Officer PGRC-11,Reply Sought from Institution,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0081.pdf
+PGRC-2026-0040,1,2026-06-06,PGRC,Officer PGRC-12,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0082.pdf
+PGRC-2026-0040,2,2026-06-11,PGRC,Officer PGRC-12,Inspection Ordered,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0083.pdf
+PGRC-2026-0041,1,2026-06-11,PGRC,Officer PGRC-04,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0084.pdf
+PGRC-2026-0041,2,2026-06-28,PGRC,Officer PGRC-04,Inspection Ordered,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0085.pdf
+PGRC-2026-0041,3,2026-07-01,PGRC,Officer PGRC-12,Disposed - Action Taken,Synthetic final disposal of the complaint.,synthetic_action_0313.pdf
+PGRC-2026-0042,1,2026-05-11,PGRC,Officer PGRC-08,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0086.pdf
+PGRC-2026-0042,2,2026-05-20,PGRC,Officer PGRC-08,Under Review,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0087.pdf
+PGRC-2026-0043,1,2026-05-07,PGRC,Officer PGRC-09,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0088.pdf
+PGRC-2026-0043,2,2026-05-23,PGRC,Officer PGRC-09,Inspection Ordered,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0089.pdf
+PGRC-2026-0043,3,2026-05-26,PGRC,Officer PGRC-12,Disposed - Action Taken,Synthetic final disposal of the complaint.,synthetic_action_0315.pdf
+PGRC-2026-0044,1,2026-10-10,PGRC,Officer PGRC-01,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0090.pdf
+PGRC-2026-0044,2,2026-10-15,PGRC,Officer PGRC-01,Documents Sought,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0091.pdf
+PGRC-2026-0045,1,2026-08-04,PGRC,Officer PGRC-06,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0092.pdf
+PGRC-2026-0045,2,2026-08-22,PGRC,Officer PGRC-06,Reply Sought from Institution,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0093.pdf
+PGRC-2026-0046,1,2026-06-20,PGRC,Officer PGRC-04,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0094.pdf
+PGRC-2026-0046,2,2026-06-29,PGRC,Officer PGRC-04,Reply Sought from Institution,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0095.pdf
+PGRC-2026-0047,1,2026-07-02,PGRC,Officer PGRC-07,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0096.pdf
+PGRC-2026-0047,2,2026-07-07,PGRC,Officer PGRC-07,Under Review,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0097.pdf
+PGRC-2026-0048,1,2026-09-24,PGRC,Officer PGRC-12,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0098.pdf
+PGRC-2026-0048,2,2026-09-30,PGRC,Officer PGRC-12,Reply Sought from Institution,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0099.pdf
+PGRC-2026-0049,1,2026-04-07,PGRC,Officer PGRC-03,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0100.pdf
+PGRC-2026-0049,2,2026-04-09,PGRC,Officer PGRC-03,Under Review,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0101.pdf
+PGRC-2026-0049,3,2026-04-12,PGRC,Officer PGRC-10,Disposed - Action Taken,Synthetic final disposal of the complaint.,synthetic_action_0321.pdf
+PGRC-2026-0050,1,2026-08-29,PGRC,Officer PGRC-08,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0102.pdf
+PGRC-2026-0050,2,2026-09-13,PGRC,Officer PGRC-08,Inspection Ordered,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0103.pdf
+PGRC-2026-0051,1,2026-09-13,PGRC,Officer PGRC-10,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0104.pdf
+PGRC-2026-0051,2,2026-09-27,PGRC,Officer PGRC-10,Inspection Ordered,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0105.pdf
+PGRC-2026-0052,1,2026-04-30,PGRC,Officer PGRC-02,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0106.pdf
+PGRC-2026-0052,2,2026-05-03,PGRC,Officer PGRC-01,Disposed - Unsubstantiated,Synthetic final disposal of the complaint.,synthetic_action_0324.pdf
+PGRC-2026-0053,1,2026-04-09,PGRC,Officer PGRC-01,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0107.pdf
+PGRC-2026-0053,2,2026-04-13,PGRC,Officer PGRC-01,Documents Sought,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0108.pdf
+PGRC-2026-0053,3,2026-04-16,PGRC,Officer PGRC-03,Transferred,Synthetic transfer from PGRC to RB.,synthetic_action_0325.pdf
+PGRC-2026-0054,1,2026-04-15,PGRC,Officer PGRC-04,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0109.pdf
+PGRC-2026-0054,2,2026-04-26,PGRC,Officer PGRC-04,Reply Sought from Institution,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0110.pdf
+PGRC-2026-0054,3,2026-04-29,PGRC,Officer PGRC-02,Disposed - Action Taken,Synthetic final disposal of the complaint.,synthetic_action_0326.pdf
+PGRC-2026-0055,1,2026-09-05,PGRC,Officer PGRC-09,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0111.pdf
+PGRC-2026-0055,2,2026-09-12,PGRC,Officer PGRC-09,Reply Sought from Institution,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0112.pdf
+PGRC-2026-0055,3,2026-09-15,PGRC,Officer PGRC-08,Disposed - Action Taken,Synthetic final disposal of the complaint.,synthetic_action_0328.pdf
+PGRC-2026-0056,1,2026-08-28,PGRC,Officer PGRC-07,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0113.pdf
+PGRC-2026-0056,2,2026-09-02,PGRC,Officer PGRC-07,Documents Sought,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0114.pdf
+PGRC-2026-0056,3,2026-09-05,PGRC,Officer PGRC-06,Disposed - Action Taken,Synthetic final disposal of the complaint.,synthetic_action_0329.pdf
+PGRC-2026-0057,1,2026-07-16,PGRC,Officer PGRC-01,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0115.pdf
+PGRC-2026-0057,2,2026-07-21,PGRC,Officer PGRC-01,Inspection Ordered,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0116.pdf
+PGRC-2026-0058,1,2026-07-12,PGRC,Officer PGRC-07,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0117.pdf
+PGRC-2026-0058,2,2026-07-15,PGRC,Officer PGRC-11,Disposed - Unsubstantiated,Synthetic final disposal of the complaint.,synthetic_action_0330.pdf
+PGRC-2026-0059,1,2026-05-31,PGRC,Officer PGRC-02,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0118.pdf
+PGRC-2026-0059,2,2026-06-09,PGRC,Officer PGRC-02,Inspection Ordered,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0119.pdf
+PGRC-2026-0059,3,2026-06-12,PGRC,Officer PGRC-09,Disposed - Unsubstantiated,Synthetic final disposal of the complaint.,synthetic_action_0331.pdf
+PGRC-2026-0060,1,2026-08-10,PGRC,Officer PGRC-06,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0120.pdf
+PGRC-2026-0060,2,2026-08-14,PGRC,Officer PGRC-06,Under Review,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0121.pdf
+PGRC-2026-0060,3,2026-08-17,PGRC,Officer PGRC-08,Disposed - Action Taken,Synthetic final disposal of the complaint.,synthetic_action_0332.pdf
+PGRC-2026-0061,1,2026-08-02,PGRC,Officer PGRC-03,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0122.pdf
+PGRC-2026-0061,2,2026-08-17,PGRC,Officer PGRC-03,Reply Sought from Institution,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0123.pdf
+PGRC-2026-0061,3,2026-08-20,PGRC,Officer PGRC-10,Disposed - Action Taken,Synthetic final disposal of the complaint.,synthetic_action_0334.pdf
+PGRC-2026-0062,1,2026-09-06,PGRC,Officer PGRC-02,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0124.pdf
+PGRC-2026-0062,2,2026-09-20,PGRC,Officer PGRC-02,Documents Sought,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0125.pdf
+PGRC-2026-0063,1,2026-10-13,PGRC,Officer PGRC-08,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0126.pdf
+PGRC-2026-0063,2,2026-10-22,PGRC,Officer PGRC-08,Documents Sought,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0127.pdf
+PGRC-2026-0064,1,2026-05-05,PGRC,Officer PGRC-09,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0128.pdf
+PGRC-2026-0064,2,2026-05-15,PGRC,Officer PGRC-09,Reply Sought from Institution,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0129.pdf
+PGRC-2026-0064,3,2026-05-18,PGRC,Officer PGRC-07,Disposed - Unsubstantiated,Synthetic final disposal of the complaint.,synthetic_action_0335.pdf
+PGRC-2026-0065,1,2026-05-11,PGRC,Officer PGRC-11,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0130.pdf
+PGRC-2026-0065,2,2026-05-22,PGRC,Officer PGRC-11,Reply Sought from Institution,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0131.pdf
+PGRC-2026-0066,1,2026-05-03,PGRC,Officer PGRC-11,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0132.pdf
+PGRC-2026-0066,2,2026-05-09,PGRC,Officer PGRC-11,Documents Sought,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0133.pdf
+PGRC-2026-0066,3,2026-05-12,PGRC,Officer PGRC-03,Transferred,Synthetic transfer from PGRC to RB.,synthetic_action_0340.pdf
+PGRC-2026-0067,1,2026-09-16,PGRC,Officer PGRC-09,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0134.pdf
+PGRC-2026-0067,2,2026-09-21,PGRC,Officer PGRC-09,Documents Sought,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0135.pdf
+PGRC-2026-0068,1,2026-04-30,PGRC,Officer PGRC-07,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0136.pdf
+PGRC-2026-0068,2,2026-05-20,PGRC,Officer PGRC-07,Inspection Ordered,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0137.pdf
+PGRC-2026-0069,1,2026-08-03,PGRC,Officer PGRC-08,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0138.pdf
+PGRC-2026-0069,2,2026-08-16,PGRC,Officer PGRC-08,Reply Sought from Institution,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0139.pdf
+PGRC-2026-0070,1,2026-07-11,PGRC,Officer PGRC-08,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0140.pdf
+PGRC-2026-0070,2,2026-07-24,PGRC,Officer PGRC-08,Reply Sought from Institution,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0141.pdf
+PGRC-2026-0071,1,2026-08-24,PGRC,Officer PGRC-06,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0142.pdf
+PGRC-2026-0071,2,2026-09-08,PGRC,Officer PGRC-06,Inspection Ordered,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0143.pdf
+PGRC-2026-0071,3,2026-09-11,PGRC,Officer PGRC-01,Disposed - Unsubstantiated,Synthetic final disposal of the complaint.,synthetic_action_0342.pdf
+PGRC-2026-0072,1,2026-09-03,PGRC,Officer PGRC-12,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0144.pdf
+PGRC-2026-0072,2,2026-09-19,PGRC,Officer PGRC-12,Documents Sought,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0145.pdf
+PGRC-2026-0072,3,2026-09-22,PGRC,Officer PGRC-11,Disposed - Unsubstantiated,Synthetic final disposal of the complaint.,synthetic_action_0343.pdf
+PGRC-2026-0073,1,2026-08-07,PGRC,Officer PGRC-02,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0146.pdf
+PGRC-2026-0073,2,2026-08-13,PGRC,Officer PGRC-02,Reply Sought from Institution,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0147.pdf
+PGRC-2026-0074,1,2026-08-26,PGRC,Officer PGRC-10,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0148.pdf
+PGRC-2026-0074,2,2026-09-06,PGRC,Officer PGRC-10,Documents Sought,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0149.pdf
+PGRC-2026-0075,1,2026-08-30,PGRC,Officer PGRC-10,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0150.pdf
+PGRC-2026-0075,2,2026-08-31,PGRC,Officer PGRC-10,Inspection Ordered,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0151.pdf
+PGRC-2026-0075,3,2026-09-03,PGRC,Officer PGRC-10,Disposed - Action Taken,Synthetic final disposal of the complaint.,synthetic_action_0345.pdf
+PGRC-2026-0076,1,2026-04-28,PGRC,Officer PGRC-12,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0152.pdf
+PGRC-2026-0076,2,2026-05-02,PGRC,Officer PGRC-12,Under Review,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0153.pdf
+PGRC-2026-0076,3,2026-05-04,PGRC,Officer PGRC-04,Escalated to Competent Authority,Synthetic escalation to the competent authority.,synthetic_action_0346.pdf
+PGRC-2026-0077,1,2026-05-18,PGRC,Officer PGRC-10,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0154.pdf
+PGRC-2026-0077,2,2026-06-07,PGRC,Officer PGRC-10,Documents Sought,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0155.pdf
+PGRC-2026-0078,1,2026-07-28,PGRC,Officer PGRC-07,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0156.pdf
+PGRC-2026-0078,2,2026-08-17,PGRC,Officer PGRC-07,Inspection Ordered,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0157.pdf
+PGRC-2026-0079,1,2026-04-14,PGRC,Officer PGRC-12,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0158.pdf
+PGRC-2026-0079,2,2026-04-21,PGRC,Officer PGRC-12,Documents Sought,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0159.pdf
+PGRC-2026-0080,1,2026-04-03,PGRC,Officer PGRC-03,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0160.pdf
+PGRC-2026-0080,2,2026-04-12,PGRC,Officer PGRC-03,Reply Sought from Institution,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0161.pdf
+PGRC-2026-0080,3,2026-04-15,PGRC,Officer PGRC-02,Transferred,Synthetic transfer from PGRC to RB.,synthetic_action_0348.pdf
+PGRC-2026-0081,1,2026-10-19,PGRC,Officer PGRC-02,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0162.pdf
+PGRC-2026-0081,2,2026-10-22,PGRC,Officer PGRC-02,Documents Sought,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0163.pdf
+PGRC-2026-0082,1,2026-07-15,PGRC,Officer PGRC-02,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0164.pdf
+PGRC-2026-0082,2,2026-07-20,PGRC,Officer PGRC-02,Under Review,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0165.pdf
+RB-2026-0001,1,2026-08-12,RB,Officer RB-07,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0166.pdf
+RB-2026-0001,2,2026-08-23,RB,Officer RB-07,Under Review,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0167.pdf
+RB-2026-0002,1,2026-08-10,RB,Officer RB-04,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0168.pdf
+RB-2026-0002,2,2026-08-11,RB,Officer RB-04,Under Review,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0169.pdf
+RB-2026-0003,1,2026-07-03,RB,Officer RB-01,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0170.pdf
+RB-2026-0003,2,2026-07-05,RB,Officer RB-01,Under Review,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0171.pdf
+RB-2026-0004,1,2026-07-09,RB,Officer RB-02,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0172.pdf
+RB-2026-0005,1,2026-06-10,RB,Officer RB-02,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0173.pdf
+RB-2026-0005,2,2026-06-13,RB,Officer RB-02,Show-Cause Notice Issued,Planted S4 scenario: related complaints received conflicting outcomes.,synthetic_action_0174.pdf
+RB-2026-0005,3,2026-06-24,RB,Officer RB-02,Under Review,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0175.pdf
+RB-2026-0006,1,2026-07-01,RB,Officer RB-10,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0176.pdf
+RB-2026-0006,2,2026-07-03,RB,Officer RB-10,Documents Sought,Planted S5 scenario: request for the same institution's supporting records.,synthetic_action_0177.pdf
+RB-2026-0006,3,2026-07-07,RB,Officer RB-10,Reply Sought from Institution,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0178.pdf
+RB-2026-0007,1,2026-05-20,RB,Officer RB-05,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0179.pdf
+RB-2026-0007,2,2026-05-21,RB,Officer RB-05,Reply Sought from Institution,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0180.pdf
+RB-2026-0008,1,2026-06-15,RB,Officer RB-02,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0181.pdf
+RB-2026-0008,2,2026-06-17,RB,Officer RB-02,Inspection Ordered,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0182.pdf
+RB-2026-0009,1,2026-07-15,RB,Officer RB-02,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0183.pdf
+RB-2026-0009,2,2026-07-16,RB,Officer RB-02,Documents Sought,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0184.pdf
+RB-2026-0010,1,2026-05-01,RB,Officer RB-08,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0185.pdf
+RB-2026-0011,1,2026-08-01,RB,Officer RB-12,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0186.pdf
+RB-2026-0011,2,2026-08-19,RB,Officer RB-12,Inspection Ordered,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0187.pdf
+RB-2026-0012,1,2026-08-05,RB,Officer RB-01,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0188.pdf
+RB-2026-0012,2,2026-08-07,RB,Officer RB-01,Transferred,Planted S11 scenario: complaint transferred from RB to PGRC.,synthetic_action_0189.pdf
+RB-2026-0012,3,2026-08-22,PGRC,Officer PGRC-12,Under Review,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0190.pdf
+RB-2026-0013,1,2026-07-20,RB,Officer RB-03,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0191.pdf
+RB-2026-0013,2,2026-07-24,RB,Officer RB-03,Under Review,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0192.pdf
+RB-2026-0014,1,2026-04-15,RB,Officer RB-01,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0193.pdf
+RB-2026-0014,2,2026-04-24,RB,Officer RB-01,Documents Sought,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0194.pdf
+RB-2026-0015,1,2026-04-25,RB,Officer RB-06,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0195.pdf
+RB-2026-0015,2,2026-05-12,RB,Officer RB-06,Documents Sought,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0196.pdf
+RB-2026-0016,1,2026-05-05,RB,Officer RB-06,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0197.pdf
+RB-2026-0016,2,2026-05-10,RB,Officer RB-06,Under Review,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0198.pdf
+RB-2026-0017,1,2026-05-25,RB,Officer RB-11,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0199.pdf
+RB-2026-0017,2,2026-06-14,RB,Officer RB-11,Documents Sought,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0200.pdf
+RB-2026-0018,1,2026-06-14,RB,Officer RB-11,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0201.pdf
+RB-2026-0018,2,2026-06-27,RB,Officer RB-11,Documents Sought,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0202.pdf
+RB-2026-0019,1,2026-06-24,RB,Officer RB-01,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0203.pdf
+RB-2026-0019,2,2026-07-09,RB,Officer RB-01,Inspection Ordered,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0204.pdf
+RB-2026-0020,1,2026-07-14,RB,Officer RB-08,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0205.pdf
+RB-2026-0020,2,2026-07-27,RB,Officer RB-08,Documents Sought,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0206.pdf
+RB-2026-0021,1,2026-09-02,RB,Officer RB-02,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0207.pdf
+RB-2026-0021,2,2026-09-21,RB,Officer RB-02,Under Review,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0208.pdf
+RB-2026-0022,1,2026-09-17,RB,Officer RB-03,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0209.pdf
+RB-2026-0022,2,2026-09-19,RB,Officer RB-03,Under Review,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0210.pdf
+RB-2026-0023,1,2026-05-11,RB,Officer RB-09,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0211.pdf
+RB-2026-0023,2,2026-05-24,RB,Officer RB-09,Under Review,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0212.pdf
+RB-2026-0024,1,2026-05-04,RB,Officer RB-02,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0213.pdf
+RB-2026-0024,2,2026-05-13,RB,Officer RB-02,Under Review,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0214.pdf
+RB-2026-0025,1,2026-08-07,RB,Officer RB-11,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0215.pdf
+RB-2026-0025,2,2026-08-12,RB,Officer RB-11,Inspection Ordered,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0216.pdf
+RB-2026-0026,1,2026-09-24,RB,Officer RB-11,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0217.pdf
+RB-2026-0026,2,2026-09-25,RB,Officer RB-11,Inspection Ordered,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0218.pdf
+RB-2026-0026,3,2026-09-28,RB,Officer RB-01,Disposed - Unsubstantiated,Synthetic final disposal of the complaint.,synthetic_action_0304.pdf
+RB-2026-0027,1,2026-04-05,RB,Officer RB-02,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0219.pdf
+RB-2026-0027,2,2026-04-10,RB,Officer RB-02,Under Review,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0220.pdf
+RB-2026-0028,1,2026-04-30,RB,Officer RB-04,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0221.pdf
+RB-2026-0028,2,2026-05-14,RB,Officer RB-04,Under Review,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0222.pdf
+RB-2026-0028,3,2026-05-17,RB,Officer RB-12,Transferred,Synthetic transfer from RB to PGRC.,synthetic_action_0305.pdf
+RB-2026-0029,1,2026-06-18,RB,Officer RB-02,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0223.pdf
+RB-2026-0029,2,2026-06-29,RB,Officer RB-02,Inspection Ordered,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0224.pdf
+RB-2026-0029,3,2026-07-02,RB,Officer RB-02,Transferred,Synthetic transfer from RB to PGRC.,synthetic_action_0307.pdf
+RB-2026-0030,1,2026-05-14,RB,Officer RB-06,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0225.pdf
+RB-2026-0030,2,2026-05-16,RB,Officer RB-06,Inspection Ordered,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0226.pdf
+RB-2026-0030,3,2026-05-19,RB,Officer RB-09,Disposed - Unsubstantiated,Synthetic final disposal of the complaint.,synthetic_action_0310.pdf
+RB-2026-0031,1,2026-04-16,RB,Officer RB-01,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0227.pdf
+RB-2026-0031,2,2026-04-27,RB,Officer RB-01,Reply Sought from Institution,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0228.pdf
+RB-2026-0032,1,2026-04-29,RB,Officer RB-09,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0229.pdf
+RB-2026-0032,2,2026-05-04,RB,Officer RB-09,Inspection Ordered,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0230.pdf
+RB-2026-0032,3,2026-05-07,RB,Officer RB-05,Disposed - Unsubstantiated,Synthetic final disposal of the complaint.,synthetic_action_0311.pdf
+RB-2026-0033,1,2026-08-02,RB,Officer RB-03,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0231.pdf
+RB-2026-0033,2,2026-08-10,RB,Officer RB-03,Under Review,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0232.pdf
+RB-2026-0034,1,2026-07-12,RB,Officer RB-10,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0233.pdf
+RB-2026-0034,2,2026-07-31,RB,Officer RB-10,Inspection Ordered,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0234.pdf
+RB-2026-0035,1,2026-09-05,RB,Officer RB-11,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0235.pdf
+RB-2026-0035,2,2026-09-19,RB,Officer RB-11,Documents Sought,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0236.pdf
+RB-2026-0036,1,2026-06-01,RB,Officer RB-05,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0237.pdf
+RB-2026-0036,2,2026-06-05,RB,Officer RB-05,Documents Sought,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0238.pdf
+RB-2026-0036,3,2026-06-08,RB,Officer RB-02,Transferred,Synthetic transfer from RB to PGRC.,synthetic_action_0314.pdf
+RB-2026-0037,1,2026-06-09,RB,Officer RB-06,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0239.pdf
+RB-2026-0037,2,2026-06-21,RB,Officer RB-06,Under Review,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0240.pdf
+RB-2026-0037,3,2026-06-23,RB,Officer RB-08,Escalated to Competent Authority,Synthetic escalation to the competent authority.,synthetic_action_0316.pdf
+RB-2026-0038,1,2026-04-03,RB,Officer RB-04,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0241.pdf
+RB-2026-0038,2,2026-04-19,RB,Officer RB-04,Documents Sought,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0242.pdf
+RB-2026-0038,3,2026-04-22,RB,Officer RB-11,Disposed - Unsubstantiated,Synthetic final disposal of the complaint.,synthetic_action_0317.pdf
+RB-2026-0039,1,2026-04-09,RB,Officer RB-07,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0243.pdf
+RB-2026-0039,2,2026-04-29,RB,Officer RB-07,Reply Sought from Institution,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0244.pdf
+RB-2026-0039,3,2026-05-02,RB,Officer RB-09,Transferred,Synthetic transfer from RB to PGRC.,synthetic_action_0318.pdf
+RB-2026-0040,1,2026-06-16,RB,Officer RB-07,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0245.pdf
+RB-2026-0040,2,2026-06-22,RB,Officer RB-07,Documents Sought,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0246.pdf
+RB-2026-0041,1,2026-09-22,RB,Officer RB-07,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0247.pdf
+RB-2026-0041,2,2026-10-05,RB,Officer RB-07,Inspection Ordered,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0248.pdf
+RB-2026-0041,3,2026-10-08,RB,Officer RB-10,Disposed - Action Taken,Synthetic final disposal of the complaint.,synthetic_action_0319.pdf
+RB-2026-0042,1,2026-06-12,RB,Officer RB-06,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0249.pdf
+RB-2026-0042,2,2026-06-18,RB,Officer RB-06,Inspection Ordered,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0250.pdf
+RB-2026-0042,3,2026-06-20,RB,Officer RB-08,Escalated to Competent Authority,Synthetic escalation to the competent authority.,synthetic_action_0320.pdf
+RB-2026-0043,1,2026-07-26,RB,Officer RB-03,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0251.pdf
+RB-2026-0043,2,2026-07-31,RB,Officer RB-03,Inspection Ordered,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0252.pdf
+RB-2026-0044,1,2026-04-13,RB,Officer RB-11,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0253.pdf
+RB-2026-0044,2,2026-04-26,RB,Officer RB-11,Inspection Ordered,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0254.pdf
+RB-2026-0045,1,2026-06-27,RB,Officer RB-12,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0255.pdf
+RB-2026-0045,2,2026-07-01,RB,Officer RB-12,Reply Sought from Institution,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0256.pdf
+RB-2026-0046,1,2026-07-20,RB,Officer RB-08,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0257.pdf
+RB-2026-0046,2,2026-07-23,RB,Officer RB-08,Reply Sought from Institution,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0258.pdf
+RB-2026-0047,1,2026-10-04,RB,Officer RB-11,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0259.pdf
+RB-2026-0047,2,2026-10-05,RB,Officer RB-11,Inspection Ordered,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0260.pdf
+RB-2026-0047,3,2026-10-08,RB,Officer RB-01,Disposed - Unsubstantiated,Synthetic final disposal of the complaint.,synthetic_action_0322.pdf
+RB-2026-0048,1,2026-04-12,RB,Officer RB-10,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0261.pdf
+RB-2026-0048,2,2026-04-29,RB,Officer RB-10,Reply Sought from Institution,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0262.pdf
+RB-2026-0049,1,2026-06-07,RB,Officer RB-10,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0263.pdf
+RB-2026-0049,2,2026-06-09,RB,Officer RB-10,Reply Sought from Institution,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0264.pdf
+RB-2026-0049,3,2026-06-11,RB,Officer RB-08,Escalated to Competent Authority,Synthetic escalation to the competent authority.,synthetic_action_0323.pdf
+RB-2026-0050,1,2026-09-06,RB,Officer RB-04,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0265.pdf
+RB-2026-0050,2,2026-09-18,RB,Officer RB-04,Documents Sought,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0266.pdf
+RB-2026-0050,3,2026-09-21,RB,Officer RB-03,Disposed - Unsubstantiated,Synthetic final disposal of the complaint.,synthetic_action_0327.pdf
+RB-2026-0051,1,2026-05-15,RB,Officer RB-08,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0267.pdf
+RB-2026-0051,2,2026-06-04,RB,Officer RB-08,Reply Sought from Institution,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0268.pdf
+RB-2026-0052,1,2026-04-21,RB,Officer RB-03,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0269.pdf
+RB-2026-0052,2,2026-05-03,RB,Officer RB-03,Reply Sought from Institution,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0270.pdf
+RB-2026-0052,3,2026-05-06,RB,Officer RB-11,Disposed - Unsubstantiated,Synthetic final disposal of the complaint.,synthetic_action_0333.pdf
+RB-2026-0053,1,2026-06-20,RB,Officer RB-01,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0271.pdf
+RB-2026-0053,2,2026-07-02,RB,Officer RB-01,Under Review,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0272.pdf
+RB-2026-0054,1,2026-10-08,RB,Officer RB-11,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0273.pdf
+RB-2026-0054,2,2026-10-17,RB,Officer RB-11,Under Review,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0274.pdf
+RB-2026-0054,3,2026-10-20,RB,Officer RB-12,Disposed - Action Taken,Synthetic final disposal of the complaint.,synthetic_action_0336.pdf
+RB-2026-0055,1,2026-06-24,RB,Officer RB-01,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0275.pdf
+RB-2026-0055,2,2026-07-09,RB,Officer RB-01,Under Review,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0276.pdf
+RB-2026-0056,1,2026-06-27,RB,Officer RB-03,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0277.pdf
+RB-2026-0056,2,2026-07-05,RB,Officer RB-03,Inspection Ordered,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0278.pdf
+RB-2026-0056,3,2026-07-08,RB,Officer RB-08,Transferred,Synthetic transfer from RB to PGRC.,synthetic_action_0337.pdf
+RB-2026-0057,1,2026-06-08,RB,Officer RB-01,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0279.pdf
+RB-2026-0057,2,2026-06-27,RB,Officer RB-01,Inspection Ordered,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0280.pdf
+RB-2026-0057,3,2026-06-30,RB,Officer RB-10,Transferred,Synthetic transfer from RB to PGRC.,synthetic_action_0338.pdf
+RB-2026-0058,1,2026-04-11,RB,Officer RB-08,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0281.pdf
+RB-2026-0058,2,2026-04-21,RB,Officer RB-08,Documents Sought,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0282.pdf
+RB-2026-0058,3,2026-04-24,RB,Officer RB-01,Disposed - Unsubstantiated,Synthetic final disposal of the complaint.,synthetic_action_0339.pdf
+RB-2026-0059,1,2026-08-15,RB,Officer RB-08,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0283.pdf
+RB-2026-0059,2,2026-08-29,RB,Officer RB-08,Inspection Ordered,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0284.pdf
+RB-2026-0059,3,2026-09-01,RB,Officer RB-11,Transferred,Synthetic transfer from RB to PGRC.,synthetic_action_0341.pdf
+RB-2026-0060,1,2026-09-14,RB,Officer RB-06,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0285.pdf
+RB-2026-0060,2,2026-10-01,RB,Officer RB-06,Inspection Ordered,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0286.pdf
+RB-2026-0060,3,2026-10-04,RB,Officer RB-10,Disposed - Action Taken,Synthetic final disposal of the complaint.,synthetic_action_0344.pdf
+RB-2026-0061,1,2026-04-10,RB,Officer RB-03,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0287.pdf
+RB-2026-0062,1,2026-04-16,RB,Officer RB-05,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0288.pdf
+RB-2026-0062,2,2026-05-01,RB,Officer RB-05,Documents Sought,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0289.pdf
+RB-2026-0063,1,2026-09-21,RB,Officer RB-10,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0290.pdf
+RB-2026-0063,2,2026-10-01,RB,Officer RB-10,Inspection Ordered,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0291.pdf
+RB-2026-0063,3,2026-10-04,RB,Officer RB-12,Disposed - Action Taken,Synthetic final disposal of the complaint.,synthetic_action_0347.pdf
+RB-2026-0064,1,2026-05-25,RB,Officer RB-05,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0292.pdf
+RB-2026-0064,2,2026-06-06,RB,Officer RB-05,Documents Sought,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0293.pdf
+RB-2026-0065,1,2026-08-08,RB,Officer RB-08,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0294.pdf
+RB-2026-0065,2,2026-08-23,RB,Officer RB-08,Inspection Ordered,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0295.pdf
+RB-2026-0065,3,2026-08-26,RB,Officer RB-07,Transferred,Synthetic transfer from RB to PGRC.,synthetic_action_0349.pdf
+RB-2026-0066,1,2026-08-14,RB,Officer RB-09,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0296.pdf
+RB-2026-0066,2,2026-08-23,RB,Officer RB-09,Documents Sought,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0297.pdf
+RB-2026-0066,3,2026-08-26,RB,Officer RB-09,Disposed - Unsubstantiated,Synthetic final disposal of the complaint.,synthetic_action_0350.pdf
+RB-2026-0067,1,2026-04-15,RB,Officer RB-12,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0298.pdf
+RB-2026-0067,2,2026-04-26,RB,Officer RB-12,Documents Sought,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0299.pdf
+RB-2026-0067,3,2026-04-28,RB,Officer RB-07,Escalated to Competent Authority,Synthetic escalation to the competent authority.,synthetic_action_0351.pdf
+RB-2026-0068,1,2026-04-11,RB,Officer RB-07,Acknowledged,Synthetic acknowledgement recorded for this complaint.,synthetic_action_0300.pdf
+RB-2026-0068,2,2026-04-13,RB,Officer RB-07,Inspection Ordered,Synthetic follow-up action; supporting documents may be requested.,synthetic_action_0301.pdf

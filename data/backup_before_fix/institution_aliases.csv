@@ -1,0 +1,248 @@
+alias,institution_id,alias_type
+SouthernValeUniversity,SYN-0001,COMMON_TYPO
+Southern Vale,SYN-0001,SHORT_NAME
+Orbelis Clg of Technology,SYN-0002,ABBREVIATION_VARIANT
+OrbelisCollegeofTechnology,SYN-0002,COMMON_TYPO
+Orbelis College of,SYN-0002,SHORT_NAME
+Quoralis Inst. of Engineering,SYN-0003,ABBREVIATION_VARIANT
+Quoralis Institute of Engg,SYN-0003,ABBREVIATION_VARIANT
+QuoralisInstituteofEngineering,SYN-0003,COMMON_TYPO
+Quoralis Institute of,SYN-0003,SHORT_NAME
+Zenvora Clg of Architecture,SYN-0004,ABBREVIATION_VARIANT
+ZenvoraCollegeofArchitecture,SYN-0004,COMMON_TYPO
+Zenvora College of,SYN-0004,SHORT_NAME
+WesternCrestUniversity,SYN-0005,COMMON_TYPO
+Western Crest,SYN-0005,SHORT_NAME
+Avenor Inst. of Pharmacy,SYN-0006,ABBREVIATION_VARIANT
+AvenorInstituteofPharmacy,SYN-0006,COMMON_TYPO
+Avenor Institute of,SYN-0006,SHORT_NAME
+Virellon Clg of Technology,SYN-0007,ABBREVIATION_VARIANT
+VirellonCollegeofTechnology,SYN-0007,COMMON_TYPO
+Virellon College of,SYN-0007,SHORT_NAME
+Trivenor Clg of Architecture,SYN-0008,ABBREVIATION_VARIANT
+TrivenorCollegeofArchitecture,SYN-0008,COMMON_TYPO
+Trivenor College of,SYN-0008,SHORT_NAME
+EasternMeridianUniversity,SYN-0009,COMMON_TYPO
+Eastern Meridian,SYN-0009,SHORT_NAME
+Astermere Clg of Architecture,SYN-0010,ABBREVIATION_VARIANT
+AstermereCollegeofArchitecture,SYN-0010,COMMON_TYPO
+Astermere College of,SYN-0010,SHORT_NAME
+Caldris Clg of Technology,SYN-0011,ABBREVIATION_VARIANT
+CaldrisCollegeofTechnology,SYN-0011,COMMON_TYPO
+Caldris College of,SYN-0011,SHORT_NAME
+Lumivex Inst. of Pharmacy,SYN-0012,ABBREVIATION_VARIANT
+LumivexInstituteofPharmacy,SYN-0012,COMMON_TYPO
+Lumivex Institute of,SYN-0012,SHORT_NAME
+NorthernAsterUniversity,SYN-0013,COMMON_TYPO
+Northern Aster,SYN-0013,SHORT_NAME
+Zenvora Inst. of Engineering,SYN-0014,ABBREVIATION_VARIANT
+Zenvora Institute of Engg,SYN-0014,ABBREVIATION_VARIANT
+ZenvoraInstituteofEngineering,SYN-0014,COMMON_TYPO
+Zenvora Institute of,SYN-0014,SHORT_NAME
+TrivenorSchoolofManagement,SYN-0015,COMMON_TYPO
+Trivenor School of,SYN-0015,SHORT_NAME
+Veltrix Clg of Technology,SYN-0016,ABBREVIATION_VARIANT
+VeltrixCollegeofTechnology,SYN-0016,COMMON_TYPO
+Veltrix College of,SYN-0016,SHORT_NAME
+AerovantSchoolofManagement,SYN-0017,COMMON_TYPO
+Aerovant School of,SYN-0017,SHORT_NAME
+Maventra Inst. of Pharmacy,SYN-0018,ABBREVIATION_VARIANT
+MaventraInstituteofPharmacy,SYN-0018,COMMON_TYPO
+Maventra Institute of,SYN-0018,SHORT_NAME
+Elvarin Clg of Architecture,SYN-0019,ABBREVIATION_VARIANT
+ElvarinCollegeofArchitecture,SYN-0019,COMMON_TYPO
+Elvarin College of,SYN-0019,SHORT_NAME
+Solvanta Inst. of Applied Sciences,SYN-0020,ABBREVIATION_VARIANT
+SolvantaInstituteofAppliedSciences,SYN-0020,COMMON_TYPO
+Solvanta Institute of Applied,SYN-0020,SHORT_NAME
+Deltora Inst. of Pharmacy,SYN-0021,ABBREVIATION_VARIANT
+DeltoraInstituteofPharmacy,SYN-0021,COMMON_TYPO
+Deltora Institute of,SYN-0021,SHORT_NAME
+Maventra Inst. of Applied Sciences,SYN-0022,ABBREVIATION_VARIANT
+MaventraInstituteofAppliedSciences,SYN-0022,COMMON_TYPO
+Maventra Institute of Applied,SYN-0022,SHORT_NAME
+SolvantaSchoolofManagement,SYN-0023,COMMON_TYPO
+Solvanta School of,SYN-0023,SHORT_NAME
+Solvanta Clg of Architecture,SYN-0024,ABBREVIATION_VARIANT
+SolvantaCollegeofArchitecture,SYN-0024,COMMON_TYPO
+Solvanta College of,SYN-0024,SHORT_NAME
+Zenvora Clg of Technology,SYN-0025,ABBREVIATION_VARIANT
+ZenvoraCollegeofTechnology,SYN-0025,COMMON_TYPO
+Zenvora College of,SYN-0025,SHORT_NAME
+Avenor Clg of Architecture,SYN-0026,ABBREVIATION_VARIANT
+AvenorCollegeofArchitecture,SYN-0026,COMMON_TYPO
+Avenor College of,SYN-0026,SHORT_NAME
+Orbelis Inst. of Engineering,SYN-0027,ABBREVIATION_VARIANT
+Orbelis Institute of Engg,SYN-0027,ABBREVIATION_VARIANT
+OrbelisInstituteofEngineering,SYN-0027,COMMON_TYPO
+Orbelis Institute of,SYN-0027,SHORT_NAME
+Aerovant Inst. of Applied Sciences,SYN-0028,ABBREVIATION_VARIANT
+AerovantInstituteofAppliedSciences,SYN-0028,COMMON_TYPO
+Aerovant Institute of Applied,SYN-0028,SHORT_NAME
+Aerovant Clg of Architecture,SYN-0029,ABBREVIATION_VARIANT
+AerovantCollegeofArchitecture,SYN-0029,COMMON_TYPO
+Aerovant College of,SYN-0029,SHORT_NAME
+Meridian Vale Technical Inst.,SYN-0030,ABBREVIATION_VARIANT
+MeridianValeTechnicalInstitute,SYN-0030,COMMON_TYPO
+Meridian Vale Technical,SYN-0030,SHORT_NAME
+DeltoraSchoolofManagement,SYN-0031,COMMON_TYPO
+Deltora School of,SYN-0031,SHORT_NAME
+Maventra Clg of Technology,SYN-0032,ABBREVIATION_VARIANT
+MaventraCollegeofTechnology,SYN-0032,COMMON_TYPO
+Maventra College of,SYN-0032,SHORT_NAME
+Veltrix Inst. of Applied Sciences,SYN-0033,ABBREVIATION_VARIANT
+VeltrixInstituteofAppliedSciences,SYN-0033,COMMON_TYPO
+Veltrix Institute of Applied,SYN-0033,SHORT_NAME
+Meridian Vale Clg of Architecture,SYN-0034,ABBREVIATION_VARIANT
+MeridianValeCollegeofArchitecture,SYN-0034,COMMON_TYPO
+Meridian Vale College of,SYN-0034,SHORT_NAME
+Orbelis Inst. of Applied Sciences,SYN-0035,ABBREVIATION_VARIANT
+OrbelisInstituteofAppliedSciences,SYN-0035,COMMON_TYPO
+Orbelis Institute of Applied,SYN-0035,SHORT_NAME
+Kestora Inst. of Pharmacy,SYN-0036,ABBREVIATION_VARIANT
+KestoraInstituteofPharmacy,SYN-0036,COMMON_TYPO
+Kestora Institute of,SYN-0036,SHORT_NAME
+Crestora Inst. of Engineering,SYN-0037,ABBREVIATION_VARIANT
+Crestora Institute of Engg,SYN-0037,ABBREVIATION_VARIANT
+CrestoraInstituteofEngineering,SYN-0037,COMMON_TYPO
+Crestora Institute of,SYN-0037,SHORT_NAME
+Meridian Vale Clg of Technology,SYN-0038,ABBREVIATION_VARIANT
+MeridianValeCollegeofTechnology,SYN-0038,COMMON_TYPO
+Meridian Vale College of,SYN-0038,SHORT_NAME
+NorvellaSchoolofManagement,SYN-0039,COMMON_TYPO
+Norvella School of,SYN-0039,SHORT_NAME
+Norvella Inst. of Applied Sciences,SYN-0040,ABBREVIATION_VARIANT
+NorvellaInstituteofAppliedSciences,SYN-0040,COMMON_TYPO
+Norvella Institute of Applied,SYN-0040,SHORT_NAME
+Southern Vale University,SYN-0002,LOCATION_BASED
+Southern Vale University,SYN-0003,LOCATION_BASED
+Southern Vale University,SYN-0004,LOCATION_BASED
+Western Crest University,SYN-0006,LOCATION_BASED
+Western Crest University,SYN-0007,LOCATION_BASED
+Western Crest University,SYN-0008,LOCATION_BASED
+Eastern Meridian University,SYN-0010,LOCATION_BASED
+Eastern Meridian University,SYN-0011,LOCATION_BASED
+Eastern Meridian University,SYN-0012,LOCATION_BASED
+Northern Aster University,SYN-0014,LOCATION_BASED
+Northern Aster University,SYN-0015,LOCATION_BASED
+Northern Aster University,SYN-0016,LOCATION_BASED
+SVU,SYN-0001,ACRONYM
+Southern Vale University,SYN-0001,ABBREVIATION_VARIANT
+Southern Vale University Campus,SYN-0001,LOCATION_BASED
+OCOT,SYN-0002,ACRONYM
+Orbelis College of Technology,SYN-0002,ABBREVIATION_VARIANT
+Orbelis College of Technology Campus,SYN-0002,LOCATION_BASED
+QIOE,SYN-0003,ACRONYM
+Quoralis Institute of Engineering,SYN-0003,ABBREVIATION_VARIANT
+Quoralis Institute of Engineering Campus,SYN-0003,LOCATION_BASED
+ZCOA,SYN-0004,ACRONYM
+Zenvora College of Architecture,SYN-0004,ABBREVIATION_VARIANT
+Zenvora College of Architecture Campus,SYN-0004,LOCATION_BASED
+WCU,SYN-0005,ACRONYM
+Western Crest University,SYN-0005,ABBREVIATION_VARIANT
+Western Crest University Campus,SYN-0005,LOCATION_BASED
+AIOP,SYN-0006,ACRONYM
+Avenor Institute of Pharmacy,SYN-0006,ABBREVIATION_VARIANT
+Avenor Institute of Pharmacy Campus,SYN-0006,LOCATION_BASED
+VCOT,SYN-0007,ACRONYM
+Virellon College of Technology,SYN-0007,ABBREVIATION_VARIANT
+Virellon College of Technology Campus,SYN-0007,LOCATION_BASED
+TCOA,SYN-0008,ACRONYM
+Trivenor College of Architecture,SYN-0008,ABBREVIATION_VARIANT
+Trivenor College of Architecture Campus,SYN-0008,LOCATION_BASED
+EMU,SYN-0009,ACRONYM
+Eastern Meridian University,SYN-0009,ABBREVIATION_VARIANT
+Eastern Meridian University Campus,SYN-0009,LOCATION_BASED
+ACOA,SYN-0010,ACRONYM
+Astermere College of Architecture,SYN-0010,ABBREVIATION_VARIANT
+Astermere College of Architecture Campus,SYN-0010,LOCATION_BASED
+CCOT,SYN-0011,ACRONYM
+Caldris College of Technology,SYN-0011,ABBREVIATION_VARIANT
+Caldris College of Technology Campus,SYN-0011,LOCATION_BASED
+LIOP,SYN-0012,ACRONYM
+Lumivex Institute of Pharmacy,SYN-0012,ABBREVIATION_VARIANT
+Lumivex Institute of Pharmacy Campus,SYN-0012,LOCATION_BASED
+NAU,SYN-0013,ACRONYM
+Northern Aster University,SYN-0013,ABBREVIATION_VARIANT
+Northern Aster University Campus,SYN-0013,LOCATION_BASED
+ZIOE,SYN-0014,ACRONYM
+Zenvora Institute of Engineering,SYN-0014,ABBREVIATION_VARIANT
+Zenvora Institute of Engineering Campus,SYN-0014,LOCATION_BASED
+TSOM,SYN-0015,ACRONYM
+Trivenor School of Management,SYN-0015,ABBREVIATION_VARIANT
+Trivenor School of Management Campus,SYN-0015,LOCATION_BASED
+VCOT,SYN-0016,ACRONYM
+Veltrix College of Technology,SYN-0016,ABBREVIATION_VARIANT
+Veltrix College of Technology Campus,SYN-0016,LOCATION_BASED
+ASOM,SYN-0017,ACRONYM
+Aerovant School of Management,SYN-0017,ABBREVIATION_VARIANT
+Aerovant School of Management Campus,SYN-0017,LOCATION_BASED
+MIOP,SYN-0018,ACRONYM
+Maventra Institute of Pharmacy,SYN-0018,ABBREVIATION_VARIANT
+Maventra Institute of Pharmacy Campus,SYN-0018,LOCATION_BASED
+ECOA,SYN-0019,ACRONYM
+Elvarin College of Architecture,SYN-0019,ABBREVIATION_VARIANT
+Elvarin College of Architecture Campus,SYN-0019,LOCATION_BASED
+SIOAS,SYN-0020,ACRONYM
+Solvanta Institute of Applied Sciences,SYN-0020,ABBREVIATION_VARIANT
+Solvanta Institute of Applied Sciences Campus,SYN-0020,LOCATION_BASED
+DIOP,SYN-0021,ACRONYM
+Deltora Institute of Pharmacy,SYN-0021,ABBREVIATION_VARIANT
+Deltora Institute of Pharmacy Campus,SYN-0021,LOCATION_BASED
+MIOAS,SYN-0022,ACRONYM
+Maventra Institute of Applied Sciences,SYN-0022,ABBREVIATION_VARIANT
+Maventra Institute of Applied Sciences Campus,SYN-0022,LOCATION_BASED
+SSOM,SYN-0023,ACRONYM
+Solvanta School of Management,SYN-0023,ABBREVIATION_VARIANT
+Solvanta School of Management Campus,SYN-0023,LOCATION_BASED
+SCOA,SYN-0024,ACRONYM
+Solvanta College of Architecture,SYN-0024,ABBREVIATION_VARIANT
+Solvanta College of Architecture Campus,SYN-0024,LOCATION_BASED
+ZCOT,SYN-0025,ACRONYM
+Zenvora College of Technology,SYN-0025,ABBREVIATION_VARIANT
+Zenvora College of Technology Campus,SYN-0025,LOCATION_BASED
+ACOA,SYN-0026,ACRONYM
+Avenor College of Architecture,SYN-0026,ABBREVIATION_VARIANT
+Avenor College of Architecture Campus,SYN-0026,LOCATION_BASED
+OIOE,SYN-0027,ACRONYM
+Orbelis Institute of Engineering,SYN-0027,ABBREVIATION_VARIANT
+Orbelis Institute of Engineering Campus,SYN-0027,LOCATION_BASED
+AIOAS,SYN-0028,ACRONYM
+Aerovant Institute of Applied Sciences,SYN-0028,ABBREVIATION_VARIANT
+Aerovant Institute of Applied Sciences Campus,SYN-0028,LOCATION_BASED
+ACOA,SYN-0029,ACRONYM
+Aerovant College of Architecture,SYN-0029,ABBREVIATION_VARIANT
+Aerovant College of Architecture Campus,SYN-0029,LOCATION_BASED
+MVTI,SYN-0030,ACRONYM
+Meridian Vale Technical Institute,SYN-0030,ABBREVIATION_VARIANT
+Meridian Vale Technical Institute Campus,SYN-0030,LOCATION_BASED
+DSOM,SYN-0031,ACRONYM
+Deltora School of Management,SYN-0031,ABBREVIATION_VARIANT
+Deltora School of Management Campus,SYN-0031,LOCATION_BASED
+MCOT,SYN-0032,ACRONYM
+Maventra College of Technology,SYN-0032,ABBREVIATION_VARIANT
+Maventra College of Technology Campus,SYN-0032,LOCATION_BASED
+VIOAS,SYN-0033,ACRONYM
+Veltrix Institute of Applied Sciences,SYN-0033,ABBREVIATION_VARIANT
+Veltrix Institute of Applied Sciences Campus,SYN-0033,LOCATION_BASED
+MVCOA,SYN-0034,ACRONYM
+Meridian Vale College of Architecture,SYN-0034,ABBREVIATION_VARIANT
+Meridian Vale College of Architecture Campus,SYN-0034,LOCATION_BASED
+OIOAS,SYN-0035,ACRONYM
+Orbelis Institute of Applied Sciences,SYN-0035,ABBREVIATION_VARIANT
+Orbelis Institute of Applied Sciences Campus,SYN-0035,LOCATION_BASED
+KIOP,SYN-0036,ACRONYM
+Kestora Institute of Pharmacy,SYN-0036,ABBREVIATION_VARIANT
+Kestora Institute of Pharmacy Campus,SYN-0036,LOCATION_BASED
+CIOE,SYN-0037,ACRONYM
+Crestora Institute of Engineering,SYN-0037,ABBREVIATION_VARIANT
+Crestora Institute of Engineering Campus,SYN-0037,LOCATION_BASED
+MVCOT,SYN-0038,ACRONYM
+Meridian Vale College of Technology,SYN-0038,ABBREVIATION_VARIANT
+Meridian Vale College of Technology Campus,SYN-0038,LOCATION_BASED
+NSOM,SYN-0039,ACRONYM
+Norvella School of Management,SYN-0039,ABBREVIATION_VARIANT
+Norvella School of Management Campus,SYN-0039,LOCATION_BASED
+NIOAS,SYN-0040,ACRONYM
+Norvella Institute of Applied Sciences,SYN-0040,ABBREVIATION_VARIANT
+Norvella Institute of Applied Sciences Campus,SYN-0040,LOCATION_BASED

@@ -1,0 +1,41 @@
+institution_id,official_name,institution_type,parent_id,address_line,area,district,state,pincode,region,lat,lng,programs,established_year
+SYN-0001,Southern Vale University,University,,Synthetic Academic Zone 1,Academic Zone 1,Chennai,Tamil Nadu,,South,13.093854,80.232701,University programs,2008
+SYN-0002,Orbelis College of Technology,Pharmacy,SYN-0001,Fictional Campus 1-1,Campus Zone 1-1,Chennai,Tamil Nadu,,South,13.101618,80.284836,B.E. CSE;MBA,2017
+SYN-0003,Quoralis Institute of Engineering,Engineering,SYN-0001,Fictional Campus 1-2,Campus Zone 1-2,Chennai,Tamil Nadu,,South,13.045243,80.238196,Technical diploma;Applied sciences,2007
+SYN-0004,Zenvora College of Architecture,Architecture,SYN-0001,Fictional Campus 1-3,Campus Zone 1-3,Chennai,Tamil Nadu,,South,13.087600,80.287982,Technical diploma;Applied sciences,2022
+SYN-0005,Western Crest University,University,,Synthetic Academic Zone 2,Academic Zone 2,Nashik,Maharashtra,,West,20.001095,73.767435,University programs,2018
+SYN-0006,Avenor Institute of Pharmacy,Pharmacy,SYN-0005,Fictional Campus 2-1,Campus Zone 2-1,Nashik,Maharashtra,,West,20.013351,73.777020,B.E. CSE;MBA,2004
+SYN-0007,Virellon College of Technology,Engineering,SYN-0005,Fictional Campus 2-2,Campus Zone 2-2,Nashik,Maharashtra,,West,19.964920,73.757537,Technical diploma;Applied sciences,2011
+SYN-0008,Trivenor College of Architecture,Architecture,SYN-0005,Fictional Campus 2-3,Campus Zone 2-3,Nashik,Maharashtra,,West,20.015879,73.792698,Technical diploma;Applied sciences,2012
+SYN-0009,Eastern Meridian University,University,,Synthetic Academic Zone 3,Academic Zone 3,Durgapur,West Bengal,,East,23.486704,87.295354,University programs,2020
+SYN-0010,Astermere College of Architecture,Architecture,SYN-0009,Fictional Campus 3-1,Campus Zone 3-1,Durgapur,West Bengal,,East,23.495783,87.277464,B.E. CSE;MBA,2021
+SYN-0011,Caldris College of Technology,Engineering,SYN-0009,Fictional Campus 3-2,Campus Zone 3-2,Durgapur,West Bengal,,East,23.548825,87.341219,Technical diploma;Applied sciences,2012
+SYN-0012,Lumivex Institute of Pharmacy,Pharmacy,SYN-0009,Fictional Campus 3-3,Campus Zone 3-3,Durgapur,West Bengal,,East,23.493412,87.300322,Technical diploma;Applied sciences,2021
+SYN-0013,Northern Aster University,University,,Synthetic Academic Zone 4,Academic Zone 4,Jaipur,Rajasthan,,North,26.893758,75.822232,University programs,2020
+SYN-0014,Zenvora Institute of Engineering,Engineering,SYN-0013,Fictional Campus 4-1,Campus Zone 4-1,Jaipur,Rajasthan,,North,26.915131,75.766885,B.E. CSE;MBA,2014
+SYN-0015,Trivenor School of Management,Management,SYN-0013,Fictional Campus 4-2,Campus Zone 4-2,Jaipur,Rajasthan,,North,26.889969,75.773243,Technical diploma;Applied sciences,2001
+SYN-0016,Veltrix College of Technology,Management,SYN-0013,Fictional Campus 4-3,Campus Zone 4-3,Jaipur,Rajasthan,,North,26.904493,75.752595,Technical diploma;Applied sciences,2018
+SYN-0017,Aerovant School of Management,Management,,Fictional Education Sector 17,Education Sector 17,Jorhat,Assam,,North-East,26.722330,94.174870,B.E. CSE;B.E. Mechanical;MBA,2023
+SYN-0018,Maventra Institute of Pharmacy,Pharmacy,,Fictional Education Sector 18,Education Sector 18,Durgapur,West Bengal,,East,23.514675,87.318583,B.E. CSE;B.E. Mechanical;MBA,2011
+SYN-0019,Elvarin College of Architecture,Architecture,,Fictional Education Sector 19,Education Sector 19,Warangal,Telangana,,South,17.936173,79.557869,B.E. CSE;B.E. Mechanical;MBA,2003
+SYN-0020,Solvanta Institute of Applied Sciences,Architecture,,Fictional Education Sector 20,Education Sector 20,Thrissur,Kerala,,South,10.535313,76.205181,B.E. CSE;B.E. Mechanical;MBA,2019
+SYN-0021,Deltora Institute of Pharmacy,Pharmacy,,Fictional Education Sector 21,Education Sector 21,Prayagraj,Uttar Pradesh,,North,25.464662,81.807218,B.E. CSE;B.E. Mechanical;MBA,2023
+SYN-0022,Maventra Institute of Applied Sciences,Management,,Fictional Education Sector 22,Education Sector 22,Mysuru,Karnataka,,South,12.317288,76.626614,B.E. CSE;B.E. Mechanical;MBA,2009
+SYN-0023,Solvanta School of Management,Management,,Fictional Education Sector 23,Education Sector 23,Jaipur,Rajasthan,,North,26.948705,75.817368,B.E. CSE;B.E. Mechanical;MBA,2008
+SYN-0024,Solvanta College of Architecture,Architecture,,Fictional Education Sector 24,Education Sector 24,Durgapur,West Bengal,,East,23.550041,87.295776,B.E. CSE;B.E. Mechanical;MBA,2020
+SYN-0025,Zenvora College of Technology,Pharmacy,,Fictional Education Sector 25,Education Sector 25,Durgapur,West Bengal,,East,23.510313,87.284824,B.E. CSE;B.E. Mechanical;MBA,2024
+SYN-0026,Avenor College of Architecture,Architecture,,Fictional Education Sector 26,Education Sector 26,Durgapur,West Bengal,,East,23.519488,87.280849,B.E. CSE;B.E. Mechanical;MBA,2011
+SYN-0027,Orbelis Institute of Engineering,Engineering,,Fictional Education Sector 27,Education Sector 27,Nashik,Maharashtra,,West,20.027741,73.825556,B.E. CSE;B.E. Mechanical;MBA,2002
+SYN-0028,Aerovant Institute of Applied Sciences,Engineering,,Fictional Education Sector 28,Education Sector 28,Jorhat,Assam,,North-East,26.789139,94.206316,B.E. CSE;B.E. Mechanical;MBA,2004
+SYN-0029,Aerovant College of Architecture,Architecture,,Fictional Education Sector 29,Education Sector 29,Thrissur,Kerala,,South,10.508805,76.244195,B.E. CSE;B.E. Mechanical;MBA,2013
+SYN-0030,Meridian Vale Technical Institute,Management,,Fictional Education Sector 30,Education Sector 30,Warangal,Telangana,,South,17.960819,79.607835,B.E. CSE;B.E. Mechanical;MBA,2011
+SYN-0031,Deltora School of Management,Management,,Fictional Education Sector 31,Education Sector 31,Prayagraj,Uttar Pradesh,,North,25.415632,81.811422,B.E. CSE;B.E. Mechanical;MBA,2000
+SYN-0032,Maventra College of Technology,Diploma,,Fictional Education Sector 32,Education Sector 32,Cuttack,Odisha,,East,20.440117,85.848679,B.E. CSE;B.E. Mechanical;MBA,2020
+SYN-0033,Veltrix Institute of Applied Sciences,Management,,Fictional Education Sector 33,Education Sector 33,Chennai,Tamil Nadu,,South,13.048369,80.249740,B.E. CSE;B.E. Mechanical;MBA,2021
+SYN-0034,Meridian Vale College of Architecture,Architecture,,Fictional Education Sector 34,Education Sector 34,Prayagraj,Uttar Pradesh,,North,25.453668,81.876891,B.E. CSE;B.E. Mechanical;MBA,2018
+SYN-0035,Orbelis Institute of Applied Sciences,Architecture,,Fictional Education Sector 35,Education Sector 35,Prayagraj,Uttar Pradesh,,North,25.460400,81.821533,B.E. CSE;B.E. Mechanical;MBA,2003
+SYN-0036,Kestora Institute of Pharmacy,Pharmacy,,Fictional Education Sector 36,Education Sector 36,Indore,Madhya Pradesh,,Central,22.712488,75.886807,B.E. CSE;B.E. Mechanical;MBA,2001
+SYN-0037,Crestora Institute of Engineering,Engineering,,Fictional Education Sector 37,Education Sector 37,Indore,Madhya Pradesh,,Central,22.737857,75.881747,B.E. CSE;B.E. Mechanical;MBA,2003
+SYN-0038,Meridian Vale College of Technology,Diploma,,Fictional Education Sector 38,Education Sector 38,Warangal,Telangana,,South,17.964789,79.587851,B.E. CSE;B.E. Mechanical;MBA,2008
+SYN-0039,Norvella School of Management,Management,,Fictional Education Sector 39,Education Sector 39,Prayagraj,Uttar Pradesh,,North,25.403633,81.858472,B.E. CSE;B.E. Mechanical;MBA,2017
+SYN-0040,Norvella Institute of Applied Sciences,Pharmacy,,Fictional Education Sector 40,Education Sector 40,Chennai,Tamil Nadu,,South,13.056005,80.269551,B.E. CSE;B.E. Mechanical;MBA,2006

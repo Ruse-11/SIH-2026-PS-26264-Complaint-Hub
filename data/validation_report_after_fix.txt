@@ -1,0 +1,148 @@
+Reference date for stalled/overdue checks: 2026-10-25
+
+======================================================================
+1. File and row counts vs spec
+======================================================================
+  OK   institutions.csv               rows=  40  spec 40
+  WARN institution_aliases.csv        rows= 247  spec ~160 (+/-15%)
+  OK   institution_name_tests.csv     rows=  45  spec >= 45
+  OK   reporters.csv                  rows=  80  spec 80
+  OK   cases.csv                      rows= 150  spec 150
+  OK   actions.csv                    rows= 350  spec ~300 (+/-20%)
+
+======================================================================
+2. Column names per file
+======================================================================
+  institutions.csv: institution_id, official_name, institution_type, parent_id, address_line, area, district, state, pincode, region, lat, lng, programs, established_year
+  institution_aliases.csv: alias, institution_id, alias_type
+  institution_name_tests.csv: test_id, typed_input, expected_outcome, expected_institution_id, note
+  reporters.csv: reporter_id, display_name, reporter_type, email, phone
+  cases.csv: source_case_no, source_system, institution_id, reporter_id, category, title, description, severity, received_date, status, assigned_bureau, assigned_officer, last_action_date, expected_disposal_date, scenario_tag
+  actions.csv: source_case_no, action_seq, action_date, bureau, officer, action_type, remarks, doc_ref
+  Note: CLAUDE.md section 9 calls the institution key aicte_id and uses received_at; the CSVs use
+  institution_id and received_date. The M1 seed loader maps these names; no CSV change needed.
+
+======================================================================
+3. Integrity (unique IDs and references)
+======================================================================
+  parent groups: 4 (spec 4) -> {'SYN-0001': 3, 'SYN-0005': 3, 'SYN-0009': 3, 'SYN-0013': 3}
+  unique IDs checked; cases without any action: 0
+
+======================================================================
+4. Allowed values
+======================================================================
+  cases.csv.category: OK
+  cases.csv.status: OK
+  cases.csv.severity: OK
+  cases.csv.source_system: OK
+  cases.csv.assigned_bureau: OK
+  actions.csv.action_type: OK
+  actions.csv.bureau: OK
+  institutions.csv.institution_type: OK
+  reporters.csv.reporter_type: OK
+  institution_name_tests.csv.expected_outcome: OK
+  action types never used: ['Penalty Proposed']
+  institution_type contradicting the name: 0 rows
+
+======================================================================
+5. Dates (YYYY-MM-DD, 2026-04-01..2026-10-22, order)
+======================================================================
+  date issues found: 0
+
+======================================================================
+5b. Status vs action history (consistency)
+======================================================================
+  consistency issues found: 0
+
+======================================================================
+6. Coordinates
+======================================================================
+  coordinate issues: 0
+
+======================================================================
+7. Demo college SYN-0040
+======================================================================
+  exists: True, cases: 0
+
+======================================================================
+8. Scenarios S1-S16
+======================================================================
+  PASS S1 (2 cases, in md: True): same institution, RB and PGRC, both open
+  PASS S2 (2 cases, in md: True): same reporter, same institution, both portals
+  PASS S3 (3 cases, in md: True): >=3 different reporters, same institution and category
+  PASS S4 (2 cases, in md: True): ENFORCING action in one bureau, CLOSING in another, same institution
+  PASS S5 (2 cases, in md: True): Documents Sought by both bureaus within 10 days
+  PASS S6 (2 cases, in md: True): same institution, different categories (must NOT be linked as duplicate)
+  PASS S7 (2 cases, in md: True): same reporter, different institutions (must NOT be linked)
+  PASS S8 (2 cases, in md: True): identical description, different institutions (must NOT be linked)
+  PASS S9 (1 cases, in md: True): Pending and no action for 45+ days before 2026-10-25
+  PASS S10 (2 cases, in md: True): one open case due within 3 days of 2026-10-25, one overdue
+  PASS S11 (2 cases, in md: True): status Transferred with a Transferred action
+  PASS S12 (1 cases, in md: True): status Escalated with escalation action
+  PASS S13 (1 cases, in md: True): no institution_id (unlisted)
+  PASS S14 (2 cases, in md: True): same institution and category, different wording
+  PASS S15 (17 cases, in md: True): >=8 cases at one institution over 3+ months
+  PASS S16 (2 cases, in md: True): no institution_id (ambiguous parent)
+  institutions with most cases: [('SYN-0032', 17), ('SYN-0021', 8), ('SYN-0001', 7)]
+
+======================================================================
+8b. Name tests and aliases (resolver inputs)
+======================================================================
+  aliases: 247, distinct: 230, types: {'COMMON_TYPO': 40, 'SHORT_NAME': 40, 'ABBREVIATION_VARIANT': 75, 'LOCATION_BASED': 52, 'ACRONYM': 40}
+
+======================================================================
+9. Privacy
+======================================================================
+  privacy errors: 0; suspicious real-name hits: 0
+  institution names (check by eye that none is a real college):
+    SYN-0001  Southern Vale University  (Chennai, Tamil Nadu)
+    SYN-0002  Orbelis College of Technology  (Chennai, Tamil Nadu)
+    SYN-0003  Quoralis Institute of Engineering  (Chennai, Tamil Nadu)
+    SYN-0004  Zenvora College of Architecture  (Chennai, Tamil Nadu)
+    SYN-0005  Western Crest University  (Nashik, Maharashtra)
+    SYN-0006  Avenor Institute of Pharmacy  (Nashik, Maharashtra)
+    SYN-0007  Virellon College of Technology  (Nashik, Maharashtra)
+    SYN-0008  Trivenor College of Architecture  (Nashik, Maharashtra)
+    SYN-0009  Eastern Meridian University  (Durgapur, West Bengal)
+    SYN-0010  Astermere College of Architecture  (Durgapur, West Bengal)
+    SYN-0011  Caldris College of Technology  (Durgapur, West Bengal)
+    SYN-0012  Lumivex Institute of Pharmacy  (Durgapur, West Bengal)
+    SYN-0013  Northern Aster University  (Jaipur, Rajasthan)
+    SYN-0014  Zenvora Institute of Engineering  (Jaipur, Rajasthan)
+    SYN-0015  Trivenor School of Management  (Jaipur, Rajasthan)
+    SYN-0016  Veltrix College of Technology  (Jaipur, Rajasthan)
+    SYN-0017  Aerovant School of Management  (Jorhat, Assam)
+    SYN-0018  Maventra Institute of Pharmacy  (Durgapur, West Bengal)
+    SYN-0019  Elvarin College of Architecture  (Warangal, Telangana)
+    SYN-0020  Solvanta Institute of Applied Sciences  (Thrissur, Kerala)
+    SYN-0021  Deltora Institute of Pharmacy  (Prayagraj, Uttar Pradesh)
+    SYN-0022  Maventra Institute of Applied Sciences  (Mysuru, Karnataka)
+    SYN-0023  Solvanta School of Management  (Jaipur, Rajasthan)
+    SYN-0024  Solvanta College of Architecture  (Durgapur, West Bengal)
+    SYN-0025  Zenvora College of Technology  (Durgapur, West Bengal)
+    SYN-0026  Avenor College of Architecture  (Durgapur, West Bengal)
+    SYN-0027  Orbelis Institute of Engineering  (Nashik, Maharashtra)
+    SYN-0028  Aerovant Institute of Applied Sciences  (Jorhat, Assam)
+    SYN-0029  Aerovant College of Architecture  (Thrissur, Kerala)
+    SYN-0030  Meridian Vale Technical Institute  (Warangal, Telangana)
+    SYN-0031  Deltora School of Management  (Prayagraj, Uttar Pradesh)
+    SYN-0032  Maventra College of Technology  (Cuttack, Odisha)
+    SYN-0033  Veltrix Institute of Applied Sciences  (Chennai, Tamil Nadu)
+    SYN-0034  Meridian Vale College of Architecture  (Prayagraj, Uttar Pradesh)
+    SYN-0035  Orbelis Institute of Applied Sciences  (Prayagraj, Uttar Pradesh)
+    SYN-0036  Kestora Institute of Pharmacy  (Indore, Madhya Pradesh)
+    SYN-0037  Crestora Institute of Engineering  (Indore, Madhya Pradesh)
+    SYN-0038  Meridian Vale College of Technology  (Warangal, Telangana)
+    SYN-0039  Norvella School of Management  (Prayagraj, Uttar Pradesh)
+    SYN-0040  Norvella Institute of Applied Sciences  (Chennai, Tamil Nadu)
+
+======================================================================
+10. Problems table
+======================================================================
+  LEVEL  | FILE                       | ROWS           | PROBLEM -> SUGGESTED FIX
+  ----------------------------------------------------------------------------------------------------
+  WARN   | institution_aliases.csv    | -              | 247 rows, spec says ~160 (+/-15%) -> fine if intentional; otherwise trim/add rows
+  WARN   | institution_aliases.csv    | -              | 4x, e.g. alias 'zenvora college' maps to unrelated ['SYN-0004', 'SYN-0025'] -> ok only if meant to be ambiguous
+  WARN   | institutions.csv           | 2,3,4,5,6,7,8,9... | 40x, e.g. SYN-0001 has empty pincode -> optional; add a 6-digit pincode if the confirm card should show it
+
+SUMMARY: 0 errors, 45 warnings, 0 to check by hand

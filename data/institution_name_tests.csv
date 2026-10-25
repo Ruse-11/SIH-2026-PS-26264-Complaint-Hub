@@ -1,0 +1,46 @@
+test_id,typed_input,expected_outcome,expected_institution_id,note
+TEST-001,Solvanta Institute of Applied Sciences,RESOLVED,SYN-0020,Exact fictional institution name
+TEST-002,Zenvora Institute of Engineering,RESOLVED,SYN-0014,Exact fictional institution name
+TEST-003,Zenvora College of Technology,RESOLVED,SYN-0025,Exact fictional institution name
+TEST-004,Maventra College of Technology,RESOLVED,SYN-0032,Exact fictional institution name
+TEST-005,Trivenor College of Architecture,RESOLVED,SYN-0008,Exact fictional institution name
+TEST-006,Virellon College of Technology,RESOLVED,SYN-0007,Exact fictional institution name
+TEST-007,Kestora Institute of Pharmacy,RESOLVED,SYN-0036,Exact fictional institution name
+TEST-008,Astermere College of Architecture,RESOLVED,SYN-0010,Exact fictional institution name
+TEST-009,Deltora Institute of Pharmacy,RESOLVED,SYN-0021,Exact fictional institution name
+TEST-010,Meridian Vale College of Technology,RESOLVED,SYN-0038,Exact fictional institution name
+TEST-011,Caldris College of Technology,RESOLVED,SYN-0011,Exact fictional institution name
+TEST-012,Veltrix Institute of Applied Sciences,RESOLVED,SYN-0033,Exact fictional institution name
+TEST-013,Trivenor School of Management,RESOLVED,SYN-0015,Exact fictional institution name
+TEST-014,Eastern Meridian University,AMBIGUOUS,SYN-0010;SYN-0011;SYN-0012,Parent university name matches multiple constituent colleges; never auto-pick
+TEST-015,Northern Aster University,AMBIGUOUS,SYN-0014;SYN-0015;SYN-0016,Parent university name matches multiple constituent colleges; never auto-pick
+TEST-016,Avenor Institute of Pharmacy,RESOLVED,SYN-0006,Exact fictional institution name
+TEST-017,Crestora Institute of Engineering,RESOLVED,SYN-0037,Exact fictional institution name
+TEST-018,Aerovant College of Architecture,RESOLVED,SYN-0029,Exact fictional institution name
+TEST-019,Norvella Institute of Applied Sciences,RESOLVED,SYN-0040,Exact fictional institution name
+TEST-020,Meridian Vale Technical Institute,RESOLVED,SYN-0030,Exact fictional institution name
+TEST-021,Solvanta School of Management,RESOLVED,SYN-0023,Exact fictional institution name
+TEST-022,Orbelis Institute of Engineering,RESOLVED,SYN-0027,Exact fictional institution name
+TEST-023,Meridian Vale College of Architecture,RESOLVED,SYN-0034,Exact fictional institution name
+TEST-024,Veltrix College of Technology,RESOLVED,SYN-0016,Exact fictional institution name
+TEST-025,Orbelis College of Technology,RESOLVED,SYN-0002,Exact fictional institution name
+TEST-026,Southern Vale University,AMBIGUOUS,SYN-0002;SYN-0003;SYN-0004,Parent university name matches multiple constituent colleges
+TEST-027,Western Crest University,AMBIGUOUS,SYN-0006;SYN-0007;SYN-0008,Parent university name matches multiple constituent colleges
+TEST-028,Eastern Meridian University,AMBIGUOUS,SYN-0010;SYN-0011;SYN-0012,Parent university name matches multiple constituent colleges
+TEST-029,Northern Aster University,AMBIGUOUS,SYN-0014;SYN-0015;SYN-0016,Parent university name matches multiple constituent colleges
+TEST-030,Northern Aster University main campus,AMBIGUOUS,SYN-0014;SYN-0015;SYN-0016,Campus not specified clearly
+TEST-031,Northern Aster University technical campus,AMBIGUOUS,SYN-0014;SYN-0015;SYN-0016,Campus not specified clearly
+TEST-032,Northern Aster University city campus,AMBIGUOUS,SYN-0014;SYN-0015;SYN-0016,Campus not specified clearly
+TEST-033,Eastern Meridian University main campus,AMBIGUOUS,SYN-0010;SYN-0011;SYN-0012,Campus not specified clearly
+TEST-034,Eastern Meridian University technical campus,AMBIGUOUS,SYN-0010;SYN-0011;SYN-0012,Campus not specified clearly
+TEST-035,Eastern Meridian University city campus,AMBIGUOUS,SYN-0010;SYN-0011;SYN-0012,Campus not specified clearly
+TEST-036,Unlisted Fictional Technical College 1,NOT_LISTED,,Institution intentionally absent from the dataset
+TEST-037,Unlisted Fictional Technical College 2,NOT_LISTED,,Institution intentionally absent from the dataset
+TEST-038,Unlisted Fictional Technical College 3,NOT_LISTED,,Institution intentionally absent from the dataset
+TEST-039,Unlisted Fictional Technical College 4,NOT_LISTED,,Institution intentionally absent from the dataset
+TEST-040,Unlisted Fictional Technical College 5,NOT_LISTED,,Institution intentionally absent from the dataset
+TEST-041,Unlisted Fictional Technical College 6,NOT_LISTED,,Institution intentionally absent from the dataset
+TEST-042,Unlisted Fictional Technical College 7,NOT_LISTED,,Institution intentionally absent from the dataset
+TEST-043,Unlisted Fictional Technical College 8,NOT_LISTED,,Institution intentionally absent from the dataset
+TEST-044,ZENVORA COLLEGE OF ARCHITECTURE,RESOLVED,SYN-0004,Case-insensitive exact-name test
+TEST-045,QUORALIS INSTITUTE OF ENGINEERING,RESOLVED,SYN-0003,Case-insensitive exact-name test
