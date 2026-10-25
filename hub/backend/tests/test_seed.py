@@ -71,7 +71,7 @@ class SeedTest(unittest.TestCase):
     def test_config_tables(self):
         self.assertEqual(self.count(m.ActionTypeStance), 12)
         self.assertEqual(self.count(m.CategoryOwnership), 11)
-        self.assertEqual(self.count(m.Threshold), 6)
+        self.assertEqual(self.count(m.Threshold), 9)  # M10 added SLA_DUE_SOON_DAYS, PENDING_REMINDER_DAYS, ESCALATION_OVERDUE_DAYS
 
     def test_seed_twice_gives_same_result(self):
         self.assertEqual(seed.run(self.engine), self.counts)
