@@ -9,3 +9,4 @@ dist/
 .env
 .vscode/
 .idea/
+hub/frontend/package-lock.json

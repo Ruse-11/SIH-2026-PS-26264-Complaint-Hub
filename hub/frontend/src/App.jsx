@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Navigate, NavLink, Outlet, Route, Routes } from "react-router-dom";
+import { Navigate, NavLink, Outlet, Route, Routes, useNavigate } from "react-router-dom";
 import { useAuth } from "./auth.jsx";
 import Login from "./pages/Login.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
@@ -55,6 +55,18 @@ const SCOPE_TEXT = {
 // Permissions that change data. A role with none of them is read-only.
 const ACTIONS = ["can_log_actions", "can_decide_links", "can_transfer", "can_escalate", "can_decide_lead"];
 
+// Search box in the header: jumps to the case list filtered by what was typed (name, AICTE ID or case ID).
+function HeaderSearch() {
+  const navigate = useNavigate();
+  const [text, setText] = useState("");
+  return (
+    <form className="flex-1" onSubmit={(e) => { e.preventDefault(); if (text.trim()) navigate("/cases?q=" + encodeURIComponent(text.trim())); }}>
+      <input id="header-search" value={text} onChange={(e) => setText(e.target.value)} placeholder="Search institution, AICTE ID or case ID…"
+        className="w-full max-w-md rounded border px-3 py-1.5 text-sm" />
+    </form>
+  );
+}
+
 // Sidebar + header around every page after login.
 function Shell() {
   const { user, logout } = useAuth();
@@ -78,7 +90,8 @@ function Shell() {
       </aside>
       <div className="flex-1">
         <header className="flex items-center justify-between gap-4 border-b bg-white px-6 py-3">
-          <span className="text-sm text-slate-500">Officers decide. The system only suggests. (synthetic data)</span>
+          <HeaderSearch />
+          <span className="hidden text-sm text-slate-500 xl:inline">Officers decide. The system only suggests. (synthetic data)</span>
           <div className="flex items-center gap-3">
             <HubStatus />
             <div className="text-right leading-tight">

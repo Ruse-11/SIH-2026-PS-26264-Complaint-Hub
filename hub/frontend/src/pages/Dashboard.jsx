@@ -1,5 +1,113 @@
-import ComingSoon from "../components/ComingSoon.jsx";
+// Dashboard: KPI tiles, what needs an officer's decision, bureau workload, institution-wise status, categories.
+import { Link } from "react-router-dom";
+import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { Loading, Panel, Tile, useGet } from "../components/ui.jsx";
+
+const STATUS_COLUMNS = [["pending", "Pending"], ["under_process", "Under Process"], ["disposed", "Disposed"], ["transferred", "Transferred"], ["escalated", "Escalated"]];
 
 export default function Dashboard() {
-  return <ComingSoon title="Dashboard" module="M8" />;
+  const kpi = useGet("/api/dashboard/kpis");
+  const top = useGet("/api/cases?sort=priority&page_size=5");
+  if (!kpi.data) return <Loading state={kpi} />;
+  const { totals: t, suggestions_waiting: w } = kpi.data;
+  const bureauChart = kpi.data.by_bureau.map((b) => ({ bureau: b.assigned_bureau, Pending: b.by_status.pending, "Under Process": b.by_status.under_process, Escalated: b.by_status.escalated, Overdue: b.overdue }));
+
+  return (
+    <div className="space-y-6">
+      <div className="flex items-end justify-between">
+        <h1 className="text-xl font-semibold">Dashboard</h1>
+        <span className="text-xs text-slate-500">Live from the hub · as of {kpi.data.as_of}</span>
+      </div>
+
+      <div className="grid grid-cols-2 gap-3 md:grid-cols-4 xl:grid-cols-8">
+        <Tile label="Total cases" value={t.total} to="/cases" />
+        <Tile label="Pending" value={t.pending} tone="amber" to="/cases?status=Pending" />
+        <Tile label="Under process" value={t.under_process} tone="blue" to="/cases?status=Under Process" />
+        <Tile label="Disposed" value={t.disposed} tone="green" to="/cases?status=Disposed" />
+        <Tile label="Transferred" value={t.transferred} tone="purple" to="/cases?status=Transferred" />
+        <Tile label="Escalated" value={t.escalated} tone="red" to="/cases?status=Escalated" />
+        <Tile label="Beyond timeline" value={t.overdue} tone="red" to="/cases?overdue=true" hint="open past expected date" />
+        <Tile label="Needs review" value={t.unverified} to="/needs-review" hint="college not identified" />
+      </div>
+
+      <Panel title="Waiting for an officer's decision" right={<Link className="text-sm text-blue-700 hover:underline" to="/overlaps">Open overlaps</Link>}>
+        <div className="grid gap-3 sm:grid-cols-4">
+          <Mini label="Potential overlapping cases" value={w.cross_bureau} />
+          <Mini label="Possible duplicates (same reporter)" value={w.same_reporter} />
+          <Mini label="Corroboration suggestions" value={w.corroboration} />
+          <Mini label="Open alerts" value={kpi.data.open_alerts} to="/alerts" />
+        </div>
+        <p className="mt-3 text-xs text-slate-500">The system only suggests. Nothing is linked and no priority boost is applied until an officer confirms.</p>
+      </Panel>
+
+      <div className="grid gap-6 lg:grid-cols-2">
+        <Panel title="Bureau-wise workload">
+          <div className="h-64">
+            <ResponsiveContainer>
+              <BarChart data={bureauChart}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="bureau" /><YAxis allowDecimals={false} /><Tooltip /><Legend />
+                <Bar dataKey="Pending" stackId="a" fill="#f59e0b" />
+                <Bar dataKey="Under Process" stackId="a" fill="#3b82f6" />
+                <Bar dataKey="Escalated" stackId="a" fill="#ef4444" />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+          <table className="mt-3 w-full text-sm">
+            <thead><tr className="text-left text-xs text-slate-500"><th>Bureau</th><th>Total</th><th>Open</th><th>Beyond timeline</th></tr></thead>
+            <tbody>{kpi.data.by_bureau.map((b) => (
+              <tr key={b.assigned_bureau} className="border-t"><td className="py-1 font-medium">{b.assigned_bureau}</td><td>{b.total}</td><td>{b.open}</td><td className="text-red-700">{b.overdue}</td></tr>
+            ))}</tbody>
+          </table>
+        </Panel>
+
+        <Panel title="Cases by category">
+          <div className="h-80">
+            <ResponsiveContainer>
+              <BarChart data={kpi.data.by_category} layout="vertical" margin={{ left: 60 }}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis type="number" allowDecimals={false} /><YAxis type="category" dataKey="category" width={170} tick={{ fontSize: 11 }} /><Tooltip />
+                <Bar dataKey="total" fill="#475569" name="Cases" />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </Panel>
+      </div>
+
+      <Panel title="Institution-wise status (most open cases first)">
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead><tr className="text-left text-xs text-slate-500">
+              <th>Institution</th>{STATUS_COLUMNS.map(([, l]) => <th key={l}>{l}</th>)}<th>Beyond timeline</th>
+            </tr></thead>
+            <tbody>{kpi.data.by_institution.map((i) => (
+              <tr key={i.institution_id} className="border-t">
+                <td className="py-1"><Link className="text-blue-700 hover:underline" to={"/institutions/" + i.institution_id}>{i.name}</Link> <span className="text-xs text-slate-400">{i.institution_id}</span></td>
+                {STATUS_COLUMNS.map(([k]) => <td key={k}>{i.by_status[k]}</td>)}
+                <td className="text-red-700">{i.overdue}</td>
+              </tr>
+            ))}</tbody>
+          </table>
+        </div>
+      </Panel>
+
+      <Panel title="Highest priority cases" right={<Link className="text-sm text-blue-700 hover:underline" to="/cases">All cases</Link>}>
+        {top.data && (
+          <ul className="divide-y text-sm">
+            {top.data.items.map((c) => (
+              <li key={c.hub_case_id} className="flex items-center justify-between gap-3 py-2">
+                <span><Link className="font-medium text-blue-700 hover:underline" to={"/cases/" + c.hub_case_id}>{c.source_case_no}</Link> · {c.institution_name || "College not identified"} · {c.title}</span>
+                <span className="shrink-0 text-slate-500">priority {c.priority_score}</span>
+              </li>
+            ))}
+          </ul>
+        )}
+      </Panel>
+    </div>
+  );
+}
+
+function Mini({ label, value, to }) {
+  const body = <div className="rounded-lg border p-3"><div className="text-2xl font-semibold">{value}</div><div className="text-xs text-slate-500">{label}</div></div>;
+  return to ? <Link to={to}>{body}</Link> : body;
 }

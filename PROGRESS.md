@@ -14,7 +14,8 @@
 ## Next
 - **M6 DONE** Overlap detection A/B/C (TF-IDF baseline), suggestions with reasons, alerts, `alerts_created` in the receipt, `GET /api/matching/links`, `GET /api/alerts`. Dataset is backfilled at seed time. T_A=0.20 and T_B=0.35 are tuned placeholders for the TF-IDF baseline.
 - **M7 DONE** `POST /api/matching/links/{id}/confirm|reject` (note optional), `POST /api/alerts/{id}/acknowledge`, `GET /api/audit` (senior mgmt + competent authority), `GET /api/corroboration/{case_id}` (priority breakdown). Priority = severity x10 + confirmed corroborators (max 4) x5 + age (max 60 days) x0.3; the boost applies only after confirmation.
-- **Next: M8** dashboard screens (KPIs, cases list with search and filters, case detail, institution profile, overlaps, alerts, Needs Review).
+- **M8 DONE** Dashboard screens: KPI tiles, waiting-for-decision panel, bureau workload, institution-wise status, category chart, cases list (search by institution name, AICTE ID, case ID; filters bureau, region, category, status, dates, beyond timeline, sort, paging), case detail (priority breakdown, action history, Confirm/Reject), institution profile with chronological history, overlaps (grouped by college), alerts (acknowledge), Needs Review (assign a college, learned alias). Role scoping everywhere: officers see their bureau, regional office its region, senior management and competent authority everything. APIs: `GET /api/dashboard/kpis`, `GET /api/cases` (+ `/filters`, `/needs-review`, `POST /{id}/assign-institution`), `GET /api/search`, `GET /api/institutions/{id}/history`.
+- **Next: M9** conflict rules (enforcing vs closing, duplicate action) and the lead-bureau suggestion on the overlap and conflict alerts.
 
 ## Run (Windows, from the project folder)
 ```
