@@ -12,6 +12,7 @@ DATABASE_URL = os.getenv("HUB_DATABASE_URL", f"sqlite:///{DB_PATH.as_posix()}")
 
 # Dev-only secrets. Real deployments would read these from the environment.
 JWT_SECRET = os.getenv("HUB_JWT_SECRET", "dev-only-change-me")
+FINGERPRINT_SECRET = os.getenv("HUB_FINGERPRINT_SECRET", "dev-only-fingerprint-key")  # key for hashing reporter contacts
 PORTAL_API_KEYS = {"RB": "dev-rb-key", "PGRC": "dev-pgrc-key"}  # one key per portal (used from M4)
 
 # Browser pages (dashboard :5173, portals :8001/:8002) call the hub directly, so allow them.

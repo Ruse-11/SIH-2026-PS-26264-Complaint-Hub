@@ -6,7 +6,7 @@ Updated after every module.
 | Feature | Backend file | Frontend / other file | Status |
 |---|---|---|---|
 | Project scaffold, run_all, health check | hub/backend/app/main.py, run_all.py | hub/frontend/src/App.jsx | DONE (M0) |
-| Models + CSV seed loader | models.py, seed.py | data/*.csv | TODO (M1) |
+| Models + CSV seed loader | models.py, seed.py, services/institutions.py (normalizer), services/reporters.py (fingerprint) | data/*.csv | DONE (M1) |
 | Institution registry, search, name resolver | routers/institutions.py | shared/institution-finder.js | TODO (M2) |
 | Login + roles | routers/auth.py | pages/Login.jsx | TODO (M3, cut to dropdown if behind) |
 | Intake API, reporter fingerprint, cases, actions | routers/intake.py, reporters.py, cases.py | – | TODO (M4) |
