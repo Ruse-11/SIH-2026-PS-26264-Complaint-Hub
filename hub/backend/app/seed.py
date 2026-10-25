@@ -16,7 +16,7 @@ from . import models as m
 from .services.auth import DEMO_PASSWORD, hash_password
 from .services.institutions import normalize_name
 from .services.reporters import make_fingerprint
-from .services import conflicts, matching, priority
+from .services import conflicts, matching, priority, starvation
 
 # ---- Config tables. These are ASSUMPTIONS about AICTE rules (labelled so in the PPT) and can be edited in the DB. ----
 STANCES = {
@@ -40,6 +40,9 @@ THRESHOLDS = [  # key, value, description
     ("CONFLICT_WINDOW_DAYS", 30, "enforcing vs closing action in different bureaus within N days = conflict"),
     ("DUPLICATE_ACTION_DAYS", 10, "same kind of action by two bureaus within N days = duplicate action"),
     ("STARVATION_DAYS", 30, "open case with no action for N days = stalled"),
+    ("SLA_DUE_SOON_DAYS", 3, "open case due within N days = 'due soon' alert"),
+    ("PENDING_REMINDER_DAYS", 7, "case still Pending (nobody started) after N days = reminder"),
+    ("ESCALATION_OVERDUE_DAYS", 30, "open case overdue by N days or more = suggest escalating"),
     ("MAX_CORROBORATORS", 4, "cap on distinct reporters counted in the priority boost"),
 ]
 
@@ -161,6 +164,7 @@ def run(engine=None) -> dict:
         db.flush()
         counts["conflict_suggestions"] = conflicts.rebuild_all(db)  # M9: conflicts and duplicate actions
         db.flush()
+        counts["time_alerts"] = starvation.scan(db)["active"]  # M10: stalled / SLA alerts as of today
         priority.recompute_all(db, now=datetime.now())  # M7: priority score for every case
         db.commit()
     return counts

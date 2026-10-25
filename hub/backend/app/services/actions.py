@@ -7,7 +7,7 @@ from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from .. import models as m
-from . import cases as case_service, conflicts, priority
+from . import cases as case_service, conflicts, priority, starvation
 from .audit import log_event
 from .auth import permissions
 
@@ -69,6 +69,7 @@ def log_action(db: Session, user: m.User, hub_case_id: str, action_type: str, re
     db.flush()  # the session does not autoflush: save the action before the conflict check reads it
     alerts = conflicts.detect_for_case(db, case)
     priority.recompute_case(db, case)
+    starvation.scan(db, case_ids=[hub_case_id])  # an action clears 'stalled'; closing clears the deadline alerts; escalating raises one
     db.commit()
     return {"hub_case_id": hub_case_id, "seq": seq, "action_type": action_type, "stance": stance, "status": case.status,
             "assigned_bureau": case.assigned_bureau, "alerts_created": alerts}

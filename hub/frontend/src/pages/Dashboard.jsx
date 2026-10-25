@@ -8,6 +8,7 @@ const STATUS_COLUMNS = [["pending", "Pending"], ["under_process", "Under Process
 export default function Dashboard() {
   const kpi = useGet("/api/dashboard/kpis");
   const top = useGet("/api/cases?sort=priority&page_size=5");
+  const late = useGet("/api/starvation?limit=5");
   if (!kpi.data) return <Loading state={kpi} />;
   const { totals: t, suggestions_waiting: w } = kpi.data;
   const bureauChart = kpi.data.by_bureau.map((b) => ({ bureau: b.assigned_bureau, Pending: b.by_status.pending, "Under Process": b.by_status.under_process, Escalated: b.by_status.escalated, Overdue: b.overdue }));
@@ -93,6 +94,23 @@ export default function Dashboard() {
         </div>
       </Panel>
 
+      {late.data && (
+        <Panel title="Stalled and deadline watch" right={<Link className="text-sm text-blue-700 hover:underline" to="/alerts">All alerts</Link>}>
+          <div className="grid gap-4 lg:grid-cols-3">
+            <Watch title="Stalled (no action)" total={late.data.counts.stalled} rows={late.data.stalled}
+              detail={(c) => `${c.idle_days} days without action`} />
+            <Watch title="Due soon" total={late.data.counts.due_soon} rows={late.data.due_soon}
+              detail={(c) => `due ${c.expected_disposal_date} (${c.days_to_due} day(s) left)`} />
+            <Watch title="Consider escalating" total={late.data.counts.escalation_suggested} rows={late.data.escalation_suggested}
+              detail={(c) => `${c.days_overdue} days past expected date`} />
+          </div>
+          <p className="mt-3 text-xs text-slate-500">
+            Limits (configurable): stalled after {late.data.thresholds.STARVATION_DAYS} days without action, due soon within {late.data.thresholds.SLA_DUE_SOON_DAYS} days,
+            escalation suggested {late.data.thresholds.ESCALATION_OVERDUE_DAYS} days past the expected date. Escalating is always the officer's decision.
+          </p>
+        </Panel>
+      )}
+
       <Panel title="Highest priority cases" right={<Link className="text-sm text-blue-700 hover:underline" to="/cases">All cases</Link>}>
         {top.data && (
           <ul className="divide-y text-sm">
@@ -112,4 +130,22 @@ export default function Dashboard() {
 function Mini({ label, value, to, tone }) {
   const body = <div className="rounded-lg border p-3"><div className={"text-2xl font-semibold " + (tone === "red" && value > 0 ? "text-red-700" : "")}>{value}</div><div className="text-xs text-slate-500">{label}</div></div>;
   return to ? <Link to={to}>{body}</Link> : body;
+}
+
+function Watch({ title, total, rows, detail }) {
+  return (
+    <div className="rounded-lg border p-3">
+      <div className="flex items-baseline justify-between"><span className="font-medium">{title}</span><span className="text-2xl font-semibold">{total}</span></div>
+      <ul className="mt-2 space-y-1 text-sm">
+        {rows.map((c) => (
+          <li key={c.hub_case_id}>
+            <Link className="font-medium text-blue-700 hover:underline" to={"/cases/" + c.hub_case_id}>{c.source_case_no}</Link>{" "}
+            <span className="text-slate-500">{c.bureau} · {detail(c)}</span>
+          </li>
+        ))}
+        {rows.length === 0 && <li className="text-slate-500">None</li>}
+      </ul>
+      {total > rows.length && <Link className="mt-2 block text-xs text-blue-700 hover:underline" to="/alerts">and {total - rows.length} more in Alerts</Link>}
+    </div>
+  );
 }

@@ -1,12 +1,15 @@
 """Alerts (M6): list what the matching engine raised. Acknowledge comes with the officer actions in M7."""
-from sqlalchemy import select
+from sqlalchemy import case, select
 from sqlalchemy.orm import Session
 
 from .. import models as m
 
 
-def list_alerts(db: Session, type=None, institution_id=None, open_only=False, limit=200, visible=None) -> list[dict]:
-    q = select(m.Alert).order_by(m.Alert.id.desc()).limit(limit)
+_RANK = case((m.Alert.severity == "critical", 0), (m.Alert.severity == "warning", 1), else_=2)  # critical first
+
+
+def list_alerts(db: Session, type=None, institution_id=None, open_only=False, limit=500, visible=None) -> list[dict]:
+    q = select(m.Alert).order_by(_RANK, m.Alert.id.desc()).limit(limit)
     if type:
         q = q.where(m.Alert.type == type)
     if institution_id:

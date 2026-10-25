@@ -10,21 +10,24 @@ export default function Alerts() {
   const { api } = useAuth();
   const [type, setType] = useState("");
   const [openOnly, setOpenOnly] = useState(true);
+  const [shown, setShown] = useState(40);
   const alerts = useGet(`/api/alerts?open_only=${openOnly}${type ? "&type=" + type : ""}`);
 
   return (
     <div className="space-y-4">
-      <h1 className="text-xl font-semibold">Alerts</h1>
+      <h1 className="text-xl font-semibold">Alerts {alerts.data ? <span className="text-sm font-normal text-slate-500">({alerts.data.length})</span> : null}</h1>
       <div className="flex flex-wrap items-center gap-4 text-sm">
-        <select className="rounded border bg-white px-2 py-1.5" value={type} onChange={(e) => setType(e.target.value)}>
-          <option value="">All types</option><option value="OVERLAP">Overlap</option><option value="CONFLICT">Conflict</option><option value="DUPLICATE_ACTION">Duplicate action</option><option value="DUPLICATE">Duplicate complaint</option><option value="CORROBORATION">Corroboration</option>
+        <select className="rounded border bg-white px-2 py-1.5" value={type} onChange={(e) => { setType(e.target.value); setShown(40); }}>
+          <option value="">All types</option><option value="OVERLAP">Overlap</option><option value="CONFLICT">Conflict</option>
+          <option value="STALLED">Stalled</option><option value="OVERDUE">SLA overdue</option><option value="DUE_SOON">Due soon</option>
+          <option value="ESCALATION_SUGGESTED">Consider escalating</option><option value="ESCALATED">Escalated</option><option value="PENDING_REMINDER">Pending reminder</option><option value="DUPLICATE_ACTION">Duplicate action</option><option value="DUPLICATE">Duplicate complaint</option><option value="CORROBORATION">Corroboration</option>
         </select>
         <label className="flex items-center gap-2"><input type="checkbox" checked={openOnly} onChange={(e) => setOpenOnly(e.target.checked)} /> Not yet acknowledged</label>
       </div>
       <Loading state={alerts} />
       {alerts.data && alerts.data.length === 0 && <div className="rounded-xl bg-white p-6 text-slate-500">No alerts.</div>}
       <ul className="space-y-2">
-        {(alerts.data || []).map((a) => (
+        {(alerts.data || []).slice(0, shown).map((a) => (
           <li key={a.id} className="flex flex-wrap items-start justify-between gap-3 rounded-lg bg-white p-4 shadow-sm">
             <div className="max-w-3xl">
               <span className={"mr-2 rounded-full px-2 py-0.5 text-xs font-medium " + (TONE[a.severity] || "")}>{a.type}</span>
@@ -40,6 +43,11 @@ export default function Alerts() {
           </li>
         ))}
       </ul>
+      {alerts.data && alerts.data.length > shown && (
+        <button className="rounded border bg-white px-4 py-2 text-sm hover:bg-slate-100" onClick={() => setShown(shown + 40)}>
+          Show more ({alerts.data.length - shown} left)
+        </button>
+      )}
     </div>
   );
 }
