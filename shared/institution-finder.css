@@ -1,1 +1,43 @@
-/* Institution Finder widget styles. Built in M5. */
+/* Styles for the mock portals and the Institution Finder widget. --accent is set per portal. */
+:root { --accent: #1e40af; --ink: #0f172a; --muted: #64748b; --line: #e2e8f0; --bg: #f1f5f9; }
+* { box-sizing: border-box; }
+body { margin: 0; font-family: system-ui, -apple-system, "Segoe UI", sans-serif; background: var(--bg); color: var(--ink); }
+.portal-header { background: var(--accent); color: #fff; padding: 14px 24px; display: flex; align-items: center; gap: 12px; }
+.portal-header h1 { font-size: 18px; margin: 0; font-weight: 600; }
+.tag { background: #fef3c7; color: #92400e; border-radius: 999px; padding: 2px 10px; font-size: 12px; }
+.portal-main { max-width: 760px; margin: 24px auto; padding: 0 16px 48px; }
+.portal-note { color: var(--muted); font-size: 13px; margin: 0 0 16px; }
+.steps { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+.steps span { font-size: 13px; padding: 4px 12px; border-radius: 999px; background: #e2e8f0; color: var(--muted); }
+.steps span.on { background: var(--accent); color: #fff; }
+.steps span.done { background: #dcfce7; color: #166534; }
+.panel { background: #fff; border-radius: 12px; padding: 20px; box-shadow: 0 1px 3px #0001; }
+.panel h2 { margin: 0 0 4px; font-size: 18px; }
+.hint { color: var(--muted); font-size: 13px; margin: 2px 0 12px; }
+label { display: block; font-size: 13px; font-weight: 600; margin: 12px 0 4px; }
+input, select, textarea { width: 100%; padding: 9px 11px; border: 1px solid #cbd5e1; border-radius: 8px; font: inherit; background: #fff; }
+textarea { min-height: 110px; resize: vertical; }
+button { font: inherit; cursor: pointer; border-radius: 8px; padding: 9px 16px; border: 1px solid #cbd5e1; background: #fff; }
+button.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+button:disabled { opacity: .5; cursor: default; }
+.row { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; align-items: center; }
+.link { background: none; border: none; color: var(--accent); padding: 4px 0; text-decoration: underline; }
+.error { background: #fee2e2; color: #991b1b; border-radius: 8px; padding: 8px 12px; margin-top: 12px; font-size: 14px; }
+.demo { background: #fef9c3; color: #713f12; border-radius: 8px; padding: 10px 12px; margin-top: 12px; font-size: 14px; }
+.demo b { font-size: 20px; letter-spacing: 3px; }
+/* Institution Finder */
+.fcards { display: grid; gap: 8px; margin-top: 12px; }
+.fcard { text-align: left; width: 100%; padding: 10px 12px; }
+.fcard:hover { border-color: var(--accent); background: #f8fafc; }
+.fcard .n { font-weight: 600; }
+.fcard .m { font-size: 13px; color: var(--muted); }
+.fmsg { margin-top: 12px; font-size: 14px; color: var(--muted); }
+.fdetail dl { display: grid; grid-template-columns: 130px 1fr; gap: 4px 12px; margin: 12px 0; font-size: 14px; }
+.fdetail dt { color: var(--muted); }
+.fdetail dd { margin: 0; }
+.fmap { width: 100%; height: 220px; border: 1px solid var(--line); border-radius: 8px; }
+.fgrid { display: grid; gap: 0 12px; grid-template-columns: 1fr 1fr; }
+@media (max-width: 560px) { .fgrid { grid-template-columns: 1fr; } .fdetail dl { grid-template-columns: 1fr; } }
+.banner { background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 10px 12px; font-size: 14px; }
+.banner.warn { background: #fffbeb; border-color: #fde68a; }
+.receipt-no { font-size: 28px; font-weight: 700; letter-spacing: 1px; margin: 8px 0; }

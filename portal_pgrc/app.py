@@ -1,26 +1,15 @@
-"""PGRC mock portal (port 8002), Public Grievance Redressal Cell. Not the real AICTE portal.
-M0: health check + placeholder page. The Institution Finder, mock OTP, signed token and submit-to-hub come in M5.
+"""PGRC mock portal (Public Grievance Redressal Cell), port 8002. Not the real AICTE portal.
+All logic is in shared/portal_core.py (the two portals are identical apart from name and API key).
 Run from this folder:  python -m uvicorn app:app --port 8002
 """
+import sys
 from pathlib import Path
 
-from fastapi import FastAPI
-from fastapi.responses import FileResponse
-from fastapi.staticfiles import StaticFiles
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "shared"))
 
-STATIC = Path(__file__).resolve().parent / "static"
+from portal_core import Portal  # noqa: E402
 
-app = FastAPI(title="PGRC Portal (mock)")
-
-
-@app.get("/health")
-def health():
-    return {"status": "ok", "service": "portal_pgrc"}
-
-
-@app.get("/")
-def index():
-    return FileResponse(STATIC / "index.html")
-
-
-app.mount("/static", StaticFiles(directory=STATIC), name="static")
+portal = Portal(code="PGRC", name="Public Grievance Redressal Cell", folder=Path(__file__).resolve().parent,
+                shared_dir=ROOT / "shared", default_api_key="dev-pgrc-key")
+app = portal.build_app()

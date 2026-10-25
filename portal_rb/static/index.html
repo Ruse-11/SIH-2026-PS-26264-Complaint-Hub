@@ -3,18 +3,20 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>RB Portal (mock)</title>
-  <style>
-    body { font-family: system-ui, sans-serif; background: #f1f5f9; color: #0f172a; margin: 0; }
-    main { max-width: 640px; margin: 15vh auto; background: #fff; padding: 2rem; border-radius: 12px; box-shadow: 0 1px 4px #0002; }
-    .tag { display: inline-block; background: #fef3c7; color: #92400e; padding: 2px 10px; border-radius: 999px; font-size: 12px; }
-  </style>
+  <title>RB Portal (mock) - File a complaint</title>
+  <link rel="stylesheet" href="/shared/institution-finder.css" />
+  <style>:root { --accent: #1e40af; }</style>
 </head>
 <body>
-  <main>
-    <h1>Regulation Bureau (RB)</h1>
-    <p><span class="tag">Mock portal</span> Complaint form coming in M5: Institution Finder, mock OTP, then submit to the hub.</p>
-    <p>Synthetic prototype for SIH 2026 PS 26264. No real data.</p>
+  <header class="portal-header">
+    <h1 id="portal-name">Regulation Bureau (RB)</h1>
+    <span class="tag">Mock portal, synthetic data</span>
+  </header>
+  <main class="portal-main">
+    <p class="portal-note">File a complaint about a technical education institution. This is a prototype portal for SIH 2026 PS 26264; it is not the real AICTE portal.</p>
+    <div id="app">Loading…</div>
   </main>
+  <script src="/shared/institution-finder.js"></script>
+  <script src="/shared/portal-form.js"></script>
 </body>
 </html>

@@ -11,7 +11,7 @@ Updated after every module.
 | Login + roles (JWT, 6 seeded demo accounts, role permissions) | routers/auth.py, services/auth.py | pages/Login.jsx, src/auth.jsx, App.jsx header | DONE (M3) |
 | Intake API (API key per portal), reporter fingerprint, case + first action, safe retry, audit row | routers/intake.py, services/intake.py, services/audit.py, services/reporters.py | – | DONE (M4) |
 | Case detail with action history (`GET /api/cases/{id}`; list/search in M8); bureau action sync `POST /api/actions` | routers/cases.py, services/cases.py | pages/CaseDetail.jsx (M8) | detail DONE (M4); actions sync STUB |
-| Mock portals + Institution Finder + OTP + token | portal_rb/app.py, portal_pgrc/app.py | shared/institution-finder.js/.css | TODO (M5) (placeholder pages exist) |
+| Mock portals (own DB, own case numbers, retry outbox), Institution Finder widget (search, confirm card + map, guided questions, not-listed), mock OTP, signed 30-min tokens | shared/portal_core.py, portal_rb/app.py, portal_pgrc/app.py | shared/institution-finder.js/.css, shared/portal-form.js, portal_*/static/index.html | DONE (M5) |
 | Matching A/B/C + overlap alert | routers/matching.py, alerts.py, corroboration.py | pages/Overlaps.jsx, Alerts.jsx | TODO (M6) |
 | Officer confirm/reject, audit, priority | routers/audit.py | pages/CaseDetail.jsx | TODO (M7) |
 | Dashboard KPIs, cases list, search/filters, case detail, institution profile, needs review | routers/dashboard.py, search.py | pages/Dashboard, Cases, CaseDetail, InstitutionProfile, NeedsReview | TODO (M8) |
