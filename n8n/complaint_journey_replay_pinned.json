@@ -1,0 +1,769 @@
+{
+  "name": "Complaint Journey Replay (pinned, illustrative)",
+  "nodes": [
+    {
+      "id": "37de050c-25c9-48a6-ba37-65bd2bb35338",
+      "name": "Start replay",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        20,
+        300
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "7340a539-5d1c-4805-a29b-de606fb33530",
+      "name": "Settings",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        240,
+        300
+      ],
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "1af62118-8217-458d-93bc-b7e870c2f26c",
+              "name": "hub_url",
+              "value": "http://localhost:8000",
+              "type": "string"
+            },
+            {
+              "id": "2e23fa79-4b7f-42e9-adde-1856d29e3911",
+              "name": "rb_url",
+              "value": "http://localhost:8001",
+              "type": "string"
+            },
+            {
+              "id": "aa823de2-f2af-4e4f-9a05-3604fa611807",
+              "name": "pgrc_url",
+              "value": "http://localhost:8002",
+              "type": "string"
+            },
+            {
+              "id": "87a08de6-e1ec-47ce-887e-adc70b227a35",
+              "name": "dashboard_url",
+              "value": "http://localhost:5173",
+              "type": "string"
+            },
+            {
+              "id": "547eeed3-2deb-4358-a7e1-10ee9bdde1d1",
+              "name": "college_query",
+              "value": "Norvella Institute of Applied Sciences",
+              "type": "string"
+            },
+            {
+              "id": "2af71ff4-f2bd-43a2-8e7b-e6679d63d77c",
+              "name": "telegram_chat_id",
+              "value": "REPLACE_WITH_YOUR_CHAT_ID",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "73bc267b-a5fa-48d4-825c-28b9602d439b",
+      "name": "1 Finder search",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        500,
+        300
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $('Settings').first().json.hub_url }}/api/institutions/search",
+        "options": {},
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "q",
+              "value": "={{ $('Settings').first().json.college_query }}"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "f7ba8b2f-7aab-48d9-9c77-fd0ffa2a3bc6",
+      "name": "2 Institution details",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        740,
+        300
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $('Settings').first().json.hub_url }}/api/institutions/{{ $json.candidates[0].aicte_id }}",
+        "options": {}
+      }
+    },
+    {
+      "id": "2b584606-d0ca-4bdb-aa15-b7cf0846bfd5",
+      "name": "3 Confirm card + map link",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        980,
+        300
+      ],
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "4989132c-285e-46e4-81ca-96ebebad0157",
+              "name": "college_id",
+              "value": "={{ $json.aicte_id }}",
+              "type": "string"
+            },
+            {
+              "id": "dabf8bd5-7484-46fc-a860-e493edc6e894",
+              "name": "college_name",
+              "value": "={{ $json.official_name }}",
+              "type": "string"
+            },
+            {
+              "id": "92c95555-b106-4aca-90c7-5635970717aa",
+              "name": "address",
+              "value": "={{ [$json.address_line, $json.area, $json.district, $json.state].filter(Boolean).join(', ') }}",
+              "type": "string"
+            },
+            {
+              "id": "84e5eb03-290d-4e19-b1b8-fa25fb03a497",
+              "name": "map_link",
+              "value": "=https://www.openstreetmap.org/?mlat={{ $json.lat }}&mlon={{ $json.lng }}#map=16/{{ $json.lat }}/{{ $json.lng }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "daa9e6c1-970c-425a-97ce-11304d6d945b",
+      "name": "4 RB: confirm institution",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1220,
+        300
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Settings').first().json.rb_url }}/institution/confirm",
+        "options": {},
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ institution_id: $json.college_id, resolution_method: \"REPORTER_CONFIRMED\" }) }}"
+      }
+    },
+    {
+      "id": "05df0cf2-660e-48b4-b280-7dafddc71aae",
+      "name": "5 RB: request OTP",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1460,
+        300
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Settings').first().json.rb_url }}/otp/request",
+        "options": {},
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ contact: \"9000000201\" }) }}"
+      }
+    },
+    {
+      "id": "4a029e9e-e5eb-434e-8dd2-b6071601d4e7",
+      "name": "6 RB: verify OTP",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1700,
+        300
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Settings').first().json.rb_url }}/otp/verify",
+        "options": {},
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ contact: \"9000000201\", code: $json.demo_otp }) }}"
+      }
+    },
+    {
+      "id": "6c6b6cfa-098e-4ee8-9c8b-70a650f80586",
+      "name": "7 RB: submit complaint",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1940,
+        300
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Settings').first().json.rb_url }}/submit",
+        "options": {},
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ institution_token: $(\"4 RB: confirm institution\").first().json.institution_token, verification_token: $json.verification_token, reporter_type: \"student\", category: \"Infrastructure/Lab\", title: \"Laboratory equipment not working\", severity: 3, description: \"The laboratory equipment has been out of order for months and students cannot do practicals.\" }) }}"
+      }
+    },
+    {
+      "id": "9dd56017-7a3b-4458-90cd-dc19aea5e9de",
+      "name": "8 PGRC: confirm institution",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        260,
+        560
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Settings').first().json.pgrc_url }}/institution/confirm",
+        "options": {},
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ institution_id: $(\"3 Confirm card + map link\").first().json.college_id, resolution_method: \"REPORTER_CONFIRMED\" }) }}"
+      }
+    },
+    {
+      "id": "668ffa33-d2da-4b21-a786-8eb3e88ae561",
+      "name": "9 PGRC: request OTP",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        500,
+        560
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Settings').first().json.pgrc_url }}/otp/request",
+        "options": {},
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ contact: \"9000000202\" }) }}"
+      }
+    },
+    {
+      "id": "df0d587a-cf29-4c5d-ad09-f371eb547d1f",
+      "name": "10 PGRC: verify OTP",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        740,
+        560
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Settings').first().json.pgrc_url }}/otp/verify",
+        "options": {},
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ contact: \"9000000202\", code: $json.demo_otp }) }}"
+      }
+    },
+    {
+      "id": "bd91a060-dc11-4e20-b499-ec21d3328bbc",
+      "name": "11 PGRC: submit complaint",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        980,
+        560
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Settings').first().json.pgrc_url }}/submit",
+        "options": {},
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ institution_token: $(\"8 PGRC: confirm institution\").first().json.institution_token, verification_token: $json.verification_token, reporter_type: \"student\", category: \"Fee/Refund\", title: \"Refund not returned\", severity: 3, description: \"My refundable deposit has not been returned after I withdrew from the programme.\" }) }}"
+      }
+    },
+    {
+      "id": "b230b2b3-e45b-42aa-a953-618400b3478a",
+      "name": "12 Overlap alert raised?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        1220,
+        560
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "8fed893c-73c2-407c-9806-a030dd24ee3d",
+              "leftValue": "={{ $json.alerts_created.length }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "c8ef2d26-10bd-4792-b0b4-4259b5167e35",
+      "name": "13 Build alert message",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1460,
+        480
+      ],
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "21715a92-04f9-43e7-bc4c-8b74a19386b1",
+              "name": "text",
+              "value": "={{ '🚨 ' + $json.alerts_created[0].message + '\\n\\nCollege: ' + $json.alerts_created[0].institution + '\\nCases: ' + $json.alerts_created[0].cases.join(', ') + '\\nSuggested lead bureau (suggestion only): ' + ($json.alerts_created[0].suggested_lead.bureau || 'none') + '\\nOpen on the dashboard: ' + $('Settings').first().json.dashboard_url + $json.alerts_created[0].dashboard_link + '\\n\\nIllustrative replay (pinned data, the hub is not contacted). Officers decide.' }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "9f82a7df-d838-400c-acba-2d0c8bbab425",
+      "name": "14 Telegram: notify officer",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1700,
+        480
+      ],
+      "parameters": {
+        "chatId": "={{ $('Settings').first().json.telegram_chat_id }}",
+        "text": "={{ $json.text }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      }
+    },
+    {
+      "id": "5d4e83d3-2fe5-4906-9a4c-7e450e3a52eb",
+      "name": "No overlap, nothing to send",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1460,
+        660
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "b57a38bf-1048-4bd5-91c5-b91c30657b07",
+      "name": "Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        20,
+        40
+      ],
+      "parameters": {
+        "width": 1200,
+        "height": 190,
+        "content": "## Complaint Journey Replay\n**Illustrative replay (pinned data, the hub is not contacted).**\nReporter 1 files on the RB portal, reporter 2 on the PGRC portal, both about the clean college SYN-0040. The hub finds the cross-bureau overlap and returns it in `alerts_created`; the IF node sends it to Telegram.\nBefore a run: `python reset_demo.py`. Edit URLs and the Telegram chat ID in the **Settings** node (inside Docker use host.docker.internal instead of localhost)."
+      }
+    }
+  ],
+  "connections": {
+    "Start replay": {
+      "main": [
+        [
+          {
+            "node": "Settings",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Settings": {
+      "main": [
+        [
+          {
+            "node": "1 Finder search",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "1 Finder search": {
+      "main": [
+        [
+          {
+            "node": "2 Institution details",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "2 Institution details": {
+      "main": [
+        [
+          {
+            "node": "3 Confirm card + map link",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "3 Confirm card + map link": {
+      "main": [
+        [
+          {
+            "node": "4 RB: confirm institution",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "4 RB: confirm institution": {
+      "main": [
+        [
+          {
+            "node": "5 RB: request OTP",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "5 RB: request OTP": {
+      "main": [
+        [
+          {
+            "node": "6 RB: verify OTP",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "6 RB: verify OTP": {
+      "main": [
+        [
+          {
+            "node": "7 RB: submit complaint",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "7 RB: submit complaint": {
+      "main": [
+        [
+          {
+            "node": "8 PGRC: confirm institution",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "8 PGRC: confirm institution": {
+      "main": [
+        [
+          {
+            "node": "9 PGRC: request OTP",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "9 PGRC: request OTP": {
+      "main": [
+        [
+          {
+            "node": "10 PGRC: verify OTP",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "10 PGRC: verify OTP": {
+      "main": [
+        [
+          {
+            "node": "11 PGRC: submit complaint",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "11 PGRC: submit complaint": {
+      "main": [
+        [
+          {
+            "node": "12 Overlap alert raised?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "12 Overlap alert raised?": {
+      "main": [
+        [
+          {
+            "node": "13 Build alert message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No overlap, nothing to send",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "13 Build alert message": {
+      "main": [
+        [
+          {
+            "node": "14 Telegram: notify officer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "pinData": {
+    "1 Finder search": [
+      {
+        "json": {
+          "query": "Norvella Institute of Applied Sciences",
+          "normalized": "norvella institute applied sciences",
+          "outcome": "RESOLVED",
+          "match_type": "NAME",
+          "reason": "Exact match.",
+          "candidates": [
+            {
+              "aicte_id": "SYN-0040",
+              "official_name": "Norvella Institute of Applied Sciences",
+              "address_line": "Fictional Education Sector 40",
+              "area": "Education Sector 40",
+              "district": "Chennai",
+              "state": "Tamil Nadu",
+              "pincode": null,
+              "region": "South",
+              "type": "Pharmacy",
+              "lat": 13.056005,
+              "lng": 80.269551,
+              "programs": "B.E. CSE;B.E. Mechanical;MBA",
+              "parent_id": null,
+              "parent_name": null,
+              "score": 100,
+              "match": "NAME"
+            }
+          ]
+        }
+      }
+    ],
+    "2 Institution details": [
+      {
+        "json": {
+          "aicte_id": "SYN-0040",
+          "official_name": "Norvella Institute of Applied Sciences",
+          "address_line": "Fictional Education Sector 40",
+          "area": "Education Sector 40",
+          "district": "Chennai",
+          "state": "Tamil Nadu",
+          "pincode": null,
+          "region": "South",
+          "type": "Pharmacy",
+          "lat": 13.056005,
+          "lng": 80.269551,
+          "programs": "B.E. CSE;B.E. Mechanical;MBA",
+          "parent_id": null,
+          "parent_name": null,
+          "established_year": 2006,
+          "children": [],
+          "cases": {
+            "total": 0,
+            "by_status": {},
+            "by_bureau": {}
+          }
+        }
+      }
+    ],
+    "4 RB: confirm institution": [
+      {
+        "json": {
+          "institution_token": "eyJraW5kIjoiaW5zdCIsImlpZCI6IlNZTi0wMDQwIiwiaW5hbWUiOiJOb3J2ZWxsYSBJbnN0aXR1dGUgb2YgQXBwbGllZCBTY2llbmNlcyIsIm1ldGhvZCI6IlJFUE9SVEVSX0NPTkZJUk1FRCIsImFuc3dlcnMiOm51bGwsInBvcnRhbCI6IlJCIiwiZXhwIjoxNzkzMDQxNzU3LjU0MDU0OH0.5b91382dc8095990022d93bb2206349f4c1cb85972c4622fc39e02de787c8b92",
+          "resolution_method": "REPORTER_CONFIRMED",
+          "institution": {
+            "aicte_id": "SYN-0040",
+            "official_name": "Norvella Institute of Applied Sciences"
+          },
+          "pending_verification": false,
+          "expires_in_minutes": 30
+        }
+      }
+    ],
+    "5 RB: request OTP": [
+      {
+        "json": {
+          "demo_mode": true,
+          "demo_otp": "430037",
+          "expires_in_minutes": 5,
+          "message": "Demo mode: no SMS is sent, the code is shown here."
+        }
+      }
+    ],
+    "6 RB: verify OTP": [
+      {
+        "json": {
+          "verification_token": "eyJraW5kIjoiY29udGFjdCIsImMiOiI5MDAwMDAwMjAxIiwicG9ydGFsIjoiUkIiLCJleHAiOjE3OTMwNDE3NTcuNjI4MDIzMX0.23a0ed3232297f53f6f025157289b73a42a6e0e2e4ba4650bb51cde91042b289",
+          "expires_in_minutes": 30
+        }
+      }
+    ],
+    "7 RB: submit complaint": [
+      {
+        "json": {
+          "portal_case_no": "RB-2026-1001",
+          "hub_case_id": "HUB-0151",
+          "sync_status": "synced",
+          "hub_status": "Pending",
+          "institution": {
+            "aicte_id": "SYN-0040",
+            "official_name": "Norvella Institute of Applied Sciences"
+          },
+          "pending_verification": false,
+          "alerts_created": [],
+          "last_error": null
+        }
+      }
+    ],
+    "8 PGRC: confirm institution": [
+      {
+        "json": {
+          "institution_token": "eyJraW5kIjoiaW5zdCIsImlpZCI6IlNZTi0wMDQwIiwiaW5hbWUiOiJOb3J2ZWxsYSBJbnN0aXR1dGUgb2YgQXBwbGllZCBTY2llbmNlcyIsIm1ldGhvZCI6IlJFUE9SVEVSX0NPTkZJUk1FRCIsImFuc3dlcnMiOm51bGwsInBvcnRhbCI6IlBHUkMiLCJleHAiOjE3OTMwNDE3NTcuNjkwODQ4fQ.47d954162542e4dae86b174e7fb1a1468b97c0f538cd5e513d68da3b55d5c039",
+          "resolution_method": "REPORTER_CONFIRMED",
+          "institution": {
+            "aicte_id": "SYN-0040",
+            "official_name": "Norvella Institute of Applied Sciences"
+          },
+          "pending_verification": false,
+          "expires_in_minutes": 30
+        }
+      }
+    ],
+    "9 PGRC: request OTP": [
+      {
+        "json": {
+          "demo_mode": true,
+          "demo_otp": "264437",
+          "expires_in_minutes": 5,
+          "message": "Demo mode: no SMS is sent, the code is shown here."
+        }
+      }
+    ],
+    "10 PGRC: verify OTP": [
+      {
+        "json": {
+          "verification_token": "eyJraW5kIjoiY29udGFjdCIsImMiOiI5MDAwMDAwMjAyIiwicG9ydGFsIjoiUEdSQyIsImV4cCI6MTc5MzA0MTc1Ny42OTg4MjMyfQ.c7aa238399fb8d887ddfa270d41f58ea750cd2028a503d58fd97bd6aa9015bd8",
+          "expires_in_minutes": 30
+        }
+      }
+    ],
+    "11 PGRC: submit complaint": [
+      {
+        "json": {
+          "portal_case_no": "PGRC-2026-1001",
+          "hub_case_id": "HUB-0152",
+          "sync_status": "synced",
+          "hub_status": "Pending",
+          "institution": {
+            "aicte_id": "SYN-0040",
+            "official_name": "Norvella Institute of Applied Sciences"
+          },
+          "pending_verification": false,
+          "alerts_created": [
+            {
+              "alert_type": "OVERLAP",
+              "severity": "warning",
+              "message": "Potential Overlapping Cases – Coordination Required: 2 open cases at Norvella Institute of Applied Sciences across PGRC and RB. Suggested lead: RB (Rule 3: the older open case leads).",
+              "link_type": "CROSS_BUREAU",
+              "institution": "Norvella Institute of Applied Sciences",
+              "cases": [
+                "HUB-0152",
+                "HUB-0151"
+              ],
+              "reasons": {
+                "institution": "Norvella Institute of Applied Sciences",
+                "bureaus": [
+                  "PGRC",
+                  "RB"
+                ],
+                "categories": [
+                  "Fee/Refund",
+                  "Infrastructure/Lab"
+                ],
+                "same_category": false,
+                "open_since": {
+                  "HUB-0152": "2026-10-26",
+                  "HUB-0151": "2026-10-26"
+                },
+                "suggested_lead": {
+                  "bureau": "RB",
+                  "rule": "Rule 3: the older open case leads",
+                  "decided_by": "rules"
+                }
+              },
+              "suggested_lead": {
+                "bureau": "RB",
+                "rule": "Rule 3: the older open case leads",
+                "decided_by": "rules"
+              },
+              "dashboard_link": "/overlaps?link=143"
+            }
+          ],
+          "last_error": null
+        }
+      }
+    ]
+  }
+}

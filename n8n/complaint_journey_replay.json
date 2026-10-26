@@ -1,0 +1,573 @@
+{
+  "name": "Complaint Journey Replay",
+  "nodes": [
+    {
+      "id": "239c4591-07aa-4fcc-be93-f422228350f3",
+      "name": "Start replay",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        20,
+        300
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "e0bd47b0-508b-46a9-894f-1efe475f51fd",
+      "name": "Settings",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        240,
+        300
+      ],
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "dc1ed184-2c40-4fe4-8fa5-337927a6ce19",
+              "name": "hub_url",
+              "value": "http://localhost:8000",
+              "type": "string"
+            },
+            {
+              "id": "67bb61cd-630a-4476-b2af-0c08acad3553",
+              "name": "rb_url",
+              "value": "http://localhost:8001",
+              "type": "string"
+            },
+            {
+              "id": "482c2d0e-dda7-47f2-bd0a-377038ba97d8",
+              "name": "pgrc_url",
+              "value": "http://localhost:8002",
+              "type": "string"
+            },
+            {
+              "id": "946c48c2-353e-4008-b067-febc1626a0ca",
+              "name": "dashboard_url",
+              "value": "http://localhost:5173",
+              "type": "string"
+            },
+            {
+              "id": "f2e56f35-6180-46d7-92f8-00cb30180359",
+              "name": "college_query",
+              "value": "Norvella Institute of Applied Sciences",
+              "type": "string"
+            },
+            {
+              "id": "d398e7d5-630e-4431-ab0c-beaa637e3cf1",
+              "name": "telegram_chat_id",
+              "value": "REPLACE_WITH_YOUR_CHAT_ID",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "8972cf75-b393-43d0-948c-1995ec27f3c3",
+      "name": "1 Finder search",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        500,
+        300
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $('Settings').first().json.hub_url }}/api/institutions/search",
+        "options": {},
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "q",
+              "value": "={{ $('Settings').first().json.college_query }}"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "8deb3dd3-260d-469c-a201-d810a40c0313",
+      "name": "2 Institution details",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        740,
+        300
+      ],
+      "parameters": {
+        "method": "GET",
+        "url": "={{ $('Settings').first().json.hub_url }}/api/institutions/{{ $json.candidates[0].aicte_id }}",
+        "options": {}
+      }
+    },
+    {
+      "id": "5da2fa30-eeac-4889-91e4-64192f291853",
+      "name": "3 Confirm card + map link",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        980,
+        300
+      ],
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "91fa4f8a-9f24-4ad9-85e4-10422cd9db3f",
+              "name": "college_id",
+              "value": "={{ $json.aicte_id }}",
+              "type": "string"
+            },
+            {
+              "id": "79b19f94-9e7f-4851-9128-37cdb71d41ef",
+              "name": "college_name",
+              "value": "={{ $json.official_name }}",
+              "type": "string"
+            },
+            {
+              "id": "39ad133d-b8a7-4437-be92-def44924ab13",
+              "name": "address",
+              "value": "={{ [$json.address_line, $json.area, $json.district, $json.state].filter(Boolean).join(', ') }}",
+              "type": "string"
+            },
+            {
+              "id": "79fc2242-c55d-44ff-a802-1669cd57eccf",
+              "name": "map_link",
+              "value": "=https://www.openstreetmap.org/?mlat={{ $json.lat }}&mlon={{ $json.lng }}#map=16/{{ $json.lat }}/{{ $json.lng }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "bc0932e3-60c8-4835-bc5c-76d4bc525630",
+      "name": "4 RB: confirm institution",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1220,
+        300
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Settings').first().json.rb_url }}/institution/confirm",
+        "options": {},
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ institution_id: $json.college_id, resolution_method: \"REPORTER_CONFIRMED\" }) }}"
+      }
+    },
+    {
+      "id": "6caed808-a12a-436e-92ef-67bde6bc551e",
+      "name": "5 RB: request OTP",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1460,
+        300
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Settings').first().json.rb_url }}/otp/request",
+        "options": {},
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ contact: \"9000000201\" }) }}"
+      }
+    },
+    {
+      "id": "6680171f-fbaf-4ffd-b83d-80b1cdde4d9e",
+      "name": "6 RB: verify OTP",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1700,
+        300
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Settings').first().json.rb_url }}/otp/verify",
+        "options": {},
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ contact: \"9000000201\", code: $json.demo_otp }) }}"
+      }
+    },
+    {
+      "id": "9d7b9407-7a24-4ff9-aeda-abb4b2ad52f3",
+      "name": "7 RB: submit complaint",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1940,
+        300
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Settings').first().json.rb_url }}/submit",
+        "options": {},
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ institution_token: $(\"4 RB: confirm institution\").first().json.institution_token, verification_token: $json.verification_token, reporter_type: \"student\", category: \"Infrastructure/Lab\", title: \"Laboratory equipment not working\", severity: 3, description: \"The laboratory equipment has been out of order for months and students cannot do practicals.\" }) }}"
+      }
+    },
+    {
+      "id": "10d71082-a42d-415b-afc0-4b6550903f8d",
+      "name": "8 PGRC: confirm institution",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        260,
+        560
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Settings').first().json.pgrc_url }}/institution/confirm",
+        "options": {},
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ institution_id: $(\"3 Confirm card + map link\").first().json.college_id, resolution_method: \"REPORTER_CONFIRMED\" }) }}"
+      }
+    },
+    {
+      "id": "d0bd58c7-3ede-4c96-9551-e167d94c4f6c",
+      "name": "9 PGRC: request OTP",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        500,
+        560
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Settings').first().json.pgrc_url }}/otp/request",
+        "options": {},
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ contact: \"9000000202\" }) }}"
+      }
+    },
+    {
+      "id": "b1315aa6-caba-4af7-9e7d-f01796fa3bed",
+      "name": "10 PGRC: verify OTP",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        740,
+        560
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Settings').first().json.pgrc_url }}/otp/verify",
+        "options": {},
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ contact: \"9000000202\", code: $json.demo_otp }) }}"
+      }
+    },
+    {
+      "id": "53062ce8-a853-4568-824e-8a4a60e5089f",
+      "name": "11 PGRC: submit complaint",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        980,
+        560
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "={{ $('Settings').first().json.pgrc_url }}/submit",
+        "options": {},
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify({ institution_token: $(\"8 PGRC: confirm institution\").first().json.institution_token, verification_token: $json.verification_token, reporter_type: \"student\", category: \"Fee/Refund\", title: \"Refund not returned\", severity: 3, description: \"My refundable deposit has not been returned after I withdrew from the programme.\" }) }}"
+      }
+    },
+    {
+      "id": "69f64215-ac46-4fc2-8190-35ac4dcf6eb2",
+      "name": "12 Overlap alert raised?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [
+        1220,
+        560
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "conditions": [
+            {
+              "id": "c7f08cb2-1e4c-4c70-9f44-8b6ecbd65b0f",
+              "leftValue": "={{ $json.alerts_created.length }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "3ef58bb3-640e-4e96-a549-a8b8792eb4b2",
+      "name": "13 Build alert message",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1460,
+        480
+      ],
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c518a712-f1a3-4c65-bd47-f17c9e248db8",
+              "name": "text",
+              "value": "={{ '🚨 ' + $json.alerts_created[0].message + '\\n\\nCollege: ' + $json.alerts_created[0].institution + '\\nCases: ' + $json.alerts_created[0].cases.join(', ') + '\\nSuggested lead bureau (suggestion only): ' + ($json.alerts_created[0].suggested_lead.bureau || 'none') + '\\nOpen on the dashboard: ' + $('Settings').first().json.dashboard_url + $json.alerts_created[0].dashboard_link + '\\n\\nDemo replay: production portals call the hub directly. Officers decide.' }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "78a63014-c1d3-4093-a725-f93d22020a73",
+      "name": "14 Telegram: notify officer",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        1700,
+        480
+      ],
+      "parameters": {
+        "chatId": "={{ $('Settings').first().json.telegram_chat_id }}",
+        "text": "={{ $json.text }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      }
+    },
+    {
+      "id": "3f5b2e07-eec7-49f0-8cdc-103cd2e1c3e6",
+      "name": "No overlap, nothing to send",
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        1460,
+        660
+      ],
+      "parameters": {}
+    },
+    {
+      "id": "c31b276f-5013-4d79-aa6c-48cbb14a107a",
+      "name": "Note",
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        20,
+        40
+      ],
+      "parameters": {
+        "width": 1200,
+        "height": 190,
+        "content": "## Complaint Journey Replay\n**Demo replay: production portals call the hub directly.**\nReporter 1 files on the RB portal, reporter 2 on the PGRC portal, both about the clean college SYN-0040. The hub finds the cross-bureau overlap and returns it in `alerts_created`; the IF node sends it to Telegram.\nBefore a run: `python reset_demo.py`. Edit URLs and the Telegram chat ID in the **Settings** node (inside Docker use host.docker.internal instead of localhost)."
+      }
+    }
+  ],
+  "connections": {
+    "Start replay": {
+      "main": [
+        [
+          {
+            "node": "Settings",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Settings": {
+      "main": [
+        [
+          {
+            "node": "1 Finder search",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "1 Finder search": {
+      "main": [
+        [
+          {
+            "node": "2 Institution details",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "2 Institution details": {
+      "main": [
+        [
+          {
+            "node": "3 Confirm card + map link",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "3 Confirm card + map link": {
+      "main": [
+        [
+          {
+            "node": "4 RB: confirm institution",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "4 RB: confirm institution": {
+      "main": [
+        [
+          {
+            "node": "5 RB: request OTP",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "5 RB: request OTP": {
+      "main": [
+        [
+          {
+            "node": "6 RB: verify OTP",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "6 RB: verify OTP": {
+      "main": [
+        [
+          {
+            "node": "7 RB: submit complaint",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "7 RB: submit complaint": {
+      "main": [
+        [
+          {
+            "node": "8 PGRC: confirm institution",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "8 PGRC: confirm institution": {
+      "main": [
+        [
+          {
+            "node": "9 PGRC: request OTP",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "9 PGRC: request OTP": {
+      "main": [
+        [
+          {
+            "node": "10 PGRC: verify OTP",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "10 PGRC: verify OTP": {
+      "main": [
+        [
+          {
+            "node": "11 PGRC: submit complaint",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "11 PGRC: submit complaint": {
+      "main": [
+        [
+          {
+            "node": "12 Overlap alert raised?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "12 Overlap alert raised?": {
+      "main": [
+        [
+          {
+            "node": "13 Build alert message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "No overlap, nothing to send",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "13 Build alert message": {
+      "main": [
+        [
+          {
+            "node": "14 Telegram: notify officer",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "meta": {
+    "templateCredsSetupCompleted": false
+  },
+  "pinData": {}
+}
