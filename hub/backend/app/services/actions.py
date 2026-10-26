@@ -1,6 +1,6 @@
 """Officers log actions on a case in the hub (M9). In production the bureau systems would call POST /api/actions.
 Logging an action updates the case status and last action, writes the audit trail and re-checks for conflicts."""
-from datetime import datetime
+from datetime import date, datetime
 
 from fastapi import HTTPException
 from sqlalchemy import func, select
@@ -33,7 +33,7 @@ def allowed_action_types(db: Session, user: m.User) -> list[dict]:
 
 
 def log_action(db: Session, user: m.User, hub_case_id: str, action_type: str, remarks: str | None,
-               doc_ref: str | None, to_bureau: str | None) -> dict:
+               doc_ref: str | None, to_bureau: str | None, next_step: str | None = None, next_due: date | None = None) -> dict:
     case = case_service.get_visible_case(db, user, hub_case_id)
     allowed = {a["action_type"] for a in allowed_action_types(db, user)}
     if action_type not in allowed:
@@ -42,6 +42,11 @@ def log_action(db: Session, user: m.User, hub_case_id: str, action_type: str, re
         raise HTTPException(409, "This case is " + ("disposed" if case.status == "Disposed" else "waiting for a college to be assigned")
                             + ", so no further action can be logged")
     stance = db.get(m.ActionTypeStance, action_type).stance
+    next_step = (next_step or "").strip()[:200] or None
+    if next_due and next_due < date.today():
+        raise HTTPException(422, "The due date of the next action cannot be in the past")
+    if next_due and not next_step:
+        raise HTTPException(422, "Say what the next action is, or leave the date empty")
     bureau = user.bureau if user.bureau in BUREAUS else case.assigned_bureau
     from_b = None
     if action_type == TRANSFER:
@@ -64,8 +69,12 @@ def log_action(db: Session, user: m.User, hub_case_id: str, action_type: str, re
     elif case.status == "Pending":
         case.status = "Under Process"
     case.last_action_at = now
+    # the officer's own next step (if given) replaces the previous one; otherwise the hub suggests one by rule.
+    # A closed case needs no next action.
+    case.next_action = None if case.status == "Disposed" else next_step
+    case.next_action_due = None if case.status == "Disposed" else (next_due if next_step else None)
     log_event(db, actor=user.username, role=user.role, action="ACTION_LOGGED", entity_type="case", entity_id=hub_case_id,
-              detail={"action_type": action_type, "stance": stance, "seq": seq, "to_bureau": to_bureau})
+              detail={"action_type": action_type, "stance": stance, "seq": seq, "to_bureau": to_bureau, "next_action": next_step})
     db.flush()  # the session does not autoflush: save the action before the conflict check reads it
     alerts = conflicts.detect_for_case(db, case)
     priority.recompute_case(db, case)

@@ -104,7 +104,7 @@ export default function Cases() {
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead><tr className="text-left text-xs text-slate-500">
-                <th>Case</th><th>Institution</th><th>Category</th><th>Status</th><th>Bureau / officer</th><th>Received</th><th>Last action</th><th>Priority</th>
+                <th>Case</th><th>Institution</th><th>Category</th><th>Status</th><th>Bureau / officer</th><th>Received</th><th>Last action</th><th>Next action</th><th>Priority</th>
               </tr></thead>
               <tbody>{list.data.items.map((c) => (
                 <tr key={c.hub_case_id} className="border-t align-top">
@@ -116,6 +116,8 @@ export default function Cases() {
                   <td>{c.assigned_bureau}<div className="text-xs text-slate-400">{c.assigned_officer}</div></td>
                   <td>{fmtDate(c.received_at)}</td>
                   <td>{c.last_action || "–"}<div className="text-xs text-slate-400">{fmtDate(c.last_action_at)}</div></td>
+                  <td>{c.next_action || <span className="text-slate-400">–</span>}
+                    {c.next_action && <div className={"text-xs " + (c.next_action_overdue ? "font-medium text-red-700" : "text-slate-400")}>due {fmtDate(c.next_action_due)}{c.next_action_overdue ? " (overdue)" : ""}</div>}</td>
                   <td>{c.priority_score}{c.suggestions_waiting > 0 && <div className="text-xs text-amber-700">{c.suggestions_waiting} suggestion(s)</div>}</td>
                 </tr>
               ))}</tbody>

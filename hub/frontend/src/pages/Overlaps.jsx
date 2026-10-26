@@ -31,7 +31,7 @@ export default function Overlaps() {
         ))}
         <select className="ml-auto rounded border bg-white px-2 py-1.5 text-sm" value={type} onChange={(e) => setType(e.target.value)}>
           <option value="">All types</option>
-          {["CROSS_BUREAU", "CONFLICT", "DUPLICATE_ACTION", "SAME_REPORTER", "CORROBORATION"].map((t) => <option key={t} value={t}>{LINK_TYPE[t]}</option>)}
+          {["CROSS_BUREAU", "CONFLICT", "DUPLICATE_ACTION", "SAME_REPORTER", "CORROBORATION", "RELATED"].map((t) => <option key={t} value={t}>{LINK_TYPE[t]}</option>)}
         </select>
       </div>
       <Loading state={links} />

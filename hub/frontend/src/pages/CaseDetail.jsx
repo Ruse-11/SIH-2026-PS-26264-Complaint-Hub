@@ -33,6 +33,50 @@ function effectText(type, status, toBureau) {
 }
 
 // Officers record what they did on the case. The hub then checks for conflicts or duplicate actions with the other bureau.
+// An officer links this case to another case at the same college (their own decision, so it is confirmed at once).
+function LinkAnother({ caseData, onDone }) {
+  const { api, user } = useAuth();
+  const toast = useToast();
+  const canLink = user.permissions.can_decide_links && caseData.institution;
+  const list = useGet(canLink ? "/api/matching/linkable?case_id=" + encodeURIComponent(caseData.hub_case_id) : "");
+  const [other, setOther] = useState("");
+  const [type, setType] = useState("RELATED");
+  const [note, setNote] = useState("");
+  const [busy, setBusy] = useState(false);
+  if (!canLink) return null;
+  const options = (list.data || []).filter((o) => !o.existing_links.some((x) => x.endsWith(":SUGGESTED") || x.endsWith(":CONFIRMED") || x.endsWith(":REJECTED")));
+  async function submit() {
+    setBusy(true);
+    try {
+      await send(api, "/api/matching/links/manual", { case_id: caseData.hub_case_id, other_case_id: other, link_type: type, note });
+      toast({ tone: "success", title: "✓ Cases linked", lines: [note] });
+      setOther(""); setNote("");
+      onDone();
+    } catch (e) { toast({ tone: "error", title: "Could not link the cases", lines: [e.message] }); }
+    setBusy(false);
+  }
+  return (
+    <Panel title="Link another case">
+      <p className="mb-2 text-sm text-slate-600">Link a related case at the same college that the system did not suggest. Your link is recorded in the audit trail and shown on both cases.</p>
+      {options.length === 0 ? <p className="text-sm text-slate-500">No other unlinked cases at this college.</p> : (
+        <div className="grid gap-2 md:grid-cols-4">
+          <select id="manual-other" className="rounded border bg-white px-2 py-1.5 text-sm md:col-span-2" value={other} onChange={(e) => setOther(e.target.value)}>
+            <option value="">Choose a case…</option>
+            {options.map((o) => <option key={o.hub_case_id} value={o.hub_case_id}>{o.source_case_no} · {o.bureau} · {o.category} · {o.status}</option>)}
+          </select>
+          <select id="manual-type" className="rounded border bg-white px-2 py-1.5 text-sm" value={type} onChange={(e) => setType(e.target.value)}>
+            <option value="RELATED">Related</option>
+            <option value="CORROBORATION">Corroboration</option>
+            <option value="SAME_REPORTER">Same reporter duplicate</option>
+          </select>
+          <button id="manual-submit" disabled={busy || !other || note.trim().length < 5} onClick={submit}
+            className="rounded bg-slate-900 px-3 py-1.5 text-sm text-white disabled:opacity-40">Link cases</button>
+          <input id="manual-note" className="rounded border px-2 py-1.5 text-sm md:col-span-4" placeholder="Why are these related? (required, min 5 characters)" value={note} onChange={(e) => setNote(e.target.value)} />
+        </div>)}
+    </Panel>
+  );
+}
+
 function LogAction({ caseData, onDone }) {
   const { api, user } = useAuth();
   const toast = useToast();
@@ -41,6 +85,8 @@ function LogAction({ caseData, onDone }) {
   const [type, setType] = useState("");
   const [remarks, setRemarks] = useState("");
   const [doc, setDoc] = useState("");
+  const [nextStep, setNextStep] = useState("");
+  const [nextDue, setNextDue] = useState("");
   const [toBureau, setToBureau] = useState("");
   const [busy, setBusy] = useState(false);
   const closed = caseData.status === "Disposed" || caseData.status === "unverified_institution";
@@ -65,10 +111,11 @@ function LogAction({ caseData, onDone }) {
     setBusy(true);
     try {
       const done = await send(api, `/api/cases/${caseData.hub_case_id}/actions`, {
-        action_type: type, remarks, doc_ref: doc, to_bureau: type === "Transferred" ? target : null });
+        action_type: type, remarks, doc_ref: doc, to_bureau: type === "Transferred" ? target : null,
+        next_step: nextStep || null, next_due: nextStep && nextDue ? nextDue : null });
       const lines = [`Status is now ${done.status}.`, ...done.alerts_created.map((a) => "⚠ " + a.message)];
       toast({ tone: done.alerts_created.length ? "error" : "success", title: `✓ Action logged: ${done.action_type}`, lines });
-      setGroup(""); setType(""); setRemarks(""); setDoc(""); setToBureau("");
+      setGroup(""); setType(""); setRemarks(""); setDoc(""); setToBureau(""); setNextStep(""); setNextDue("");
       onDone();
     } catch (err) {
       toast({ tone: "error", title: "Could not log the action", lines: [err.message] });
@@ -118,6 +165,15 @@ function LogAction({ caseData, onDone }) {
                 placeholder={NEEDS_REMARKS.includes(type) ? "Remarks (required: say why)" : "Remarks (optional)"} className="rounded border px-3 py-2 text-sm" />
               <input value={doc} maxLength={200} onChange={(e) => setDoc(e.target.value)} placeholder="Document reference (optional)" className="rounded border px-3 py-2 text-sm" />
             </div>
+            {!CLOSING.includes(type) && (
+              <div className="grid gap-3 sm:grid-cols-2">
+                <input id="next-step" value={nextStep} maxLength={200} onChange={(e) => setNextStep(e.target.value)}
+                  placeholder="Next action required (optional, otherwise the hub suggests one)" className="rounded border px-3 py-2 text-sm" />
+                <label className="flex items-center gap-2 text-sm text-slate-600">Due by
+                  <input id="next-due" type="date" min={new Date().toISOString().slice(0, 10)} value={nextDue} disabled={!nextStep}
+                    onChange={(e) => setNextDue(e.target.value)} className="rounded border px-2 py-1.5 text-sm disabled:opacity-40" /></label>
+              </div>
+            )}
             <p className="text-sm text-slate-700">{effectText(type, caseData.status, target)}</p>
             <button disabled={busy} className="rounded bg-slate-900 px-4 py-2 text-sm text-white disabled:opacity-40">{busy ? "Saving…" : "Log action"}</button>
           </>
@@ -182,6 +238,12 @@ export default function CaseDetail() {
             <dt className="text-slate-500">Received</dt><dd>{fmtDate(d.received_at)} via {d.source_system} portal</dd>
             <dt className="text-slate-500">Expected disposal</dt><dd>{fmtDate(d.expected_disposal_date)}</dd>
             <dt className="text-slate-500">Last action</dt><dd>{d.last_action || "–"} ({fmtDate(d.last_action_at)})</dd>
+            <dt className="text-slate-500">Next action</dt>
+            <dd id="next-action">{d.next_action.text ? (
+              <>{d.next_action.text}
+                <div className={"text-xs " + (d.next_action.overdue ? "font-medium text-red-700" : "text-slate-500")}>
+                  due {fmtDate(d.next_action.due)}{d.next_action.overdue ? " (overdue)" : ""} · {d.next_action.source === "officer" ? "set by the officer" : "suggested by rule"}</div></>
+            ) : <span className="text-slate-500">None, case closed</span>}</dd>
             <dt className="text-slate-500">College found by</dt><dd>{d.resolution_method}</dd>
             <dt className="text-slate-500">Reporter</dt><dd>{d.reporter_id} ({d.reporter_type})</dd>
           </dl>
@@ -216,13 +278,14 @@ export default function CaseDetail() {
       </div>
 
       <LogAction caseData={d} onDone={c.reload} />
+      <LinkAnother caseData={d} onDone={c.reload} />
 
       <Panel title={"Linked and suggested cases (" + shownLinks.length + (shownLinks.length === d.links.length ? "" : " of " + d.links.length) + ")"}
         right={d.links.length > 0 && (
           <div className="flex gap-2">
             <select id="link-type" className="rounded border bg-white px-2 py-1.5 text-sm" value={linkType} onChange={(e) => setLinkType(e.target.value)}>
               <option value="">All types</option>
-              {["CROSS_BUREAU", "CONFLICT", "DUPLICATE_ACTION", "SAME_REPORTER", "CORROBORATION"].map((t) => (
+              {["CROSS_BUREAU", "CONFLICT", "DUPLICATE_ACTION", "SAME_REPORTER", "CORROBORATION", "RELATED"].map((t) => (
                 <option key={t} value={t}>{LINK_TYPE[t]} ({d.links.filter((l) => l.link_type === t).length})</option>))}
             </select>
             <select id="link-status" className="rounded border bg-white px-2 py-1.5 text-sm" value={linkStatus} onChange={(e) => setLinkStatus(e.target.value)}>

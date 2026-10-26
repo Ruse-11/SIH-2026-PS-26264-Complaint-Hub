@@ -31,7 +31,7 @@ def list_cases(q: str | None = Query(None, max_length=100), bureau: str | None =
 EXPORT_COLUMNS = [("hub_case_id", "Hub case ID"), ("source_case_no", "Case number"), ("institution_id", "AICTE ID"), ("institution_name", "Institution"),
                   ("region", "Region"), ("category", "Category"), ("title", "Title"), ("status", "Status"), ("assigned_bureau", "Bureau"),
                   ("assigned_officer", "Officer"), ("received_at", "Received"), ("last_action", "Last action"), ("last_action_at", "Date of last action"),
-                  ("expected_disposal_date", "Expected disposal"), ("overdue", "Beyond timeline"), ("priority_score", "Priority"),
+                  ("expected_disposal_date", "Expected disposal"), ("next_action", "Next action required"), ("next_action_due", "Next action due"), ("overdue", "Beyond timeline"), ("priority_score", "Priority"),
                   ("suggestions_waiting", "Suggestions waiting")]
 
 
@@ -82,6 +82,8 @@ class ActionBody(BaseModel):
     remarks: str | None = Field(default=None, max_length=500)
     doc_ref: str | None = Field(default=None, max_length=200)
     to_bureau: str | None = Field(default=None, max_length=20)  # only for a transfer
+    next_step: str | None = Field(default=None, max_length=200)  # next action required (optional)
+    next_due: date | None = None
 
 
 @router.get("/action-types")
@@ -93,7 +95,7 @@ def action_types(db: Session = Depends(get_db), user=Depends(auth.current_user))
 @router.post("/{hub_case_id}/actions", status_code=201)
 def log_action(hub_case_id: str, body: ActionBody, db: Session = Depends(get_db), user=Depends(auth.current_user)):
     """An officer logs an action. Conflicts and duplicate actions with the other bureau are checked straight away."""
-    return action_service.log_action(db, user, hub_case_id, body.action_type, body.remarks, body.doc_ref, body.to_bureau)
+    return action_service.log_action(db, user, hub_case_id, body.action_type, body.remarks, body.doc_ref, body.to_bureau, body.next_step, body.next_due)
 
 
 @router.get("/{hub_case_id}/file")

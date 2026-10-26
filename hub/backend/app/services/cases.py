@@ -6,7 +6,7 @@ from sqlalchemy import func, or_, select
 from sqlalchemy.orm import Session
 
 from .. import models as m
-from . import dashboard, matching, priority, scope
+from . import dashboard, matching, nextaction, priority, scope
 from .audit import log_event
 from .institutions import normalize_name
 
@@ -31,6 +31,7 @@ def case_detail(db: Session, hub_case_id: str):
         "assigned_officer": case.assigned_officer, "severity": case.severity, "priority_score": case.priority_score,
         "expected_disposal_date": iso(case.expected_disposal_date), "last_action_at": iso(case.last_action_at),
         "last_action": actions[-1].action_type if actions else None, "cluster_id": case.cluster_id,
+        "next_action": nextaction.view(case, actions[-1].action_type if actions else None),
         "priority": priority.breakdown(db, case),
         "links": matching.list_links(db, case_id=hub_case_id),
         "actions": [{"seq": a.seq, "action_type": a.action_type, "stance": a.stance, "actor": a.actor,
@@ -98,6 +99,7 @@ def list_cases(db: Session, user: m.User, q=None, bureau=None, region=None, cate
     items = []
     for c, inst_name, inst_region in rows:
         a = last.get(c.hub_case_id)
+        na = nextaction.view(c, a.action_type if a else None, as_of)
         items.append({
             "hub_case_id": c.hub_case_id, "source_case_no": c.source_case_no, "institution_id": c.institution_id,
             "institution_name": inst_name, "region": inst_region, "category": c.category, "title": c.title,
@@ -106,6 +108,7 @@ def list_cases(db: Session, user: m.User, q=None, bureau=None, region=None, cate
             "last_action_at": c.last_action_at.date().isoformat() if c.last_action_at else None,
             "expected_disposal_date": c.expected_disposal_date.isoformat() if c.expected_disposal_date else None,
             "overdue": dashboard.is_overdue(c.status, c.expected_disposal_date, as_of),
+            "next_action": na["text"], "next_action_due": na["due"], "next_action_overdue": na["overdue"],
             "priority_score": c.priority_score, "cluster_id": c.cluster_id, "suggestions_waiting": open_links.get(c.hub_case_id, 0)})
     return {"total": total, "page": page, "page_size": page_size, "items": items}
 

@@ -74,6 +74,8 @@ class Case(Base):
     expected_disposal_date: Mapped[date | None] = mapped_column(Date)
     last_action_at: Mapped[datetime | None] = mapped_column(DateTime)
     cluster_id: Mapped[int | None] = mapped_column(ForeignKey("cluster.id"))
+    next_action: Mapped[str | None] = mapped_column(String)  # set by an officer when logging an action (else the hub suggests one)
+    next_action_due: Mapped[date | None] = mapped_column(Date)
 
 
 class CaseAction(Base):
@@ -108,7 +110,7 @@ class LinkSuggestion(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     case_a: Mapped[str] = mapped_column(ForeignKey("cases.hub_case_id"), index=True)
     case_b: Mapped[str] = mapped_column(ForeignKey("cases.hub_case_id"), index=True)
-    link_type: Mapped[str] = mapped_column(String)  # SAME_REPORTER / CORROBORATION / CROSS_BUREAU / CONFLICT
+    link_type: Mapped[str] = mapped_column(String)  # SAME_REPORTER / CORROBORATION / CROSS_BUREAU / CONFLICT / DUPLICATE_ACTION, or RELATED (made by an officer)
     score: Mapped[float | None] = mapped_column(Float)
     reasons: Mapped[dict | None] = mapped_column(JSON)  # why the system suggested it
     status: Mapped[str] = mapped_column(String, default="SUGGESTED")  # SUGGESTED / CONFIRMED / REJECTED

@@ -35,11 +35,23 @@ async def _scan_loop():
         await asyncio.sleep(SCAN_EVERY_SECONDS)
 
 
+def _add_missing_columns():
+    """create_all never changes a table that already exists. If this database was seeded by an older version, add the
+    columns later versions need (SQLite ALTER TABLE), so an upgrade does not break the hub. A re-seed also fixes it."""
+    from sqlalchemy import inspect, text
+    have = {c["name"] for c in inspect(engine).get_columns("cases")}
+    with engine.begin() as con:
+        for col, ddl in (("next_action", "VARCHAR"), ("next_action_due", "DATE")):
+            if col not in have:
+                con.execute(text(f"ALTER TABLE cases ADD COLUMN {col} {ddl}"))
+
+
 @asynccontextmanager
 async def lifespan(_app):
     """On start-up make sure the tables exist (data is loaded separately by `python -m app.seed`),
     then keep the stalled / SLA alerts fresh in the background."""
     Base.metadata.create_all(engine)
+    _add_missing_columns()
     task = asyncio.create_task(_scan_loop())
     warm = asyncio.create_task(asyncio.to_thread(embeddings.warm_up))  # loads the model in the background (no-op when off)
     yield

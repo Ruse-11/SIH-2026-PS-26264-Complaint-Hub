@@ -44,3 +44,22 @@ def reject(link_id: int, body: DecisionBody | None = None, db: Session = Depends
            user=Depends(auth.current_user)):
     """An officer rejects the suggestion. The pair is never suggested again."""
     return decisions.decide(db, user, link_id, "REJECTED", body.note if body else None)
+
+
+class ManualLinkBody(BaseModel):
+    case_id: str = Field(max_length=40)
+    other_case_id: str = Field(max_length=40)
+    link_type: str = Field(default="RELATED", max_length=30)
+    note: str = Field(max_length=500)  # why the officer thinks they are related (required, kept in the audit trail)
+
+
+@router.get("/linkable")
+def linkable(case_id: str, db: Session = Depends(get_db), user=Depends(auth.current_user)):
+    """Cases at the same institution that could be linked to this case by hand."""
+    return decisions.linkable_cases(db, user, case_id)
+
+
+@router.post("/links/manual", status_code=201)
+def manual_link(body: ManualLinkBody, db: Session = Depends(get_db), user=Depends(auth.current_user)):
+    """An officer links two related cases at the same institution. Created confirmed; audited."""
+    return decisions.create_manual_link(db, user, body.case_id, body.other_case_id, body.link_type, body.note)

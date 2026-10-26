@@ -14,7 +14,7 @@ from .. import models as m
 from . import cases as case_service, dashboard
 
 LINK_LABEL = {"CROSS_BUREAU": "Cross-bureau overlap", "SAME_REPORTER": "Same reporter, duplicate", "CORROBORATION": "Corroboration",
-              "CONFLICT": "Conflicting actions", "DUPLICATE_ACTION": "Duplicate action"}
+              "CONFLICT": "Conflicting actions", "DUPLICATE_ACTION": "Duplicate action", "RELATED": "Related cases (linked by an officer)"}
 LINK_STATUS = {"SUGGESTED": "Suggested, awaiting an officer's decision", "CONFIRMED": "Confirmed by an officer", "REJECTED": "Rejected by an officer"}
 AUDIT_ROLES = ("senior_management", "competent_authority")
 
@@ -93,6 +93,9 @@ def build(db: Session, user: m.User, hub_case_id: str) -> str:
         ("Received", f"{_d(d['received_at'])} via the {d['source_system']} portal ({p['age_days']} days ago)"),
         ("Expected disposal", _d(d["expected_disposal_date"]) + (" (beyond the timeline)" if overdue else "")),
         ("Last action", f"{d['last_action'] or '–'} on {_d(d['last_action_at'])}"),
+        ("Next action required", (f"{d['next_action']['text']} (due {_d(d['next_action']['due'])}, "
+                                  f"{'set by the officer' if d['next_action']['source'] == 'officer' else 'suggested by rule'}"
+                                  f"{', overdue' if d['next_action']['overdue'] else ''})") if d["next_action"]["text"] else "None (case closed)"),
         ("Priority score", f"{p['score']} = severity {d['severity']} x 10 ({p['parts']['severity']}) + confirmed independent reporters "
                            f"{p['confirmed_corroborators']} x 5 ({p['parts']['corroboration']}) + age {p['age_days']} days x 0.3 ({p['parts']['age']})"),
         ("Possible priority boost", f"+{p['potential_boost']} if an officer confirms the pending corroboration" if p["potential_boost"] else "none pending"),

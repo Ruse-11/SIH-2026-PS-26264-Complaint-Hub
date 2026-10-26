@@ -82,6 +82,7 @@ export const LINK_TYPE = {
   CORROBORATION: "Corroboration",
   CONFLICT: "Conflicting actions",
   DUPLICATE_ACTION: "Duplicate action",
+  RELATED: "Related (linked by an officer)",
 };
 
 export const fmtDate = (d) => (d ? String(d).slice(0, 10) : "–");

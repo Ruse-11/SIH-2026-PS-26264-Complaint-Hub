@@ -10,6 +10,7 @@ const HEADLINE = {
   CORROBORATION: "Possible corroboration: independent reporters, similar complaint",
   CONFLICT: "Conflicting actions by two bureaus – decision needed",
   DUPLICATE_ACTION: "Possible duplicate action by two bureaus",
+  RELATED: "Related cases linked by an officer",
 };
 
 const ACTION_TEXT = (a) => `${a.bureau} · ${a.action_type} (${a.stance.toLowerCase()}) on ${a.case}, ${a.date}`;
@@ -58,7 +59,12 @@ function Reasons({ link }) {
   const r = link.reasons || {};
   return (
     <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-slate-700">
-      {link.link_type === "CONFLICT" || link.link_type === "DUPLICATE_ACTION" ? (
+      {r.manual ? (
+        <>
+          <li>Linked by {r.created_by} (an officer's own decision, not a system suggestion).</li>
+          <li>Reason given: {r.note}</li>
+        </>
+      ) : link.link_type === "CONFLICT" || link.link_type === "DUPLICATE_ACTION" ? (
         <>
           <li>{r.rule}</li>
           {(r.matches || []).slice(0, 2).map((m, i) => link.link_type === "CONFLICT"
