@@ -1,3 +1,30 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* ---- Government-style console (hub) ---- */
+body { font-family: "Segoe UI", Arial, Helvetica, sans-serif; background: #eef1f5; }
+.tricolour { display: flex; height: 5px; }
+.tricolour i { flex: 1; }
+.tricolour i:nth-child(1) { background: #ff9933; }
+.tricolour i:nth-child(2) { background: #fff; }
+.tricolour i:nth-child(3) { background: #138808; }
+.gov-head { background: #1b3a6b; border-bottom: 3px solid #e07b00; }
+.seal { width: 52px; height: 52px; border-radius: 50%; background: #fff; color: #1b3a6b; display: grid; place-items: center; font-weight: 800; border: 3px double #1b3a6b; box-shadow: 0 0 0 2px #fff; flex: none; }
+.gov-nav { background: #12294d; }
+.gov-tab { color: #dbe6f7; padding: 10px 16px; font-size: 14px; border-bottom: 3px solid transparent; text-decoration: none; }
+.gov-tab:hover { background: #ffffff1a; color: #fff; }
+.gov-tab.active { color: #fff; font-weight: 600; border-bottom-color: #e07b00; background: #ffffff14; }
+.gov-foot { background: #12294d; color: #cbd8ec; font-size: 12px; margin-top: 16px; }
+/* cards: flat, bordered, small corners, navy top rule (instead of soft floating cards) */
+main .rounded-xl { border-radius: 4px; }
+main .shadow-sm, main .shadow { box-shadow: none; }
+main section.rounded-xl, main .bg-white.rounded-xl { border: 1px solid #cfd6df; }
+main section.rounded-xl { border-top: 3px solid #1b3a6b; }
+main h1 { color: #1b3a6b; }
+main table thead, main table thead tr { background: #e8edf5; }
+main table th { color: #1b3a6b; font-size: 12px; text-transform: uppercase; letter-spacing: .03em; }
+main table tbody tr:nth-child(even) { background: #f8fafc; }
+main table tbody tr:hover { background: #eef3fb; }
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 3px solid #f59e0b; outline-offset: 2px; }
+main table td:first-child a { white-space: nowrap; }

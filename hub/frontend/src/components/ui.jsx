@@ -67,10 +67,11 @@ export function StatusBadge({ status }) {
   return <span className={"rounded-full px-2 py-0.5 text-xs font-medium " + (STATUS_STYLE[status] || "bg-slate-100")}>{label}</span>;
 }
 
+const BORDER = { slate: "border-l-slate-500", red: "border-l-red-600", amber: "border-l-amber-500", green: "border-l-green-600", blue: "border-l-blue-700", purple: "border-l-purple-600" };
 export function Tile({ label, value, tone = "slate", to, hint }) {
   const tones = { slate: "text-slate-900", red: "text-red-700", amber: "text-amber-700", green: "text-green-700", blue: "text-blue-700", purple: "text-purple-700" };
   const body = (
-    <div className="rounded-xl bg-white p-4 shadow-sm hover:shadow">
+    <div className={"rounded-xl border border-l-4 bg-white p-4 hover:bg-slate-50 " + (BORDER[tone] || "border-l-slate-500")}>
       <div className="text-xs uppercase tracking-wide text-slate-500">{label}</div>
       <div className={"mt-1 text-3xl font-semibold " + tones[tone]}>{value}</div>
       {hint && <div className="mt-1 text-xs text-slate-500">{hint}</div>}

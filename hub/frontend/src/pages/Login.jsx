@@ -42,14 +42,21 @@ export default function Login() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-100 px-4 py-10">
-      <div className="mx-auto max-w-3xl">
-        <h1 className="text-2xl font-semibold text-slate-900">Complaint Hub</h1>
-        <p className="mt-1 text-slate-600">
-          Integrated monitoring of institution-related complaints across AICTE bureaus. Officers decide; the system only suggests.
-        </p>
-
-        <div className="mt-6 rounded-xl bg-white p-6 shadow-sm">
+    <div className="min-h-screen bg-slate-100">
+      <div className="tricolour"><i /><i /><i /></div>
+      <header className="gov-head">
+        <div className="mx-auto flex max-w-3xl items-center gap-4 px-4 py-4">
+          <div className="seal" aria-hidden="true">CH</div>
+          <div className="leading-tight">
+            <div className="text-[11px] uppercase tracking-wider text-blue-200">Technical Education Regulator (fictional)</div>
+            <h1 className="text-xl font-bold text-white">Integrated Complaint Monitoring Hub</h1>
+            <p className="text-xs text-blue-100">Officer sign-in · Officers decide; the system only suggests.</p>
+          </div>
+          <span className="ml-auto rounded border border-dashed border-amber-300 bg-amber-50 px-2 py-1 text-xs font-semibold text-amber-800">PROTOTYPE<br />synthetic data</span>
+        </div>
+      </header>
+      <div className="mx-auto max-w-3xl px-4 py-8">
+        <div className="rounded border border-t-4 border-slate-300 border-t-blue-900 bg-white p-6">
           <h2 className="font-medium text-slate-800">Demo accounts (prototype, synthetic data)</h2>
           <p className="text-sm text-slate-500">Click a role to sign in. Password for all: {demo ? demo.password : "…"}</p>
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
@@ -70,7 +77,7 @@ export default function Login() {
         </div>
 
         <form
-          className="mt-4 rounded-xl bg-white p-6 shadow-sm"
+          className="mt-4 rounded border border-t-4 border-slate-300 border-t-blue-900 bg-white p-6"
           onSubmit={(e) => {
             e.preventDefault();
             submit(username, password);

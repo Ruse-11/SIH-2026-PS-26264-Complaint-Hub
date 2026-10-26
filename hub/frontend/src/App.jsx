@@ -77,43 +77,57 @@ function Shell() {
   const perms = user.permissions;
   return (
     <ToastProvider>
-    <div className="flex min-h-screen bg-slate-100 text-slate-900">
-      <aside className="w-56 shrink-0 bg-slate-900 p-4 text-slate-200">
-        <div className="mb-6 text-lg font-semibold">Complaint Hub</div>
-        <nav className="flex flex-col gap-1">
+    <div className="min-h-screen text-slate-900">
+      <div className="tricolour"><i /><i /><i /></div>
+      <div className="border-b bg-slate-50 px-6 py-1 text-xs text-slate-600">
+        <div className="mx-auto flex max-w-screen-2xl items-center gap-4">
+          <span>Officers decide. The system only suggests.</span>
+          <span className="rounded border border-dashed border-amber-600 bg-amber-50 px-2 font-semibold text-amber-800">PROTOTYPE · synthetic data</span>
+          <span className="flex-1" />
+          <HubStatus />
+        </div>
+      </div>
+      <header className="gov-head">
+        <div className="mx-auto flex max-w-screen-2xl items-center gap-4 px-6 py-3">
+          <div className="seal" aria-hidden="true">CH</div>
+          <div className="leading-tight">
+            <div className="text-[11px] uppercase tracking-wider text-blue-200">Technical Education Regulator (fictional)</div>
+            <div className="text-xl font-bold text-white">Integrated Complaint Monitoring Hub</div>
+            <div className="text-xs text-blue-100">Regulation Bureau · Public Grievance Redressal Cell · Other bureaus and regional offices</div>
+          </div>
+          <div className="flex-1" />
+          <div className="text-right leading-tight text-blue-50">
+            <div className="text-sm font-semibold">{user.display_name}</div>
+            <div className="text-xs text-blue-200">
+              {user.role_label} · sees {SCOPE_TEXT[perms.view_scope]}
+              {perms.view_scope === "region" ? ` (${user.region})` : ""}
+              {ACTIONS.some((k) => perms[k]) ? "" : " · read-only"}
+            </div>
+          </div>
+          <button onClick={logout} className="rounded border border-blue-300 px-3 py-1 text-sm text-white hover:bg-blue-800">Log out</button>
+        </div>
+      </header>
+      <nav className="gov-nav" aria-label="Main">
+        <div className="mx-auto flex max-w-screen-2xl flex-wrap items-center px-6">
           {NAV.filter(([, , roles]) => !roles || roles.includes(user.role)).map(([to, label]) => (
-            <NavLink
-              key={to}
-              to={to}
-              end={to === "/"}
-              className={({ isActive }) => "rounded px-3 py-2 text-sm " + (isActive ? "bg-slate-700 text-white" : "hover:bg-slate-800")}
-            >
+            <NavLink key={to} to={to} end={to === "/"} className={({ isActive }) => "gov-tab" + (isActive ? " active" : "")}>
               {label}
             </NavLink>
           ))}
-        </nav>
-      </aside>
-      <div className="flex-1">
-        <header className="flex items-center justify-between gap-4 border-b bg-white px-6 py-3">
-          <HeaderSearch />
-          <span className="hidden text-sm text-slate-500 xl:inline">Officers decide. The system only suggests. (synthetic data)</span>
-          <div className="flex items-center gap-3">
-            <HubStatus />
-            <div className="text-right leading-tight">
-              <div className="text-sm font-medium">{user.display_name}</div>
-              <div className="text-xs text-slate-500">
-                {user.role_label} · sees {SCOPE_TEXT[perms.view_scope]}
-                {perms.view_scope === "region" ? ` (${user.region})` : ""}
-                {ACTIONS.some((k) => perms[k]) ? "" : " · read-only"}
-              </div>
-            </div>
-            <button onClick={logout} className="rounded border px-3 py-1 text-sm hover:bg-slate-100">Log out</button>
-          </div>
-        </header>
-        <main className="p-6">
-          <Outlet />
-        </main>
+        </div>
+      </nav>
+      <div className="border-b bg-white px-6 py-2">
+        <div className="mx-auto max-w-screen-2xl"><HeaderSearch /></div>
       </div>
+      <main className="mx-auto max-w-screen-2xl p-6">
+        <Outlet />
+      </main>
+      <footer className="gov-foot">
+        <div className="mx-auto flex max-w-screen-2xl flex-wrap justify-between gap-2 px-6 py-4">
+          <span>Integrated Complaint Monitoring Hub · SIH 2026 · PS 26264 · all data is synthetic</span>
+          <span>Every suggestion is confirmed or rejected by an officer, and every decision is in the audit trail.</span>
+        </div>
+      </footer>
     </div>
     </ToastProvider>
   );
