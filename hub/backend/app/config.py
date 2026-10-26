@@ -2,7 +2,7 @@
 import os
 from pathlib import Path
 
-VERSION = "0.12.0-m12"
+VERSION = "0.13.0-m13"
 
 # sih-hub/ (this file is sih-hub/hub/backend/app/config.py)
 ROOT = Path(__file__).resolve().parents[3]

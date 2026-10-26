@@ -5,7 +5,7 @@ It DELETES and recreates every table, so running it twice gives the same clean r
 """
 import csv
 import json
-from datetime import date, datetime, time
+from datetime import date, datetime, time, timedelta
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
@@ -53,8 +53,13 @@ def read_csv(name):
         return list(csv.DictReader(f))
 
 
-def at_time(day: str, hour: int) -> datetime:
-    return datetime.combine(date.fromisoformat(day), time(hour, 0))
+# The dataset was written so that "today" is 25 Oct 2026 (for example scenario S10 has a case due in 3 days).
+DATASET_TODAY = date(2026, 10, 25)
+
+
+def at_time(day: str, hour: int, shift_days: int = 0) -> datetime:
+    """A dataset date as a datetime, moved by shift_days (reset_demo.py uses this to keep the demo 'current')."""
+    return datetime.combine(date.fromisoformat(day) + timedelta(days=shift_days), time(hour, 0))
 
 
 DEMO_USERS = [  # username, role, display name, bureau, region. One account per target user of the PS.
@@ -114,7 +119,7 @@ def load_reporters(db: Session):
     return len(rows)
 
 
-def load_cases_and_actions(db: Session):
+def load_cases_and_actions(db: Session, shift_days: int = 0):
     actions_by_case = {}
     for a in read_csv("actions.csv"):
         actions_by_case.setdefault(a["source_case_no"], []).append(a)
@@ -130,25 +135,26 @@ def load_cases_and_actions(db: Session):
             resolution_method="UNLISTED" if unverified else "REPORTER_CONFIRMED",
             finder_answers={"note": "institution not identified by reporter"} if unverified else None,
             reporter_id=c["reporter_id"], category=c["category"], title=c["title"], description=c["description"],
-            received_at=at_time(c["received_date"], 9),
+            received_at=at_time(c["received_date"], 9, shift_days),
             status="unverified_institution" if unverified else c["status"],  # goes to the Needs Review queue
             assigned_bureau=c["assigned_bureau"], assigned_officer=c["assigned_officer"],
             severity=int(c["severity"]),
-            expected_disposal_date=date.fromisoformat(c["expected_disposal_date"]),
-            last_action_at=at_time(acts[-1]["action_date"], 11) if acts else None))
+            expected_disposal_date=date.fromisoformat(c["expected_disposal_date"]) + timedelta(days=shift_days),
+            last_action_at=at_time(acts[-1]["action_date"], 11, shift_days) if acts else None))
         for a in acts:
             moved = a["action_type"] == "Transferred"
             db.add(m.CaseAction(
                 case_id=hub_id, seq=int(a["action_seq"]), action_type=a["action_type"],
                 stance=STANCES[a["action_type"]], actor=a["officer"], bureau=a["bureau"], remarks=a["remarks"],
-                doc_ref=a["doc_ref"], at=at_time(a["action_date"], 11),
+                doc_ref=a["doc_ref"], at=at_time(a["action_date"], 11, shift_days),
                 from_bureau=a["bureau"] if moved else None, to_bureau=c["assigned_bureau"] if moved else None))
             n_actions += 1
     return i, n_actions
 
 
-def run(engine=None) -> dict:
-    """Drop and rebuild all tables, load everything, return the row counts."""
+def run(engine=None, shift_days: int = 0) -> dict:
+    """Drop and rebuild all tables, load everything, return the row counts.
+    shift_days moves every case date forward (or back) by that many days; 0 = the dataset exactly as written."""
     engine = engine or default_engine
     Base.metadata.drop_all(engine)
     Base.metadata.create_all(engine)
@@ -158,7 +164,7 @@ def run(engine=None) -> dict:
         counts = {"institutions": load_institutions(db), "aliases": load_aliases(db),
                   "reporters": load_reporters(db)}
         db.flush()  # institutions and reporters must exist before the cases that point to them
-        counts["cases"], counts["actions"] = load_cases_and_actions(db)
+        counts["cases"], counts["actions"] = load_cases_and_actions(db, shift_days)
         db.flush()
         counts["suggestions"] = matching.rebuild_all(db)  # M6: overlap suggestions for the loaded cases
         db.flush()

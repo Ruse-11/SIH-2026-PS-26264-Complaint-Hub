@@ -1,0 +1,28 @@
+# n8n demo workflow: "Complaint Journey Replay" (demo video only, optional)
+Label it on screen: **"demo replay; production portals call the hub directly"**.
+The hub is not changed for n8n. n8n only calls the same public endpoints the portal pages use.
+
+## Before each recording
+1. `python reset_demo.py`   (clean data, current dates, SYN-0040 has no cases, portal numbers restart at 1001)
+2. `python run_all.py`
+3. `python n8n/replay_check.py`   (plays the whole replay in Python; must end with "Replay OK". Run reset_demo.py again afterwards, so n8n starts clean.)
+
+## The calls, in order (reporter 1 on RB :8001, reporter 2 on PGRC :8002)
+| # | Node | Method and URL | Body / notes |
+|---|---|---|---|
+| 1 | Finder search | `GET http://localhost:8000/api/institutions/search?q=Norvella%20Institute%20of%20Applied%20Sciences` | Take `candidates[0]` (or `suggestions[0]`). Its `aicte_id` must be SYN-0040. Do not search just "Norvella": several colleges share that word. |
+| 2 | Institution details | `GET http://localhost:8000/api/institutions/SYN-0040` | Has `official_name`, `address_line`, `lat`, `lng`. Map link: `https://www.openstreetmap.org/?mlat={lat}&mlon={lng}#map=16/{lat}/{lng}` |
+| 3 | Confirm | `POST http://localhost:8001/institution/confirm` | `{"institution_id":"SYN-0040","resolution_method":"REPORTER_CONFIRMED"}` returns `institution_token` |
+| 4 | OTP request | `POST http://localhost:8001/otp/request` | `{"contact":"9000000101"}` returns `demo_otp` (demo mode) |
+| 5 | OTP verify | `POST http://localhost:8001/otp/verify` | `{"contact":"9000000101","code":"<demo_otp>"}` returns `verification_token` |
+| 6 | Submit | `POST http://localhost:8001/submit` | `{"institution_token":..,"verification_token":..,"reporter_type":"student","category":"Infrastructure/Lab","title":"...","description":"at least 10 characters","severity":3}` returns `portal_case_no`, `hub_case_id`, `alerts_created` |
+| 7 | Repeat 3 to 6 on `http://localhost:8002` | second reporter, a different phone (`9000000102`), category `Fee/Refund` | `alerts_created` now holds the overlap alert |
+| 8 | IF | `alerts_created` is not empty | |
+| 9 | Telegram | message text from `alerts_created[0]` | e.g. "Potential Overlapping Cases – Coordination Required at Norvella Institute of Applied Sciences ... Suggested lead bureau (suggestion only): PGRC". Link: `alerts_created[0].dashboard_link` on `http://localhost:5173` |
+
+Notes
+- Titles must be at least 3 characters and descriptions at least 10.
+- Tokens last 30 minutes. OTP codes work once.
+- Each alert in `alerts_created` has: `alert_type`, `severity`, `message`, `institution`, `cases`, `reasons`, `suggested_lead`, `dashboard_link`.
+- After a run, `python reset_demo.py` puts SYN-0040 back to zero cases for the next take.
+- Fallback if n8n or Telegram is not ready: record the replay with pinned data and label it "illustrative replay".

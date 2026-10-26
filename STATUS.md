@@ -1,5 +1,5 @@
 # Complaint Monitoring Hub: what is built, what is left, what we can add
-Status as of 26 Oct 2026 (after M12). Source of truth for the plan: CLAUDE.md. Per-feature file map: FEATURES.md.
+Status as of 26 Oct 2026 (after M13, all planned modules built). Source of truth for the plan: CLAUDE.md. Per-feature file map: FEATURES.md.
 Test status: 127 automated tests pass. Code is on GitHub `main`.
 
 ## 1. Built and working (DONE)
@@ -53,8 +53,7 @@ Test status: 127 automated tests pass. Code is on GitHub `main`.
 
 | Item | Why it matters | Effort |
 |---|---|---|
-| **M13: `reset_demo.py`** (reset to a clean seeded state in one command, shift dates so the demo has live "due in 3 days" cases) | Seeded dates are old, so Insights says "90 of 96 open cases are beyond their timeline". This also protects the live demo. | Small. **Recommended next.** |
-| **M13: n8n support** (hub side is already there: confirm, OTP and submit endpoints, `alerts_created`). The n8n workflow itself is the teammate's job. | Demo video only, optional. | Small on our side |
+| ~~M13: `reset_demo.py` and n8n replay support~~ | **DONE 26 Oct.** `python reset_demo.py` resets and re-dates the demo; `n8n/README.md` and `n8n/replay_check.py` support the teammate's workflow. | Done |
 | Explicit "next action" field on a case | PS "should" item. Expected disposal date and last action are shown, but there is no editable next-action field. | Small |
 | Supporting-document reference on the case page | A document reference can be typed when logging an action. There is no list or upload. | Small |
 | Real-time push to the browser | The screens refresh on load or action, not live. The backend recomputes on every request. | Medium, can be skipped |
@@ -87,6 +86,6 @@ Case graph view, Attention Index, email/SMS notifications, document storage, loc
 10. **Production-readiness slide with code backing:** PostgreSQL via config, an indexed institution column, a job queue note.
 
 ## 6. Suggested plan for the remaining days
-- **Now:** build M13 (`reset_demo.py` plus date shift), then record the fallback demo video.
+- **Now:** run `python reset_demo.py`, rehearse the demo, record the fallback demo video.
 - **Then:** pick one or two from section 5 (my pick: "why this match" panel, then the evaluation page).
 - **Feature freeze:** evening of 26 Oct, as planned. 27 Oct is for the video, PPT and a full test run. 28 Oct is buffer only.
