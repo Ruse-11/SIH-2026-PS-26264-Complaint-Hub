@@ -33,7 +33,7 @@ CATEGORY_OWNER = {  # which bureau normally leads a category: regulatory -> RB, 
     "Fee/Refund": "PGRC", "Ragging/Harassment": "PGRC", "Exam/Result": "PGRC", "Hostel/Mess": "PGRC",
     "Scholarship": "PGRC",
 }
-SLA_DAYS = {"PGRC": 30, "RB": 45}  # default days to dispose, per bureau
+SLA_DAYS = {"PGRC": 30, "RB": 45, "QAC": 40}  # default days to dispose, per bureau
 THRESHOLDS = [  # key, value, description
     ("T_A", 0.20, "same-reporter duplicate: minimum text similarity (low, because reporter, institution and category already match)"),
     ("T_B", 0.35, "corroboration: minimum text similarity (TF-IDF baseline; raise after the M12 embeddings upgrade)"),
@@ -65,7 +65,7 @@ def at_time(day: str, hour: int, shift_days: int = 0) -> datetime:
 DEMO_USERS = [  # username, role, display name, bureau, region. One account per target user of the PS.
     ("rb.officer", "rb_officer", "Officer RB-01", "RB", None),
     ("pgrc.officer", "pgrc_officer", "Officer PGRC-01", "PGRC", None),
-    ("other.bureau", "other_bureau", "Officer OB-01 (Other bureau)", "OTHER", None),
+    ("other.bureau", "other_bureau", "Officer QAC-01 (Quality Assurance Cell)", "QAC", None),
     ("regional.south", "regional_office", "Regional Office, South", None, "South"),
     ("senior.mgmt", "senior_management", "Senior Management", None, None),
     ("competent.authority", "competent_authority", "Competent Authority", None, None),
@@ -119,13 +119,15 @@ def load_reporters(db: Session):
     return len(rows)
 
 
-def load_cases_and_actions(db: Session, shift_days: int = 0):
+def load_cases_and_actions(db: Session, shift_days: int = 0, cases_file="cases.csv", actions_file="actions.csv", start=1):
+    """Load one cases/actions CSV pair. Hub IDs continue from `start` so a second pair (extra bureau) can be added."""
     actions_by_case = {}
-    for a in read_csv("actions.csv"):
+    for a in read_csv(actions_file):
         actions_by_case.setdefault(a["source_case_no"], []).append(a)
 
     n_actions = 0
-    for i, c in enumerate(read_csv("cases.csv"), start=1):
+    i = start - 1
+    for i, c in enumerate(read_csv(cases_file), start=start):
         hub_id = f"HUB-{i:04d}"
         acts = sorted(actions_by_case.get(c["source_case_no"], []), key=lambda a: int(a["action_seq"]))
         unverified = not c["institution_id"]  # S13 / S16: reporter could not pick a college
@@ -149,7 +151,7 @@ def load_cases_and_actions(db: Session, shift_days: int = 0):
                 doc_ref=a["doc_ref"], at=at_time(a["action_date"], 11, shift_days),
                 from_bureau=a["bureau"] if moved else None, to_bureau=c["assigned_bureau"] if moved else None))
             n_actions += 1
-    return i, n_actions
+    return i - start + 1, n_actions
 
 
 def run(engine=None, shift_days: int = 0) -> dict:
@@ -165,6 +167,12 @@ def run(engine=None, shift_days: int = 0) -> dict:
                   "reporters": load_reporters(db)}
         db.flush()  # institutions and reporters must exist before the cases that point to them
         counts["cases"], counts["actions"] = load_cases_and_actions(db, shift_days)
+        # cases transferred to a third bureau (Quality Assurance Cell) so that "other bureau" users have data
+        n_cases, n_actions = load_cases_and_actions(db, shift_days, "extra_bureau_cases.csv", "extra_bureau_actions.csv",
+                                                    start=counts["cases"] + 1)
+        counts["extra_bureau_cases"] = n_cases
+        counts["cases"] += n_cases
+        counts["actions"] += n_actions
         db.flush()
         counts["suggestions"] = matching.rebuild_all(db)  # M6: overlap suggestions for the loaded cases
         db.flush()

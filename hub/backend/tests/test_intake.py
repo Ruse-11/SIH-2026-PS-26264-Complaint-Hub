@@ -65,19 +65,19 @@ class IntakeTest(unittest.TestCase):
         r = self.post()
         self.assertEqual(r.status_code, 201)
         body = r.json()
-        self.assertEqual(body["hub_case_id"], "HUB-0151")  # the seed loaded HUB-0001..0150
+        self.assertEqual(body["hub_case_id"], "HUB-0163")  # the seed loaded HUB-0001..0150
         self.assertEqual((body["status"], body["assigned_bureau"]), ("Pending", "RB"))
         self.assertEqual(body["institution"]["aicte_id"], "SYN-0040")
         self.assertTrue(body["reporter_is_new"])
         self.assertEqual(body["alerts_created"], [])  # filled by M6
-        self.assertEqual((self.count(m.Case), self.count(m.Reporter)), (151, 81))
+        self.assertEqual((self.count(m.Case), self.count(m.Reporter)), (163, 81))
         with Session(self.engine) as db:
-            case = db.get(m.Case, "HUB-0151")
+            case = db.get(m.Case, "HUB-0163")
             self.assertEqual(case.source_system, "RB")
             self.assertIsNotNone(case.expected_disposal_date)  # received date + the bureau's SLA days
-            action = db.scalars(select(m.CaseAction).where(m.CaseAction.case_id == "HUB-0151")).one()
+            action = db.scalars(select(m.CaseAction).where(m.CaseAction.case_id == "HUB-0163")).one()
             self.assertEqual((action.seq, action.action_type, action.stance), (1, "Acknowledged", "NEUTRAL"))
-            self.assertEqual(db.scalar(select(m.AuditLog.action).where(m.AuditLog.entity_id == "HUB-0151")),
+            self.assertEqual(db.scalar(select(m.AuditLog.action).where(m.AuditLog.entity_id == "HUB-0163")),
                              "CASE_RECEIVED")
 
     def test_no_raw_contact_is_stored_anywhere(self):
@@ -94,7 +94,7 @@ class IntakeTest(unittest.TestCase):
         self.assertEqual(second["assigned_bureau"], "PGRC")
         self.assertEqual(self.count(m.Reporter), 81)
         with Session(self.engine) as db:
-            ids = db.scalars(select(m.Case.reporter_id).where(m.Case.hub_case_id.in_(["HUB-0151", "HUB-0152"]))).all()
+            ids = db.scalars(select(m.Case.reporter_id).where(m.Case.hub_case_id.in_(["HUB-0163", "HUB-0164"]))).all()
             self.assertEqual(len(set(ids)), 1)
 
     def test_existing_seed_reporter_is_recognised(self):
@@ -107,19 +107,19 @@ class IntakeTest(unittest.TestCase):
         self.assertEqual((first.status_code, again.status_code), (201, 200))
         self.assertTrue(again.json()["already_received"])
         self.assertEqual(again.json()["hub_case_id"], first.json()["hub_case_id"])
-        self.assertEqual(self.count(m.Case), 151)
+        self.assertEqual(self.count(m.Case), 163)
 
     def test_api_key_is_required_and_decides_the_portal(self):
         self.assertEqual(self.post(headers={}).status_code, 401)
         self.assertEqual(self.post(headers={"X-API-Key": "wrong"}).status_code, 401)
-        self.assertEqual(self.count(m.Case), 150)
+        self.assertEqual(self.count(m.Case), 162)
 
     def test_hub_does_not_guess_institutions(self):
         self.assertEqual(self.post(complaint(verified_institution_id="SYN-9999")).status_code, 422)
         parent = self.post(complaint(verified_institution_id="SYN-0001"))  # Southern Vale University has colleges
         self.assertEqual(parent.status_code, 422)
         self.assertIn("parent university", parent.json()["detail"])
-        self.assertEqual(self.count(m.Case), 150)
+        self.assertEqual(self.count(m.Case), 162)
 
     def test_unlisted_institution_goes_to_needs_review(self):
         body = complaint(verified_institution_id=None, resolution_method="UNLISTED",
@@ -133,7 +133,7 @@ class IntakeTest(unittest.TestCase):
                        {"reporter": {"contact": "1"}}):
             with self.subTest(change=change):
                 self.assertEqual(self.post(complaint(**change)).status_code, 422)
-        self.assertEqual(self.count(m.Case), 150)
+        self.assertEqual(self.count(m.Case), 162)
 
     def test_case_detail_needs_login_and_shows_history(self):
         hub_id = self.post().json()["hub_case_id"]

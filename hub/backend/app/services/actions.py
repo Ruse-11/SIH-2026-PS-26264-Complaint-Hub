@@ -12,7 +12,7 @@ from .audit import log_event
 from .auth import permissions
 
 TRANSFER, ESCALATE = "Transferred", "Escalated to Competent Authority"
-BUREAUS = ("RB", "PGRC")
+BUREAUS = ("RB", "PGRC", "QAC")  # QAC = Quality Assurance Cell, the demo "other bureau"
 
 
 def allowed_action_types(db: Session, user: m.User) -> list[dict]:

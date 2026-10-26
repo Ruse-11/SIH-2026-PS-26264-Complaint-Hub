@@ -72,11 +72,11 @@ class DashboardTest(unittest.TestCase):
     def test_kpis_add_up_and_match_the_database(self):
         k = self.get("/api/dashboard/kpis?as_of=2026-10-25")
         t = k["totals"]
-        self.assertEqual(t["total"], 150)
+        self.assertEqual(t["total"], 162)
         self.assertEqual(t["total"], sum(t[x] for x in ("pending", "under_process", "disposed", "transferred", "escalated", "unverified")))
         self.assertEqual(t["unverified"], 3)
         self.assertEqual(t["disposed"], self.db_count(m.Case.status == "Disposed"))
-        self.assertEqual(sum(b["total"] for b in k["by_bureau"]), 150)
+        self.assertEqual(sum(b["total"] for b in k["by_bureau"]), 162)
         self.assertGreater(k["suggestions_waiting"]["cross_bureau"], 0)
         self.assertGreater(len(k["by_institution"]), 5)
 
@@ -93,9 +93,9 @@ class DashboardTest(unittest.TestCase):
         self.assertEqual(rb["totals"]["total"], self.db_count(m.Case.assigned_bureau == "RB"))
         self.assertEqual([b["assigned_bureau"] for b in rb["by_bureau"]], ["RB"])
         south = self.get("/api/dashboard/kpis", "regional.south")
-        self.assertTrue(0 < south["totals"]["total"] < 150)
+        self.assertTrue(0 < south["totals"]["total"] < 162)
         self.assertEqual([r["region"] for r in south["by_region"]], ["South"])
-        self.assertEqual(self.get("/api/dashboard/kpis", "other.bureau")["totals"]["total"], 0)  # no cases assigned yet
+        self.assertEqual(self.get("/api/dashboard/kpis", "other.bureau")["totals"]["total"], 12)  # the Quality Assurance Cell cases
 
     # ---- list, search, filters ----
     def test_search_by_case_id_aicte_id_and_name(self):
@@ -122,7 +122,7 @@ class DashboardTest(unittest.TestCase):
         self.assertTrue(july["total"] > 0 and all(i["received_at"].startswith("2026-07") for i in july["items"]))
         self.assertTrue(all(i["region"] == "South" for i in self.get("/api/cases?region=South&page_size=100")["items"]))
         p1, p2 = self.get("/api/cases?page_size=10&page=1"), self.get("/api/cases?page_size=10&page=2")
-        self.assertEqual((len(p1["items"]), p1["total"]), (10, 150))
+        self.assertEqual((len(p1["items"]), p1["total"]), (10, 162))
         self.assertFalse({i["hub_case_id"] for i in p1["items"]} & {i["hub_case_id"] for i in p2["items"]})
         scores = [i["priority_score"] for i in p1["items"]]
         self.assertEqual(scores, sorted(scores, reverse=True))  # default order = highest priority first

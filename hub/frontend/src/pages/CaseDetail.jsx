@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { useAuth } from "../auth.jsx";
 import LinkCard from "../components/LinkCard.jsx";
-import { LINK_TYPE, Loading, Panel, StatusBadge, fmtDate, send, useGet, useToast } from "../components/ui.jsx";
+import { BUREAUS, BUREAU_NAME, LINK_TYPE, Loading, Panel, StatusBadge, fmtDate, send, useGet, useToast } from "../components/ui.jsx";
 
 const STANCE = { ENFORCING: "bg-red-100 text-red-800", REQUESTING: "bg-amber-100 text-amber-800", CLOSING: "bg-green-100 text-green-800", NEUTRAL: "bg-slate-100 text-slate-700" };
 
@@ -51,6 +51,7 @@ function LinkAnother({ caseData, onDone }) {
       await send(api, "/api/matching/links/manual", { case_id: caseData.hub_case_id, other_case_id: other, link_type: type, note });
       toast({ tone: "success", title: "✓ Cases linked", lines: [note] });
       setOther(""); setNote("");
+      list.reload();
       onDone();
     } catch (e) { toast({ tone: "error", title: "Could not link the cases", lines: [e.message] }); }
     setBusy(false);
@@ -101,7 +102,8 @@ function LogAction({ caseData, onDone }) {
   const allowed = new Set(types.data.map((t) => t.action_type));
   const groups = GROUPS.map((g) => ({ ...g, options: Object.keys(g.actions).filter((a) => allowed.has(a)) })).filter((g) => g.options.length);
   const onlyEscalate = types.data.length === 1;
-  const other = caseData.assigned_bureau === "RB" ? "PGRC" : "RB";
+  const targets = BUREAUS.filter((b) => b !== caseData.assigned_bureau);
+  const other = targets[0];
   const target = toBureau || other;
   const current = groups.find((g) => g.key === (group || (groups.length === 1 ? groups[0].key : "")));
 
@@ -154,7 +156,7 @@ function LogAction({ caseData, onDone }) {
         {type === "Transferred" && (
           <label className="block text-sm">Transfer to
             <select value={target} onChange={(e) => setToBureau(e.target.value)} className="ml-2 rounded border px-2 py-1.5 text-sm">
-              {["RB", "PGRC"].filter((b) => b !== caseData.assigned_bureau).map((b) => <option key={b} value={b}>{b}</option>)}
+              {targets.map((b) => <option key={b} value={b}>{b} · {BUREAU_NAME[b]}</option>)}
             </select>
           </label>
         )}

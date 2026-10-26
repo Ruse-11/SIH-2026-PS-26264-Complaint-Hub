@@ -76,23 +76,23 @@ class ReportTest(unittest.TestCase):
             self.assertEqual(rows[b]["total"], self.count(m.Case.assigned_bureau == b))
             self.assertEqual(rows[b]["disposed"], self.count(m.Case.assigned_bureau == b, m.Case.status == "Disposed"))
             self.assertEqual(rows[b]["total"], sum(rows[b][k] for k in ("pending", "under_process", "disposed", "transferred", "escalated")) + rows[b]["needs_review"])
-        self.assertEqual(sum(r["total"] for r in rows.values()), 150)
+        self.assertEqual(sum(r["total"] for r in rows.values()), 162)
         kpi = self.client.get(f"/api/dashboard/kpis?as_of={AS_OF}", headers=self.h("senior.mgmt")).json()["totals"]
         self.assertEqual(sum(r["beyond_timeline"] for r in rows.values()), kpi["overdue"])  # report and dashboard agree
 
     def test_region_and_status_reports(self):
         regions = self.rep("region")["rows"]
-        self.assertEqual(sum(r["total"] for r in regions), 150)
+        self.assertEqual(sum(r["total"] for r in regions), 162)
         self.assertIn("(not identified)", {r["region"] for r in regions})  # the 3 unlisted cases
         statuses = {r["status"]: r["cases"] for r in self.rep("status")["rows"]}
-        self.assertEqual(sum(statuses.values()), 150)
+        self.assertEqual(sum(statuses.values()), 162)
         self.assertEqual(statuses["Disposed"], self.count(m.Case.status == "Disposed"))
 
     def test_ageing_buckets_add_up(self):
         rows = {r["group"]: r for r in self.rep("ageing")["rows"]}
         allr = rows["All bureaus"]
         self.assertEqual(allr["open_cases"], sum(allr[b] for b in ("0-7 days", "8-15 days", "16-30 days", "Over 30 days")))
-        self.assertEqual(allr["open_cases"], rows["RB"]["open_cases"] + rows["PGRC"]["open_cases"])
+        self.assertEqual(allr["open_cases"], rows["RB"]["open_cases"] + rows["PGRC"]["open_cases"] + rows["QAC"]["open_cases"])
         self.assertEqual(allr["open_cases"], self.count(m.Case.status.in_(["Pending", "Under Process", "Escalated"])))
         self.assertGreaterEqual(allr["oldest_days"], allr["average_age_days"])
 
@@ -100,18 +100,18 @@ class ReportTest(unittest.TestCase):
         rows = self.rep("disposal")["rows"]
         total = rows[0]
         self.assertEqual((total["group_type"], total["disposed"]), ("All", self.count(m.Case.status == "Disposed")))
-        self.assertAlmostEqual(total["disposal_rate_pct"], round(100 * total["disposed"] / 147, 1))  # 3 unlisted cases excluded
+        self.assertAlmostEqual(total["disposal_rate_pct"], round(100 * total["disposed"] / 159, 1))  # 3 unlisted cases excluded
         self.assertTrue({"Bureau", "Category"} <= {r["group_type"] for r in rows})
 
     def test_monthly_and_quarterly_performance(self):
         months = self.rep("monthly")["rows"]
-        self.assertEqual(sum(r["received"] for r in months), 150)
+        self.assertEqual(sum(r["received"] for r in months), 162)
         self.assertEqual([r["period"] for r in months], sorted(r["period"] for r in months))
         self.assertEqual(months[-1]["period"], "2026-10")
         self.assertEqual(months[-1]["open_at_end"], self.count(m.Case.status.in_(["Pending", "Under Process", "Escalated"])))  # last month ends today
         self.assertEqual(sum(r["disposed"] for r in months), self.count(m.Case.status == "Disposed"))
         quarters = self.rep("quarterly")["rows"]
-        self.assertEqual(sum(r["received"] for r in quarters), 150)
+        self.assertEqual(sum(r["received"] for r in quarters), 162)
         self.assertEqual([r["period"] for r in quarters], ["FY2026-27 Q1", "FY2026-27 Q2", "FY2026-27 Q3"])  # Apr-Jun, Jul-Sep, Oct-Dec
 
     def test_financial_year_quarters(self):
@@ -151,7 +151,7 @@ class ReportTest(unittest.TestCase):
         self.assertEqual([r["region"] for r in south], ["South"])
         overlaps = self.rep("overlaps", "regional.south")["rows"]
         self.assertTrue(len(overlaps) < len(self.rep("overlaps")["rows"]))
-        self.assertEqual(self.rep("bureau", "other.bureau")["rows"], [])  # no cases in its view
+        self.assertEqual([r["bureau"] for r in self.rep("bureau", "other.bureau")["rows"]], ["QAC"])  # only its own bureau
         self.assertEqual(self.client.get("/api/reports/bureau").status_code, 401)
         self.assertEqual(self.client.get("/api/reports/nope", headers=self.h("rb.officer")).status_code, 404)
 
@@ -175,11 +175,11 @@ class ReportTest(unittest.TestCase):
             self.assertIn("case_file_", r.headers["content-disposition"])
             return list(csv.reader(io.StringIO(r.text.lstrip("\ufeff"))))
         everything = rows("senior.mgmt")
-        self.assertEqual(len(everything) - 1, 150)  # every case, not one page of 25
+        self.assertEqual(len(everything) - 1, 162)  # every case, not one page of 25
         self.assertEqual(everything[0][0], "Hub case ID")
         pending = rows("senior.mgmt", "?status=Pending")
         self.assertEqual(len(pending) - 1, self.count(m.Case.status == "Pending"))
-        self.assertLess(len(rows("regional.south")) - 1, 150)  # scope still applies
+        self.assertLess(len(rows("regional.south")) - 1, 162)  # scope still applies
         self.assertEqual(self.client.get("/api/cases/export", headers=self.h("other.bureau")).status_code, 403)
         audit = self.client.get("/api/audit?action=CASE_FILE_EXPORTED", headers=self.h("senior.mgmt")).json()
         self.assertEqual(len(audit), 3)
@@ -237,7 +237,7 @@ class ReportTest(unittest.TestCase):
         waiting = [i for i in data["insights"] if i["id"] == "waiting"][0]
         self.assertEqual(waiting["tone"], "bad")  # an unresolved conflict exists
         empty = self.client.get("/api/reports/insights", headers=self.h("other.bureau")).json()
-        self.assertEqual(empty["insights"], [])
+        self.assertNotIn("repeat", [i["id"] for i in empty["insights"]])  # the QAC officer sees only its own 12 cases
 
 
 if __name__ == "__main__":

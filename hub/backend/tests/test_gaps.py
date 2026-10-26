@@ -144,5 +144,36 @@ class GapsTest(unittest.TestCase):
         self.assertEqual(self.link("rb.officer", cid, far).status_code, 422)  # different college
 
 
+    # ---- gap 3: a third bureau (Quality Assurance Cell) with data and transfers ----
+    def test_other_bureau_user_has_its_own_cases(self):
+        r = self.client.get("/api/cases?page_size=100", headers=self.h("other.bureau")).json()
+        self.assertEqual(r["total"], 12)
+        self.assertEqual({i["assigned_bureau"] for i in r["items"]}, {"QAC"})
+        self.assertEqual(self.client.get("/api/auth/me", headers=self.h("other.bureau")).json()["bureau"], "QAC")
+
+    def test_rb_officer_can_transfer_to_qac_and_qac_officer_acts(self):
+        cid = self.open_rb_case()
+        r = self.log(cid, action_type="Transferred", remarks="needs quality review", to_bureau="QAC")
+        self.assertEqual(r.status_code, 201, r.text)
+        self.assertEqual(self.detail(cid)["assigned_bureau"], "QAC")
+        r = self.client.post(f"/api/cases/{cid}/actions", json={"action_type": "Under Review", "remarks": "taken up"}, headers=self.h("other.bureau"))
+        self.assertEqual(r.status_code, 201, r.text)
+        last = self.detail(cid)["actions"][-1]
+        self.assertEqual(last["bureau"], "QAC")
+        self.assertEqual(self.client.post(f"/api/cases/{cid}/actions", json={"action_type": "Transferred", "to_bureau": "RB"},
+                                          headers=self.h("other.bureau")).status_code, 403)  # other bureaus cannot transfer
+
+    def test_unknown_bureau_cannot_be_transferred_to(self):
+        cid = self.open_rb_case()
+        self.assertEqual(self.log(cid, action_type="Transferred", remarks="x", to_bureau="NOPE").status_code, 422)
+
+    def test_qac_can_be_decided_as_lead(self):
+        with Session(self.engine) as db:
+            l = db.scalars(select(m.LinkSuggestion).where(m.LinkSuggestion.link_type == "CONFLICT")).first()
+            lid = l.id
+        r = self.client.post(f"/api/conflicts/{lid}/lead", json={"bureau": "QAC", "note": "quality angle leads"}, headers=self.h("competent.authority"))
+        self.assertEqual(r.status_code, 200, r.text)
+
+
 if __name__ == "__main__":
     unittest.main()

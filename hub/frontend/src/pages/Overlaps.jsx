@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import LinkCard from "../components/LinkCard.jsx";
-import { LINK_TYPE, Loading, useGet } from "../components/ui.jsx";
+import { LINK_TYPE, LiveStamp, Loading, useGet } from "../components/ui.jsx";
 
 const TABS = [["SUGGESTED", "Waiting for decision"], ["CONFIRMED", "Confirmed"], ["REJECTED", "Rejected"]];
 
@@ -12,7 +12,7 @@ export default function Overlaps() {
   const highlight = Number(params.get("link") || 0);
   const [status, setStatus] = useState("SUGGESTED");
   const [type, setType] = useState("");
-  const links = useGet(`/api/matching/links?status=${status}${type ? "&link_type=" + type : ""}`);
+  const links = useGet(`/api/matching/links?status=${status}${type ? "&link_type=" + type : ""}`, { every: 60 });
 
   const groups = {};
   (links.data || []).forEach((l) => {
@@ -23,7 +23,7 @@ export default function Overlaps() {
 
   return (
     <div className="space-y-4">
-      <h1 className="text-xl font-semibold">Overlaps, conflicts and duplicates</h1>
+      <div className="flex items-end justify-between"><h1 className="text-xl font-semibold">Overlaps, conflicts and duplicates</h1><LiveStamp state={links} /></div>
       <p className="text-sm text-slate-600">The system suggests; the officer confirms or rejects. Confirmed corroboration raises priority, rejected pairs are never suggested again.</p>
       <div className="flex flex-wrap items-center gap-2">
         {TABS.map(([k, label]) => (

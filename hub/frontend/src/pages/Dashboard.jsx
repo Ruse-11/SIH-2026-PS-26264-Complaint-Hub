@@ -2,14 +2,14 @@
 import { Link } from "react-router-dom";
 import { useAuth } from "../auth.jsx";
 import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
-import { Loading, Panel, Tile, useGet } from "../components/ui.jsx";
+import { LiveStamp, Loading, Panel, Tile, useGet } from "../components/ui.jsx";
 
 const STATUS_COLUMNS = [["pending", "Pending"], ["under_process", "Under Process"], ["disposed", "Disposed"], ["transferred", "Transferred"], ["escalated", "Escalated"]];
 
 export default function Dashboard() {
-  const kpi = useGet("/api/dashboard/kpis");
-  const top = useGet("/api/cases?sort=priority&page_size=5");
-  const late = useGet("/api/starvation?limit=5");
+  const kpi = useGet("/api/dashboard/kpis", { every: 60 });
+  const top = useGet("/api/cases?sort=priority&page_size=5", { every: 60 });
+  const late = useGet("/api/starvation?limit=5", { every: 60 });
   if (!kpi.data) return <Loading state={kpi} />;
   const { totals: t, suggestions_waiting: w } = kpi.data;
   const bureauChart = kpi.data.by_bureau.map((b) => ({ bureau: b.assigned_bureau, Pending: b.by_status.pending, "Under Process": b.by_status.under_process, Escalated: b.by_status.escalated, Overdue: b.overdue }));
@@ -19,7 +19,7 @@ export default function Dashboard() {
       <RoleBanner />
       <div className="flex items-end justify-between">
         <h1 className="text-xl font-semibold">Dashboard</h1>
-        <span className="text-xs text-slate-500">Live from the hub · as of {kpi.data.as_of}</span>
+        <span className="text-xs text-slate-500">Live from the hub · as of {kpi.data.as_of} · <LiveStamp state={kpi} /></span>
       </div>
 
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4 xl:grid-cols-8">

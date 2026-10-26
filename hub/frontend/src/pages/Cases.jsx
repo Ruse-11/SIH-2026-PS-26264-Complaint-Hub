@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
 import { useAuth } from "../auth.jsx";
 import InstitutionSuggest from "../components/InstitutionSuggest.jsx";
-import { Loading, Panel, StatusBadge, fmtDate, useGet, useToast } from "../components/ui.jsx";
+import { LiveStamp, Loading, Panel, StatusBadge, fmtDate, useGet, useToast } from "../components/ui.jsx";
 
 const PAGE_SIZE = 25;
 const FIELDS = ["q", "bureau", "region", "category", "status", "date_from", "date_to", "overdue", "sort"];
@@ -43,7 +43,7 @@ export default function Cases() {
   if (get("institution_id")) query.set("institution_id", get("institution_id"));
   query.set("page", page);
   query.set("page_size", PAGE_SIZE);
-  const list = useGet("/api/cases?" + query);
+  const list = useGet("/api/cases?" + query, { every: 60 });
   const options = useGet("/api/cases/filters");
   const picked = useGet(get("institution_id") ? "/api/institutions/" + get("institution_id") : null);
 
@@ -66,7 +66,7 @@ export default function Cases() {
 
   return (
     <div className="space-y-4">
-      <h1 className="text-xl font-semibold">Cases</h1>
+      <div className="flex items-end justify-between"><h1 className="text-xl font-semibold">Cases</h1><LiveStamp state={list} /></div>
       <Panel title="Search and filter">
         <div className="flex gap-2">
           <InstitutionSuggest id="case-search" className="flex-1" value={q} onChange={setQ}

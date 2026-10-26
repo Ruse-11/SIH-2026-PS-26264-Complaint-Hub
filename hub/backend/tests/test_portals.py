@@ -95,7 +95,7 @@ class PortalTest(unittest.TestCase):
     def test_full_journey_reaches_the_hub(self):
         receipt = self.submit(self.rb_web, self.confirm(self.rb_web), self.verify_phone(self.rb_web)).json()
         self.assertEqual(receipt["portal_case_no"], "RB-2026-1001")
-        self.assertEqual((receipt["sync_status"], receipt["hub_case_id"]), ("synced", "HUB-0151"))
+        self.assertEqual((receipt["sync_status"], receipt["hub_case_id"]), ("synced", "HUB-0163"))
         self.assertEqual(receipt["institution"]["aicte_id"], "SYN-0040")
         case = self.hub_cases()[0]
         self.assertEqual((case.source_system, case.source_case_no, case.institution_id, case.status),

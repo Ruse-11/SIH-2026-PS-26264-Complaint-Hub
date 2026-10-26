@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../auth.jsx";
-import { LINK_TYPE, StatusBadge, send, useToast } from "./ui.jsx";
+import { BUREAUS, LINK_TYPE, StatusBadge, send, useToast } from "./ui.jsx";
 
 const HEADLINE = {
   CROSS_BUREAU: "Potential Overlapping Cases – Coordination Required",
@@ -45,7 +45,7 @@ function LeadPanel({ link, onChanged }) {
       ) : user.permissions.can_decide_lead ? (
         <div className="mt-2 flex flex-wrap items-center gap-2">
           <select className="rounded border px-2 py-1" value={bureau} onChange={(e) => setBureau(e.target.value)}>
-            <option value="">Decide the lead bureau…</option><option>RB</option><option>PGRC</option>
+            <option value="">Decide the lead bureau…</option>{BUREAUS.map((b) => <option key={b}>{b}</option>)}
           </select>
           <input className="min-w-40 flex-1 rounded border px-2 py-1" placeholder="Reason (optional)" value={note} maxLength={500} onChange={(e) => setNote(e.target.value)} />
           <button disabled={!bureau || busy} onClick={decide} className="rounded bg-slate-900 px-3 py-1 text-white disabled:opacity-40">{busy ? "Saving…" : "Record decision"}</button>

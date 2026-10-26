@@ -19,11 +19,11 @@ Legend: DONE = works and tested. PARTIAL = works but a part of the wording is mi
 |---|---|---|---|
 | 1 | Institution profile: AICTE ID, name, address, region, details, history | DONE | Institution profile page |
 | 2 | Case tracking: ID, receipt date, category, status, bureau, officer, last action, date of last action, expected disposal | DONE | |
-| 2 | **Next action required** | **GAP** | There is no "next action" field. Expected disposal date exists. |
+| 2 | **Next action required** | DONE | Optional "next step" and "due by" when logging an action; if blank the hub suggests one by rule (for example after a show-cause: wait for the reply). Shown on the case, the cases list, the CSV and the case file. |
 | 3 | Automatic overlap detection, overlap alert | DONE | |
 | 3 | **Enable linking/mapping of related cases** | **PARTIAL** | Officers can confirm or reject the system's suggestions. An officer cannot yet link two cases by hand that the system did not suggest. |
-| 3 | "RB, PGRC or **other** Bureaus/Cells" | **PARTIAL** | The logic is bureau-neutral, but the data and transfers only use RB and PGRC. The "Other bureau" login has no cases, so its screens are empty. |
-| 4 | Real-time dashboard with all listed numbers | DONE | Numbers are computed live on every load. Alerts refresh every 30 minutes and after each action. The page does not update by itself without a reload. |
+| 3 | "RB, PGRC or **other** Bureaus/Cells" | DONE | A third bureau, the Quality Assurance Cell (QAC), has 12 synthetic cases and the "Other bureau" login sees them. RB and PGRC officers can transfer cases to QAC; QAC can be chosen as lead bureau. |
+| 4 | Real-time dashboard with all listed numbers | DONE | Numbers are computed live on every load. Alerts refresh every 30 minutes and after each action. The dashboard, alerts, overlaps and cases pages now also refresh by themselves every 60 seconds with an "Updated hh:mm:ss" label and a Refresh now button. |
 | 5 | Chronological history, officer/bureau, timestamp, remarks | DONE | |
 | 5 | **Supporting documents** | **PARTIAL** | A document reference can be typed per action. There is no upload or document list. |
 | 5 | Transfer/escalation history | DONE | Shown in the action history |
@@ -42,6 +42,8 @@ Reduce duplication, prevent conflicting actions (conflict rule), improve coordin
 
 ## E. Target users
 RB, PGRC, other bureaus, regional offices, senior management, competent authority: one login and view for each. **Other bureaus have no data** (see gap 3).
+
+## Update (26 Oct): gaps 1, 2, 3 and 6 below are now BUILT and tested (manual linking = "Link another case" on the case page). Gaps 4 and 5 remain.
 
 ## F. Gaps ranked (what I would do, in order)
 | # | Gap | Why it matters to judges | Effort | Recommendation |

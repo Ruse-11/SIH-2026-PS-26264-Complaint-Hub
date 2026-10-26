@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../auth.jsx";
-import { Loading, send, useGet } from "../components/ui.jsx";
+import { LiveStamp, Loading, send, useGet } from "../components/ui.jsx";
 
 const TONE = { warning: "bg-amber-100 text-amber-800", critical: "bg-red-100 text-red-800", info: "bg-blue-100 text-blue-800" };
 
@@ -11,11 +11,14 @@ export default function Alerts() {
   const [type, setType] = useState("");
   const [openOnly, setOpenOnly] = useState(true);
   const [shown, setShown] = useState(40);
-  const alerts = useGet(`/api/alerts?open_only=${openOnly}${type ? "&type=" + type : ""}`);
+  const alerts = useGet(`/api/alerts?open_only=${openOnly}${type ? "&type=" + type : ""}`, { every: 60 });
 
   return (
     <div className="space-y-4">
-      <h1 className="text-xl font-semibold">Alerts {alerts.data ? <span className="text-sm font-normal text-slate-500">({alerts.data.length})</span> : null}</h1>
+      <div className="flex items-end justify-between">
+        <h1 className="text-xl font-semibold">Alerts {alerts.data ? <span className="text-sm font-normal text-slate-500">({alerts.data.length})</span> : null}</h1>
+        <LiveStamp state={alerts} />
+      </div>
       <div className="flex flex-wrap items-center gap-4 text-sm">
         <select className="rounded border bg-white px-2 py-1.5" value={type} onChange={(e) => { setType(e.target.value); setShown(40); }}>
           <option value="">All types</option><option value="OVERLAP">Overlap</option><option value="CONFLICT">Conflict</option>

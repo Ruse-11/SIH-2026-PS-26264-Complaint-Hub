@@ -117,7 +117,7 @@ def rebuild_all(db: Session) -> int:
     return len(_detect(db, pairs))
 
 
-LEAD_BUREAUS = ("RB", "PGRC")  # bureaus that can lead in this prototype's data
+LEAD_BUREAUS = ("RB", "PGRC", "QAC")  # bureaus that can lead in this prototype's data
 
 
 def decide_lead(db: Session, user: m.User, link_id: int, bureau: str, note: str | None) -> dict:
