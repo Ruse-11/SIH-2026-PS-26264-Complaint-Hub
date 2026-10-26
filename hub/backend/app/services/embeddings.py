@@ -57,6 +57,11 @@ def embed_many(texts: list[str]) -> dict[str, list[float]] | None:
     return {t: cache[t] for t in texts if t in cache}
 
 
+def warm_up():
+    """Load the model at hub start so /api/health tells the truth straight away. Never raises."""
+    embed_many(["warm up"])
+
+
 def cosine(a: list[float], b: list[float]) -> float:
     dot = sum(x * y for x, y in zip(a, b))
     na, nb = math.sqrt(sum(x * x for x in a)), math.sqrt(sum(y * y for y in b))

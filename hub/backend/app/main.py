@@ -41,8 +41,10 @@ async def lifespan(_app):
     then keep the stalled / SLA alerts fresh in the background."""
     Base.metadata.create_all(engine)
     task = asyncio.create_task(_scan_loop())
+    warm = asyncio.create_task(asyncio.to_thread(embeddings.warm_up))  # loads the model in the background (no-op when off)
     yield
     task.cancel()
+    warm.cancel()
 
 
 app = FastAPI(title="Complaint Hub", version=config.VERSION, lifespan=lifespan)
