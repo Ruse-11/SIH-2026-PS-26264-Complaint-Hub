@@ -26,6 +26,7 @@ Updated after every module.
 | Shared institution search engine (initials like KIP, typos, partial words, places, AICTE IDs; prebuilt index; never-empty tiers; used by hub header, Cases search and both portals) | services/searchengine.py, routers/institutions.py (/search, /suggest), services/cases.py | shared/institution-finder.js, components/InstitutionSuggest.jsx | DONE |
 | Embeddings upgrade (fastembed, off by default, TF-IDF fallback; `method` stored in each suggestion's reasons; shown in /api/health) | services/embeddings.py, services/similarity.py, services/matching.py | – | DONE (M12; real model untested in build sandbox, see PROGRESS) |
 | reset_demo.py (one-command clean reset, dates shifted to today, portals cleared, demo-college check) and n8n replay support (call list + replay_check.py) | seed.py (shift_days), reset_demo.py | n8n/README.md, n8n/replay_check.py | DONE (M13); the n8n workflow itself is the teammate's |
+| Aadhaar / DigiLocker reporter verification (replaces the mock OTP in production; see PS_GAP_ANALYSIS.md) | routers/verification.py | – | STUB |
 | Case graph view | routers/graph.py | pages/GraphView.jsx | STUB |
 | Attention Index | routers/attention_index.py | pages/AttentionIndex.jsx | STUB |
 | Email / SMS notifications | routers/notifications.py | – | STUB |

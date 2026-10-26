@@ -23,7 +23,7 @@ class Smoke(unittest.TestCase):
         self.assertEqual(r.json()["status"], "ok")
 
     def test_every_feature_has_a_501_stub(self):
-        self.assertEqual(len(ALL), 19)
+        self.assertEqual(len(ALL), 20)
         for module in ALL:
             if not getattr(module.router, "is_stub", False):
                 continue  # real routers (built modules) have their own tests

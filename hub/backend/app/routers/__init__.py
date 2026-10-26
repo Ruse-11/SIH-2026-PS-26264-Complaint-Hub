@@ -19,6 +19,7 @@ from . import (
     notifications,
     documents,
     llm_summary,
+    verification,
 )
 
 ALL = [
@@ -41,4 +42,5 @@ ALL = [
     notifications,
     documents,
     llm_summary,
+    verification,
 ]
