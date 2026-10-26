@@ -21,6 +21,7 @@ Updated after every module.
 | Insights panel (rule-based, each card shows its rule) | routers/reports.py (/insights), services/insights.py | pages/Insights.jsx | DONE (M11) |
 | Case file download (CSV of the filtered Cases list, audited) | routers/cases.py (/export) | pages/Cases.jsx | DONE (M11) |
 | Audit trail screen + role banner on dashboard | routers/audit.py | pages/Audit.jsx, Dashboard.jsx | DONE (M11) |
+| Shared institution search engine (initials like KIP, typos, partial words, places, AICTE IDs; prebuilt index; never-empty tiers; used by hub header, Cases search and both portals) | services/searchengine.py, routers/institutions.py (/search, /suggest), services/cases.py | shared/institution-finder.js, components/InstitutionSuggest.jsx | DONE |
 | Embeddings upgrade (fastembed, off by default, TF-IDF fallback; `method` stored in each suggestion's reasons; shown in /api/health) | services/embeddings.py, services/similarity.py, services/matching.py | – | DONE (M12; real model untested in build sandbox, see PROGRESS) |
 | n8n endpoints + reset_demo.py | – | reset_demo.py | TODO (M13, optional) |
 | Case graph view | routers/graph.py | pages/GraphView.jsx | STUB |

@@ -58,7 +58,10 @@ def card(inst: m.Institution, parent_name, score, match) -> dict:
 
 def _cards(db: Session, ids, score, match):
     """Build cards for a list of institution ids, keeping the given order."""
-    by_id = {i.aicte_id: i for i in db.scalars(select(m.Institution))}
+    wanted = set(ids)
+    by_id = {i.aicte_id: i for i in db.scalars(select(m.Institution).where(m.Institution.aicte_id.in_(wanted)))}
+    parents = {i.parent_id for i in by_id.values() if i.parent_id}
+    by_id.update({i.aicte_id: i for i in db.scalars(select(m.Institution).where(m.Institution.aicte_id.in_(parents)))} if parents else {})
     return [card(by_id[i], by_id[by_id[i].parent_id].official_name if by_id[i].parent_id else None, score, match)
             for i in ids]
 
@@ -109,17 +112,15 @@ def resolve(db: Session, query: str) -> dict:
                        _cards(db, ids[:MAX_SHOWN], 100, match_type))
 
     # 3. Fuzzy match against official names and aliases.
-    institutions = db.scalars(select(m.Institution)).all()
-    aliases = {}
-    for iid, a in db.execute(select(m.InstitutionAlias.institution_id, m.InstitutionAlias.alias_normalized)):
-        aliases.setdefault(iid, []).append(a)
+    from . import searchengine  # local import: searchengine imports names from this module
+    ix = searchengine.get_index(db)  # prebuilt names, aliases and place words (no database scan per search)
 
     q_tokens = qn.split()
     scored = []
-    for inst in institutions:
-        texts = [inst.name_normalized] + aliases.get(inst.aicte_id, [])
+    for n in ix.candidates(qn):  # small registry: all colleges; large registry: only colleges sharing a word
+        texts = [ix.name_norm[n]] + ix.aliases[n]
         # Words in the query that name the college's place (district, area, state) are evidence of place, not name.
-        place = set(_distinctive(normalize_name(f"{inst.area or ''} {inst.district or ''} {inst.state or ''}").split()))
+        place = set(_distinctive(ix.place[n]))
         name_tokens = [t for t in q_tokens if t not in place]
         place_hits = len(q_tokens) - len(name_tokens)
         # Gate: at least one identifying word of the query must (nearly) match an identifying word of this college.
@@ -129,7 +130,7 @@ def resolve(db: Session, query: str) -> dict:
         if not any(fuzz.ratio(a, b) >= WORD_MATCH or (len(a) >= 3 and b.startswith(a)) for a in q_words for b in c_words):
             continue
         base = max(fuzz.WRatio(" ".join(name_tokens), t) for t in texts)
-        scored.append((min(100.0, base + LOCATION_BONUS * min(place_hits, 2)), inst.aicte_id))
+        scored.append((min(100.0, base + LOCATION_BONUS * min(place_hits, 2)), ix.ids[n]))
 
     scored.sort(key=lambda s: (-s[0], s[1]))
     if not scored or scored[0][0] < NOT_LISTED_BELOW:
@@ -217,69 +218,28 @@ def history(db: Session, user, aicte_id: str):
     return data
 
 
-# ---- officer search suggestions (M8 follow-up) ----
-# The reporter-facing resolver above is strict on purpose (never guess, show colleges instead of a university).
-# Officers are searching their own registry, so this one is looser: every typed word must match part of a word in the
-# college's name, alias, or place; universities are included; typos of 4+ letters are forgiven.
+# ---- officer search suggestions ----
+# One engine serves the dashboard and both portals (see searchengine.py): partial words, typos, place names,
+# AICTE IDs and initials such as "KIP". Universities are included.
 def suggest(db: Session, query: str, limit: int = 8) -> list[dict]:
-    q = (query or "").strip()
-    qn = normalize_name(q)
-    if len(q) < 2 or not qn:
-        return []
-    tokens = qn.split()
-    aliases: dict[str, list] = {}
-    for iid, a in db.execute(select(m.InstitutionAlias.institution_id, m.InstitutionAlias.alias_normalized)):
-        aliases.setdefault(iid, []).append(a)
-    insts = db.scalars(select(m.Institution)).all()
-    by_id = {i.aicte_id: i for i in insts}
-    n_children: dict[str, int] = {}
-    for i in insts:
-        if i.parent_id:
-            n_children[i.parent_id] = n_children.get(i.parent_id, 0) + 1
+    from . import searchengine  # local import: searchengine imports names from this module
+    return searchengine.find(db, query, limit)
 
-    def word_score(t: str, words: list[str], weight: float) -> float:
-        best = 0.0
-        for w in words:
-            if w == t:
-                s = 100
-            elif w.startswith(t):
-                s = 92
-            elif len(t) >= 3 and t in w:
-                s = 70
-            elif len(t) >= 4 and fuzz.ratio(t, w) >= WORD_MATCH:
-                s = 62  # a typo
-            else:
-                continue
-            best = max(best, s * weight)
-        return best
 
-    scored = []
-    for i in insts:
-        if q.upper() in i.aicte_id:  # typed part of an AICTE ID
-            scored.append((95, i))
-            continue
-        name_words = i.name_normalized.split()
-        alias_words = [w for a in aliases.get(i.aicte_id, []) for w in a.split()]
-        place_words = normalize_name(f"{i.area or ''} {i.district or ''} {i.state or ''}").split()
-        total = 0.0
-        for t in tokens:
-            s = max(word_score(t, name_words, 1.0), word_score(t, alias_words, 0.9), word_score(t, place_words, 0.8))
-            if s == 0:
-                total = 0
-                break  # every typed word must match something
-            total += s
-        if total == 0:
-            continue
-        score = total / len(tokens)
-        if i.name_normalized.startswith(qn):
-            score += 8  # typed the beginning of the name
-        elif any(a.startswith(qn) for a in aliases.get(i.aicte_id, [])):
-            score += 6
-        scored.append((score, i))
-    scored.sort(key=lambda x: (-x[0], x[1].official_name))
+def reporter_suggestions(db: Session, query: str, limit: int = 6) -> list[dict]:
+    """Search-engine answers for a reporter. A complaint is about one college, so a university in the answer is
+    replaced by its constituent colleges (same rule as the resolver)."""
+    found = suggest(db, query, limit * 2)
+    ids = []
+    for c in found:
+        for i in ([c["aicte_id"]] if not c.get("colleges") else _expand_parents(db, [c["aicte_id"]])):
+            if i not in ids:
+                ids.append(i)
+    score = {c["aicte_id"]: c for c in found}
     out = []
-    for score, i in scored[:limit]:
-        c = card(i, by_id[i.parent_id].official_name if i.parent_id else None, score, "SUGGEST")
-        c["colleges"] = n_children.get(i.aicte_id, 0)  # >0 means a university with that many constituent colleges
-        out.append(c)
+    for card_ in _cards(db, ids[:limit], 0, "CLOSEST"):
+        src = score.get(card_["aicte_id"])
+        card_["score"] = src["score"] if src else 0
+        card_["tier"] = src["tier"] if src else "match"
+        out.append(card_)
     return out

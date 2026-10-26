@@ -86,12 +86,24 @@
       results.textContent = "";
       var r = state.result;
       if (!r) return;
+      var more = r.suggestions || [];  // from the hub's shared search engine: initials, typos, partial words
       if (r.outcome === "NOT_LISTED") {
-        results.appendChild(h("div", { class: "fmsg" }, "No institution in the registry matches \"" + r.query + "\". Check the spelling, try the short name, or choose \"My institution isn't listed\"."));
+        if (!more.length) {
+          results.appendChild(h("div", { class: "fmsg" }, "No institution in the registry matches \"" + r.query + "\". Check the spelling, try the short name, or choose \"My institution isn't listed\"."));
+          return;
+        }
+        results.appendChild(h("div", { class: "fmsg" }, "Closest matches. Is your institution one of these?"));
+        results.appendChild(cardList(more, "REPORTER_CONFIRMED", null));
         return;
       }
       results.appendChild(h("div", { class: "fmsg" }, r.outcome === "RESOLVED" ? "Is this your institution?" : r.reason));
       results.appendChild(cardList(r.candidates, "REPORTER_CONFIRMED", null));
+      var shown = r.candidates.map(function (c) { return c.aicte_id; });
+      var extra = more.filter(function (c) { return shown.indexOf(c.aicte_id) < 0; });
+      if (extra.length) {
+        results.appendChild(h("div", { class: "fmsg" }, "Other possible matches"));
+        results.appendChild(cardList(extra, "REPORTER_CONFIRMED", null));
+      }
     }
 
     function cardList(items, method, answers) {

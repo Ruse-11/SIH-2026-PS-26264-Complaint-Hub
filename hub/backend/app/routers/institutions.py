@@ -11,7 +11,12 @@ router = APIRouter(prefix="/api/institutions", tags=["institutions"])
 @router.get("/search")
 def search(q: str = Query("", max_length=200), db: Session = Depends(get_db)):
     """What does this typed name mean? Returns outcome RESOLVED / AMBIGUOUS / NOT_LISTED and up to 3 cards."""
-    return service.resolve(db, q)
+    answer = service.resolve(db, q)
+    if answer["outcome"] != "RESOLVED":
+        # Same engine as the dashboard. Never empty when a good guess exists: the portal shows these as
+        # "closest matches" for the reporter to pick (the reporter still confirms; nothing is auto-picked).
+        answer["suggestions"] = service.reporter_suggestions(db, q, 6)
+    return answer
 
 
 @router.get("/suggest")

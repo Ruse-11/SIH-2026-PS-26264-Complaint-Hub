@@ -40,13 +40,11 @@ def case_detail(db: Session, hub_case_id: str):
 
 
 def _institution_ids_for_name(db: Session, q: str) -> set:
-    """Institutions whose name or alias contains the typed text (so 'CEG' finds the right college too)."""
-    n = normalize_name(q)
-    if not n:
-        return set()
-    like = f"%{n}%"
-    ids = set(db.scalars(select(m.Institution.aicte_id).where(m.Institution.name_normalized.like(like))))
-    ids |= set(db.scalars(select(m.InstitutionAlias.institution_id).where(m.InstitutionAlias.alias_normalized.like(like))))
+    """Institutions the typed text means (names, aliases, initials like 'KIP', typos), found with the shared search engine."""
+    from . import searchengine
+    found = searchengine.find(db, q, 200)
+    # A typed AICTE ID is handled separately (exact college, no children), so ID-only hits are left out here.
+    ids = {c["aicte_id"] for c in found if c["tier"] == "match" and q.strip().upper() not in c["aicte_id"].upper()}
     return _with_children(db, ids)
 
 
