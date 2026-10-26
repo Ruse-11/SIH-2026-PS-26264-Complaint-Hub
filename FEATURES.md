@@ -20,6 +20,8 @@ Updated after every module.
 | Reports (bureau, region, status, institution history, ageing, disposal rate, overlaps, monthly, quarterly) + CSV export (audited, formula-safe) | routers/reports.py, services/reports.py | pages/Reports.jsx | DONE (M11) |
 | Insights panel (rule-based, each card shows its rule) | routers/reports.py (/insights), services/insights.py | pages/Insights.jsx | DONE (M11) |
 | Case file download (CSV of the filtered Cases list, audited) | routers/cases.py (/export) | pages/Cases.jsx | DONE (M11) |
+| Single-case file download (HTML report with summary, institution, reporter text, action history, linked cases, alerts, audit; print to PDF; audited) | services/casefile.py, routers/cases.py (/{id}/file) | pages/CaseDetail.jsx | DONE |
+| Guided "Take action" panel (plain-language groups, effect preview, role-aware) and type/status filters on linked cases | services/actions.py | pages/CaseDetail.jsx | DONE |
 | Audit trail screen + role banner on dashboard | routers/audit.py | pages/Audit.jsx, Dashboard.jsx | DONE (M11) |
 | Shared institution search engine (initials like KIP, typos, partial words, places, AICTE IDs; prebuilt index; never-empty tiers; used by hub header, Cases search and both portals) | services/searchengine.py, routers/institutions.py (/search, /suggest), services/cases.py | shared/institution-finder.js, components/InstitutionSuggest.jsx | DONE |
 | Embeddings upgrade (fastembed, off by default, TF-IDF fallback; `method` stored in each suggestion's reasons; shown in /api/health) | services/embeddings.py, services/similarity.py, services/matching.py | – | DONE (M12; real model untested in build sandbox, see PROGRESS) |

@@ -7,7 +7,7 @@ from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 
 from ..db import get_db
-from ..services import actions as action_service, auth, cases as service, reports as report_service
+from ..services import actions as action_service, auth, cases as service, casefile, reports as report_service
 from ..services.audit import log_event
 from ._stub import stub_router
 
@@ -94,6 +94,21 @@ def action_types(db: Session = Depends(get_db), user=Depends(auth.current_user))
 def log_action(hub_case_id: str, body: ActionBody, db: Session = Depends(get_db), user=Depends(auth.current_user)):
     """An officer logs an action. Conflicts and duplicate actions with the other bureau are checked straight away."""
     return action_service.log_action(db, user, hub_case_id, body.action_type, body.remarks, body.doc_ref, body.to_bureau)
+
+
+@router.get("/{hub_case_id}/file")
+def case_file(hub_case_id: str, db: Session = Depends(get_db), user=Depends(auth.current_user)):
+    """The case file: one case with all its details, history and links as a printable report (roles that may export; audited)."""
+    perms = auth.permissions(user.role)
+    if not perms["can_export"]:
+        raise HTTPException(403, f"{perms['label']} cannot download case files")
+    case = service.get_visible_case(db, user, hub_case_id)
+    html = casefile.build(db, user, hub_case_id)
+    log_event(db, actor=user.username, role=user.role, action="CASE_FILE_DOWNLOADED", entity_type="case", entity_id=hub_case_id,
+              detail={"case_no": case.source_case_no})
+    db.commit()
+    name = f"{case.source_case_no}_case_file.html"
+    return Response(html, media_type="text/html; charset=utf-8", headers={"Content-Disposition": f'attachment; filename="{name}"'})
 
 
 @router.get("/{hub_case_id}")

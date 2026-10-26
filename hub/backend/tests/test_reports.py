@@ -184,6 +184,35 @@ class ReportTest(unittest.TestCase):
         audit = self.client.get("/api/audit?action=CASE_FILE_EXPORTED", headers=self.h("senior.mgmt")).json()
         self.assertEqual(len(audit), 3)
 
+    def test_single_case_file(self):
+        cid = "HUB-0001"
+        r = self.client.get(f"/api/cases/{cid}/file", headers=self.h("senior.mgmt"))
+        self.assertEqual(r.status_code, 200)
+        self.assertIn("text/html", r.headers["content-type"])
+        self.assertIn("PGRC-2026-0001_case_file.html", r.headers["content-disposition"])
+        for needle in ("1. Summary", "Reporter-entered summary", "Action history", "Linked and suggested cases", "Alerts", "Audit trail", "Southern Vale University"):
+            self.assertIn(needle, r.text)
+        self.assertIn("Cross-bureau overlap", r.text)  # a collaboration section with the other bureau's case
+        self.assertNotIn("Shown to senior management", r.text)  # senior management gets the audit section
+        # roles: PGRC officer sees it (own bureau) but no audit trail; RB officer cannot see a PGRC case; other bureau cannot export
+        pg = self.client.get(f"/api/cases/{cid}/file", headers=self.h("pgrc.officer"))
+        self.assertEqual(pg.status_code, 200)
+        self.assertIn("Shown to senior management", pg.text)
+        self.assertEqual(self.client.get(f"/api/cases/{cid}/file", headers=self.h("rb.officer")).status_code, 403)
+        self.assertEqual(self.client.get(f"/api/cases/{cid}/file", headers=self.h("other.bureau")).status_code, 403)
+        self.assertEqual(self.client.get("/api/cases/HUB-9999/file", headers=self.h("senior.mgmt")).status_code, 404)
+        audit = self.client.get("/api/audit?action=CASE_FILE_DOWNLOADED", headers=self.h("senior.mgmt")).json()
+        self.assertEqual(len(audit), 2)
+
+    def test_case_file_escapes_complaint_text(self):
+        with Session(self.engine) as db:  # one more place the text could leak into markup
+            case = db.get(m.Case, "HUB-0001")
+            case.description = "<script>alert(1)</script> & more"
+            db.commit()
+        r = self.client.get("/api/cases/HUB-0001/file", headers=self.h("senior.mgmt"))
+        self.assertNotIn("<script>alert(1)", r.text)
+        self.assertIn("&lt;script&gt;", r.text)
+
     def test_csv_cells_cannot_run_as_spreadsheet_formulas(self):
         self.assertEqual(reports._safe('=HYPERLINK("http://x")'), "'=HYPERLINK(\"http://x\")")
         self.assertEqual(reports._safe("+1"), "'+1")
