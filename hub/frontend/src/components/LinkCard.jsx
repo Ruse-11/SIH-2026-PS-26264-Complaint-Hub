@@ -73,7 +73,7 @@ function Reasons({ link }) {
         </>
       ) : (
         <>
-          <li>Text similarity {link.score} (shared words: {(r.shared_keywords || []).join(", ") || "none"}).</li>
+          <li>Text similarity {link.score}{r.method ? (r.method === "embeddings" ? " (AI embeddings + keywords)" : " (keywords)") : ""} (shared words: {(r.shared_keywords || []).join(", ") || "none"}).</li>
           <li>{r.same_reporter ? "Same reporter" : "Different reporters"}, category {r.category}.</li>
         </>
       )}
