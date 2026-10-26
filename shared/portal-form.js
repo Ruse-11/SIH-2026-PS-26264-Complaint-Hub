@@ -32,7 +32,14 @@
       });
   }
 
-  var STEPS = ["1  Find institution", "2  Verify phone", "3  Complaint details", "4  Receipt"];
+  // Each portal speaks in its own words (the logic and the element ids are identical).
+  var COPY = {
+    RB: { steps: ["Find institution", "Verify mobile", "Complaint details", "Acknowledgement"], details: "Complaint details", submit: "Submit complaint",
+          done: "Complaint registered", ref: "Reference number", another: "File another complaint", title: "Title *", desc: "Description *" },
+    PGRC: { steps: ["Identify the institution", "Verify your contact", "Describe your grievance", "Registration slip"], details: "Grievance details", submit: "Lodge grievance",
+            done: "Grievance registered", ref: "Registration number", another: "Lodge another grievance", title: "Subject of grievance *", desc: "Grievance in detail *" },
+  };
+  var STEPS = COPY.RB.steps, T = COPY.RB;
   var app = document.getElementById("app");
   var cfg, S;
 
@@ -40,7 +47,7 @@
 
   function stepsBar() {
     var bar = h("div", { class: "steps" });
-    STEPS.forEach(function (t, i) { bar.appendChild(h("span", { class: i + 1 === S.step ? "on" : i + 1 < S.step ? "done" : "" }, t)); });
+    STEPS.forEach(function (t, i) { bar.appendChild(h("span", { class: i + 1 === S.step ? "on" : i + 1 < S.step ? "done" : "" }, h("i", null, String(i + 1)), t)); });
     return bar;
   }
 
@@ -127,10 +134,10 @@
       call("/submit", { institution_token: S.instToken, verification_token: S.verifToken, reporter_type: type.value, category: cat.value,
                         title: title.value, description: desc.value, severity: Number(sev.value) })
         .then(function (d) { S.receipt = d; S.draft = null; S.error = ""; S.step = 4; draw(); pollIfPending(); }).catch(function (e) { go.disabled = false; fail(e); });
-    } }, "Submit complaint");
-    show(h("div", { class: "panel" }, h("h2", null, "Complaint details"), banner,
+    } }, T.submit);
+    show(h("div", { class: "panel" }, h("h2", null, T.details), banner,
       h("div", { class: "fgrid" }, h("div", null, h("label", null, "You are a"), type), h("div", null, h("label", null, "Category *"), cat)),
-      h("label", null, "Title *"), title, h("label", null, "Description *"), desc,
+      h("label", null, T.title), title, h("label", null, T.desc), desc,
       h("label", null, "How serious is it?"), sev, errorBox(), h("div", { class: "row" }, go)));
   }
 
@@ -141,11 +148,11 @@
     var sync = r.sync_status === "synced" ? "Forwarded to the central monitoring hub as " + r.hub_case_id + "."
       : r.sync_status === "pending" ? "Saved. It will be forwarded to the central hub automatically (the hub is not reachable right now)."
       : "Saved, but the hub could not accept it: " + (r.last_error || r.sync_status);
-    show(h("div", { class: "panel" }, h("h2", null, "Complaint received"), h("div", { class: "receipt-no", id: "receipt-no" }, r.portal_case_no),
+    show(h("div", { class: "panel" }, h("h2", null, T.done), h("div", { class: "receipt-label" }, T.ref), h("div", { class: "receipt-no", id: "receipt-no" }, r.portal_case_no),
       h("p", null, h("b", null, "Institution: "), where),
       r.pending_verification ? h("div", { class: "banner warn" }, "Status: pending verification of the institution.") : null,
       h("p", { id: "receipt-sync" }, sync),
-      h("div", { class: "row" }, h("button", { class: "primary", id: "again", onclick: function () { reset(); draw(); } }, "File another complaint"))));
+      h("div", { class: "row" }, h("button", { class: "primary", id: "again", onclick: function () { reset(); draw(); } }, T.another))));
   }
 
   // If the hub was down, check again every few seconds and update the receipt line.
@@ -162,8 +169,10 @@
 
   call("/config").then(function (c) {
     cfg = c; reset();
-    document.title = c.portal_code + " Portal (mock) - File a complaint";
-    document.getElementById("portal-name").textContent = c.portal_name + " (" + c.portal_code + ")";
+    T = COPY[c.portal_code] || COPY.RB; STEPS = T.steps;
+    document.title = c.portal_name + " (mock portal)";
+    var nameEl = document.getElementById("portal-name");
+    if (nameEl && !nameEl.dataset.static) nameEl.textContent = c.portal_name + " (" + c.portal_code + ")";
     draw();
   }).catch(function (e) { app.textContent = "Cannot load the portal: " + e.message; });
 })();

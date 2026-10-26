@@ -3,19 +3,58 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>PGRC Portal (mock) - File a complaint</title>
+  <title>Public Grievance Redressal Cell (mock portal)</title>
   <link rel="stylesheet" href="/shared/institution-finder.css" />
-  <style>:root { --accent: #047857; }</style>
+  <link rel="stylesheet" href="/static/pgrc.css" />
 </head>
 <body>
-  <header class="portal-header">
-    <h1 id="portal-name">Public Grievance Redressal Cell (PGRC)</h1>
-    <span class="tag">Mock portal, synthetic data</span>
+  <div class="strip">
+    <span>Helpline (fictional): <b>1800-000-0000</b></span>
+    <span>Mon to Sat, 10:00 to 17:30</span>
+    <span class="demo-badge">Mock portal · synthetic data</span>
+  </div>
+  <header class="top">
+    <div class="brand">
+      <div class="crest" aria-hidden="true"><span>PG</span></div>
+      <div>
+        <h1 id="portal-name" data-static="1">Public Grievance Redressal Cell</h1>
+        <p>Your voice, our responsibility · Student and public grievances on technical institutions</p>
+      </div>
+    </div>
+    <nav aria-label="Main">
+      <a href="#" title="demo only">Home</a>
+      <a href="#" class="active">Lodge Grievance</a>
+      <a href="#" title="demo only">Track Status</a>
+      <a href="#" title="demo only">FAQs</a>
+      <a href="#" title="demo only">Rights of Students</a>
+    </nav>
   </header>
-  <main class="portal-main">
-    <p class="portal-note">File a complaint about a technical education institution. This is a prototype portal for SIH 2026 PS 26264; it is not the real AICTE portal.</p>
+  <section class="hero">
+    <div>
+      <h2>Lodge a grievance in four simple steps</h2>
+      <p>Facing a problem with a college, such as fee refund, harassment, hostel or results? Tell us. Your grievance is recorded, numbered and followed up by the Cell.</p>
+    </div>
+    <ul class="promises">
+      <li><b>Free</b> of cost</li>
+      <li><b>30 days</b> target for disposal</li>
+      <li><b>Your details</b> stay confidential</li>
+    </ul>
+  </section>
+  <main class="shell">
+    <p class="portal-note">This is a prototype portal for SIH 2026 PS 26264; it is not the real AICTE portal. No real personal data is used.</p>
     <div id="app">Loading…</div>
   </main>
+  <section class="faq">
+    <div class="faqwrap">
+      <details><summary>Who can lodge a grievance?</summary><p>Students, parents, alumni and faculty of a technical institution.</p></details>
+      <details><summary>What happens after I submit?</summary><p>You get a registration number. The Cell examines the grievance and the institution may be asked to reply.</p></details>
+      <details><summary>Can I complain about more than one college?</summary><p>File a separate grievance for each institution.</p></details>
+    </div>
+  </section>
+  <footer class="bottom">
+    <span>© Public Grievance Redressal Cell (mock) · Prototype for SIH 2026</span>
+    <span><a href="#">Privacy</a> · <a href="#">Terms</a> · <a href="#">Help</a> · <a href="#">Feedback</a></span>
+  </footer>
   <script src="/shared/institution-finder.js"></script>
   <script src="/shared/portal-form.js"></script>
 </body>

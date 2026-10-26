@@ -3,19 +3,86 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>RB Portal (mock) - File a complaint</title>
+  <title>Regulation Bureau (mock portal)</title>
   <link rel="stylesheet" href="/shared/institution-finder.css" />
-  <style>:root { --accent: #1e40af; }</style>
+  <link rel="stylesheet" href="/static/rb.css" />
 </head>
 <body>
-  <header class="portal-header">
-    <h1 id="portal-name">Regulation Bureau (RB)</h1>
-    <span class="tag">Mock portal, synthetic data</span>
+  <div class="tricolour"><i></i><i></i><i></i></div>
+  <div class="utility">
+    <div class="wrap">
+      <a href="#main" class="skip">Skip to main content</a>
+      <span class="spacer"></span>
+      <span class="fs" aria-label="Text size">
+        <button type="button" onclick="document.documentElement.style.fontSize='14px'">A-</button>
+        <button type="button" onclick="document.documentElement.style.fontSize='16px'">A</button>
+        <button type="button" onclick="document.documentElement.style.fontSize='18px'">A+</button>
+      </span>
+      <span class="lang">English</span>
+    </div>
+  </div>
+  <header class="masthead">
+    <div class="wrap">
+      <div class="seal" aria-hidden="true">RB</div>
+      <div class="titles">
+        <div class="org">Technical Education Regulator (fictional)</div>
+        <h1 id="portal-name" data-static="1">Regulation Bureau</h1>
+        <div class="sub">Approvals, compliance and regulatory complaints</div>
+      </div>
+      <div class="demo-badge">MOCK PORTAL<br />synthetic data</div>
+    </div>
   </header>
-  <main class="portal-main">
-    <p class="portal-note">File a complaint about a technical education institution. This is a prototype portal for SIH 2026 PS 26264; it is not the real AICTE portal.</p>
-    <div id="app">Loading…</div>
-  </main>
+  <nav class="menu" aria-label="Main">
+    <div class="wrap">
+      <a href="#" title="demo only">Home</a>
+      <a href="#" title="demo only">About the Bureau</a>
+      <a href="#" title="demo only">Approval Process</a>
+      <a href="#" title="demo only">Regulations</a>
+      <a href="#" class="active">Register Complaint</a>
+      <a href="#" title="demo only">Contact</a>
+    </div>
+  </nav>
+  <div class="crumbs"><div class="wrap">Home &rsaquo; Public Services &rsaquo; <b>Register a complaint against an institution</b></div></div>
+
+  <div class="wrap layout">
+    <main id="main" class="content">
+      <h2 class="page-title">Register a Regulatory Complaint</h2>
+      <p class="portal-note">Use this form to report a violation of regulatory norms by a technical education institution, such as approval, faculty, infrastructure or admission irregularities. This is a prototype portal for SIH 2026 PS 26264; it is not the real AICTE portal.</p>
+      <div id="app">Loading…</div>
+    </main>
+    <aside class="side">
+      <section class="box">
+        <h3>Before you begin</h3>
+        <ol>
+          <li>Keep the name of the institution ready.</li>
+          <li>Have your mobile number handy for verification.</li>
+          <li>Describe the facts with dates. One institution per complaint.</li>
+        </ol>
+      </section>
+      <section class="box notice">
+        <h3>Important notices</h3>
+        <ul>
+          <li>Complaints are examined by the Bureau officer concerned.</li>
+          <li>False complaints may be rejected.</li>
+          <li>Keep your reference number for tracking.</li>
+        </ul>
+      </section>
+      <section class="box">
+        <h3>Need help?</h3>
+        <p>Regulation Bureau helpdesk<br />Mon to Fri, 9:30 to 18:00<br /><b>helpdesk-rb@example.com</b></p>
+      </section>
+    </aside>
+  </div>
+
+  <footer class="foot">
+    <div class="wrap">
+      <div>
+        <b>Regulation Bureau</b><br />
+        <a href="#">Terms of use</a> · <a href="#">Privacy policy</a> · <a href="#">Accessibility</a> · <a href="#">Sitemap</a>
+      </div>
+      <div class="right">Content owned by the Regulation Bureau (mock).<br />Prototype for SIH 2026. All data is synthetic.</div>
+    </div>
+  </footer>
   <script src="/shared/institution-finder.js"></script>
   <script src="/shared/portal-form.js"></script>
 </body>
