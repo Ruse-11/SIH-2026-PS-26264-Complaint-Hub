@@ -1,11 +1,13 @@
 """Text similarity for complaints (M6 baseline, no AI model): TF-IDF cosine blended with keyword overlap.
 
-M12 can swap in embeddings; this stays as the fallback. Steps: lowercase -> keep words -> drop filler words ->
+M12 blends in embeddings when they are switched on and loadable (see embeddings.py); this stays as the fallback. Steps: lowercase -> keep words -> drop filler words ->
 map a few synonyms and strip plural endings -> weight rare words higher (TF-IDF) -> compare.
 """
 import math
 import re
 from collections import Counter
+
+from . import embeddings
 
 STOP = set("""a an the and or but if of to in on at for from by with without about into after before during is are was
 were be been being has have had not no this that these those it its they them their there here we our you your i my me he
@@ -46,8 +48,9 @@ def build_idf(texts: list[str]) -> dict:
     return {w: math.log((1 + n) / (1 + c)) + 1 for w, c in df.items()}
 
 
-def compare(text_a: str, text_b: str, idf: dict | None = None) -> tuple[float, list[str]]:
-    """Return (score 0..1, shared keywords). score = 0.6 * TF-IDF cosine + 0.4 * keyword overlap (Jaccard)."""
+def compare(text_a: str, text_b: str, idf: dict | None = None, vectors: dict | None = None) -> tuple[float, list[str]]:
+    """Return (score 0..1, shared keywords). Keyword score = 0.6 * TF-IDF cosine + 0.4 * keyword overlap (Jaccard).
+    With embedding `vectors` for both texts the score is half keyword score, half embedding similarity."""
     ka, kb = keywords(text_a), keywords(text_b)
     if not ka or not kb:
         return 0.0, []
@@ -58,4 +61,7 @@ def compare(text_a: str, text_b: str, idf: dict | None = None) -> tuple[float, l
     cos = dot / (math.sqrt(sum(v * v for v in wa.values())) * math.sqrt(sum(v * v for v in wb.values())))
     sa, sb = set(ka), set(kb)
     jac = len(sa & sb) / len(sa | sb)
-    return round(0.6 * cos + 0.4 * jac, 3), sorted(sa & sb)
+    score = 0.6 * cos + 0.4 * jac
+    if vectors and text_a in vectors and text_b in vectors:
+        score = 0.5 * score + 0.5 * embeddings.scaled(vectors[text_a], vectors[text_b])
+    return round(score, 3), sorted(sa & sb)

@@ -8,4 +8,5 @@ httpx==0.28.1
 # used from M2 / M3 onward
 rapidfuzz==3.11.0
 PyJWT==2.10.1
-# fastembed (M12, optional) is NOT pinned here on purpose; we add it only if the embeddings upgrade fits the time.
+# fastembed (M12, optional): NOT needed to run the hub. To switch embeddings on:  pip install fastembed==0.5.1
+# then set HUB_EMBEDDINGS=on before starting. If it cannot load, the hub stays on TF-IDF by itself.

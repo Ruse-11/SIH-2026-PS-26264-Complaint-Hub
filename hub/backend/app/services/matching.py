@@ -11,7 +11,7 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from .. import models as m
-from . import similarity
+from . import embeddings, similarity
 
 OPEN_STATUSES = ("Pending", "Under Process", "Escalated")  # Disposed and Transferred cases are not open
 OVERLAP_TITLE = "Potential Overlapping Cases – Coordination Required"
@@ -75,6 +75,7 @@ def detect_for_case(db: Session, case: m.Case, others: list[m.Case] | None = Non
                                                        m.Case.status != "unverified_institution")))
     if idf is None:
         idf = similarity.build_idf([_text(c) for c in db.scalars(select(m.Case))])
+    vectors = embeddings.embed_many([_text(case)] + [_text(o) for o in others])  # None -> TF-IDF only
     t_a, t_b = threshold(db, "T_A", 0.75), threshold(db, "T_B", 0.65)
     inst = db.get(m.Institution, case.institution_id)
     summaries: list[dict] = []
@@ -83,7 +84,7 @@ def detect_for_case(db: Session, case: m.Case, others: list[m.Case] | None = Non
     for o in others:
         if o.category != case.category and o.reporter_id != case.reporter_id:
             continue  # B needs the same category; A needs the same reporter
-        score, shared = similarity.compare(_text(case), _text(o), idf)
+        score, shared = similarity.compare(_text(case), _text(o), idf, vectors)
         same_reporter = o.reporter_id == case.reporter_id
         if same_reporter and o.source_system != case.source_system and o.category == case.category and score >= t_a:
             kind = "SAME_REPORTER"
@@ -93,7 +94,7 @@ def detect_for_case(db: Session, case: m.Case, others: list[m.Case] | None = Non
             continue
         if _already_suggested(db, case.hub_case_id, o.hub_case_id, kind):
             continue
-        reasons = {"similarity": score, "shared_keywords": shared, "category": case.category,
+        reasons = {"similarity": score, "method": "embeddings" if vectors else "tfidf", "shared_keywords": shared, "category": case.category,
                    "same_reporter": same_reporter, "portals": sorted({case.source_system, o.source_system}),
                    "institution": inst.official_name}
         s = _add(db, case, o, kind, score, reasons)
@@ -143,6 +144,7 @@ def rebuild_all(db: Session) -> int:
     cases = list(db.scalars(select(m.Case).where(m.Case.institution_id.is_not(None),
                                                  m.Case.status != "unverified_institution").order_by(m.Case.received_at, m.Case.hub_case_id)))
     idf = similarity.build_idf([_text(c) for c in db.scalars(select(m.Case))])
+    embeddings.embed_many([_text(c) for c in cases])  # one batch up front; later calls hit the cache
     seen: dict[str, list[m.Case]] = {}
     for c in cases:
         detect_for_case(db, c, others=seen.get(c.institution_id, []), idf=idf)

@@ -7,6 +7,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from . import config, models  # noqa: F401  (models must be imported so the tables are registered)
+from .services import embeddings
 from .db import Base, engine
 from .routers import ALL
 from .routers.cases import actions_router
@@ -54,7 +55,7 @@ app.add_middleware(
 @app.get("/api/health")
 def health():
     """Used by the dashboard header, run_all.py and the quick test."""
-    return {"status": "ok", "service": "hub", "version": config.VERSION}
+    return {"status": "ok", "service": "hub", "version": config.VERSION, **embeddings.status()}
 
 
 app.include_router(actions_router)  # POST /api/actions placeholder
