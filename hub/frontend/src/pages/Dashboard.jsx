@@ -1,5 +1,6 @@
 // Dashboard: KPI tiles, what needs an officer's decision, bureau workload, institution-wise status, categories.
 import { Link } from "react-router-dom";
+import { useAuth } from "../auth.jsx";
 import { Bar, BarChart, CartesianGrid, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { Loading, Panel, Tile, useGet } from "../components/ui.jsx";
 
@@ -15,6 +16,7 @@ export default function Dashboard() {
 
   return (
     <div className="space-y-6">
+      <RoleBanner />
       <div className="flex items-end justify-between">
         <h1 className="text-xl font-semibold">Dashboard</h1>
         <span className="text-xs text-slate-500">Live from the hub · as of {kpi.data.as_of}</span>
@@ -148,4 +150,19 @@ function Watch({ title, total, rows, detail }) {
       {total > rows.length && <Link className="mt-2 block text-xs text-blue-700 hover:underline" to="/alerts">and {total - rows.length} more in Alerts</Link>}
     </div>
   );
+}
+
+// One line under the header telling this role what it can do here (read from the hub's permissions).
+const ROLE_HELP = {
+  rb_officer: "Work the RB cases, log actions, confirm or reject suggested links, transfer or escalate.",
+  pgrc_officer: "Work the PGRC cases, log actions, confirm or reject suggested links, transfer or escalate.",
+  other_bureau: "See the cases assigned to your bureau and the overlaps at those colleges. Log actions on your cases.",
+  regional_office: "See your region only. Add remarks and escalate.",
+  senior_management: "Read-only view of everything: KPIs, ageing, Insights, reports and export, audit trail.",
+  competent_authority: "Everything, plus escalations and open conflicts. You make the final call on the lead bureau.",
+};
+function RoleBanner() {
+  const { user } = useAuth();
+  const text = ROLE_HELP[user.role];
+  return text ? <div id="role-banner" className="rounded-lg bg-blue-50 px-4 py-2 text-sm text-blue-900"><b>{user.role_label}:</b> {text}</div> : null;
 }

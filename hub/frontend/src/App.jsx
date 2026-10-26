@@ -12,6 +12,7 @@ import Overlaps from "./pages/Overlaps.jsx";
 import Alerts from "./pages/Alerts.jsx";
 import Reports from "./pages/Reports.jsx";
 import Insights from "./pages/Insights.jsx";
+import Audit from "./pages/Audit.jsx";
 import NeedsReview from "./pages/NeedsReview.jsx";
 import GraphView from "./pages/GraphView.jsx";
 import AttentionIndex from "./pages/AttentionIndex.jsx";
@@ -25,6 +26,7 @@ const NAV = [
   ["/needs-review", "Needs review"],
   ["/reports", "Reports"],
   ["/insights", "Insights"],
+  ["/audit", "Audit trail", ["senior_management", "competent_authority"]],
   ["/graph", "Graph (later)"],
   ["/attention", "Attention (later)"],
 ];
@@ -79,7 +81,7 @@ function Shell() {
       <aside className="w-56 shrink-0 bg-slate-900 p-4 text-slate-200">
         <div className="mb-6 text-lg font-semibold">Complaint Hub</div>
         <nav className="flex flex-col gap-1">
-          {NAV.map(([to, label]) => (
+          {NAV.filter(([, , roles]) => !roles || roles.includes(user.role)).map(([to, label]) => (
             <NavLink
               key={to}
               to={to}
@@ -139,6 +141,7 @@ export default function App() {
           <Route path="/alerts" element={<Alerts />} />
           <Route path="/reports" element={<Reports />} />
           <Route path="/insights" element={<Insights />} />
+          <Route path="/audit" element={<Audit />} />
           <Route path="/needs-review" element={<NeedsReview />} />
           <Route path="/graph" element={<GraphView />} />
           <Route path="/attention" element={<AttentionIndex />} />
