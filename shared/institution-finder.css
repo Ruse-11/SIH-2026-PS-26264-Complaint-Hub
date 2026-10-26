@@ -41,3 +41,5 @@ button:disabled { opacity: .5; cursor: default; }
 .banner { background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 10px 12px; font-size: 14px; }
 .banner.warn { background: #fffbeb; border-color: #fde68a; }
 .receipt-no { font-size: 28px; font-weight: 700; letter-spacing: 1px; margin: 8px 0; }
+/* accessibility (GIGW/UX4G principle): always show where the keyboard focus is */
+a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible, summary:focus-visible { outline: 3px solid #f59e0b; outline-offset: 2px; }
