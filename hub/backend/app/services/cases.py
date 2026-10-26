@@ -59,7 +59,7 @@ def _with_children(db: Session, ids: set) -> set:
 
 def list_cases(db: Session, user: m.User, q=None, bureau=None, region=None, category=None, status=None,
                institution_id=None, date_from: date | None = None, date_to: date | None = None, overdue=False,
-               sort="priority", page=1, page_size=25, as_of: date | None = None) -> dict:
+               sort="priority", page=1, page_size=25, as_of: date | None = None, export=False) -> dict:
     """Case list with search (institution name, AICTE ID, case ID) and filters, limited to the user's scope."""
     as_of = as_of or date.today()
     stmt = scope.scoped_case_query(user, m.Case, m.Institution.official_name, m.Institution.region)
@@ -86,7 +86,7 @@ def list_cases(db: Session, user: m.User, q=None, bureau=None, region=None, cate
     order = {"priority": m.Case.priority_score.desc(), "received": m.Case.received_at.desc(),
              "last_action": m.Case.last_action_at.desc(), "oldest": m.Case.received_at.asc()}.get(sort, m.Case.priority_score.desc())
     total = db.scalar(select(func.count()).select_from(stmt.order_by(None).subquery()))
-    page_size = min(max(page_size, 1), 100)
+    page_size = 100000 if export else min(max(page_size, 1), 100)  # export = every matching case, not one page
     rows = db.execute(stmt.order_by(order, m.Case.hub_case_id).limit(page_size).offset((max(page, 1) - 1) * page_size)).all()
     ids = [r[0].hub_case_id for r in rows]
     last = {}  # latest action per case on this page

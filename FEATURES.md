@@ -19,6 +19,7 @@ Updated after every module.
 | Starvation (stalled) and SLA alerts: due soon, overdue, pending reminder, escalation suggested, escalated; repeat-safe scan on start, every 30 min and after each action | routers/starvation.py, services/starvation.py, main.py | pages/Dashboard.jsx (watch panel), pages/Alerts.jsx | DONE (M10) |
 | Reports (bureau, region, status, institution history, ageing, disposal rate, overlaps, monthly, quarterly) + CSV export (audited, formula-safe) | routers/reports.py, services/reports.py | pages/Reports.jsx | DONE (M11) |
 | Insights panel (rule-based, each card shows its rule) | routers/reports.py (/insights), services/insights.py | pages/Insights.jsx | DONE (M11) |
+| Case file download (CSV of the filtered Cases list, audited) | routers/cases.py (/export) | pages/Cases.jsx | DONE (M11) |
 | Audit trail screen + role banner on dashboard | routers/audit.py | pages/Audit.jsx, Dashboard.jsx | DONE (M11) |
 | Embeddings upgrade (fastembed) | services/matching.py | – | TODO (M12, optional) |
 | n8n endpoints + reset_demo.py | – | reset_demo.py | TODO (M13, optional) |

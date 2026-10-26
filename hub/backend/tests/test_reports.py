@@ -168,6 +168,22 @@ class ReportTest(unittest.TestCase):
         audit = self.client.get("/api/audit?action=REPORT_EXPORTED", headers=self.h("senior.mgmt")).json()
         self.assertEqual((len(audit), audit[0]["actor"], audit[0]["entity_id"]), (1, "rb.officer", "bureau"))
 
+    def test_case_file_export_follows_filters_and_scope(self):
+        def rows(user, qs=""):
+            r = self.client.get("/api/cases/export" + qs, headers=self.h(user))
+            self.assertEqual(r.status_code, 200)
+            self.assertIn("case_file_", r.headers["content-disposition"])
+            return list(csv.reader(io.StringIO(r.text.lstrip("\ufeff"))))
+        everything = rows("senior.mgmt")
+        self.assertEqual(len(everything) - 1, 150)  # every case, not one page of 25
+        self.assertEqual(everything[0][0], "Hub case ID")
+        pending = rows("senior.mgmt", "?status=Pending")
+        self.assertEqual(len(pending) - 1, self.count(m.Case.status == "Pending"))
+        self.assertLess(len(rows("regional.south")) - 1, 150)  # scope still applies
+        self.assertEqual(self.client.get("/api/cases/export", headers=self.h("other.bureau")).status_code, 403)
+        audit = self.client.get("/api/audit?action=CASE_FILE_EXPORTED", headers=self.h("senior.mgmt")).json()
+        self.assertEqual(len(audit), 3)
+
     def test_csv_cells_cannot_run_as_spreadsheet_formulas(self):
         self.assertEqual(reports._safe('=HYPERLINK("http://x")'), "'=HYPERLINK(\"http://x\")")
         self.assertEqual(reports._safe("+1"), "'+1")

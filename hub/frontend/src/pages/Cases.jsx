@@ -2,8 +2,9 @@
 // so dashboard tiles can link straight to "?status=Pending" and the back button works.
 import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
+import { useAuth } from "../auth.jsx";
 import InstitutionSuggest from "../components/InstitutionSuggest.jsx";
-import { Loading, Panel, StatusBadge, fmtDate, useGet } from "../components/ui.jsx";
+import { Loading, Panel, StatusBadge, fmtDate, useGet, useToast } from "../components/ui.jsx";
 
 const PAGE_SIZE = 25;
 const FIELDS = ["q", "bureau", "region", "category", "status", "date_from", "date_to", "overdue", "sort"];
@@ -14,6 +15,28 @@ export default function Cases() {
   const [q, setQ] = useState(get("q"));
   useEffect(() => setQ(get("q")), [params.get("q")]); // eslint-disable-line react-hooks/exhaustive-deps
   const page = Number(get("page") || 1);
+  const { api, user } = useAuth();
+  const toast = useToast();
+  const [busy, setBusy] = useState(false);
+
+  // Download every case matching the current search and filters (not just this page) as CSV.
+  async function downloadCaseFile() {
+    setBusy(true);
+    try {
+      const ex = new URLSearchParams();
+      FIELDS.forEach((k) => get(k) && ex.set(k, get(k)));
+      if (get("institution_id")) ex.set("institution_id", get("institution_id"));
+      const r = await api("/api/cases/export?" + ex);
+      if (!r.ok) throw new Error((await r.json().catch(() => ({}))).detail || "Export failed");
+      const url = URL.createObjectURL(await r.blob());
+      const a = document.createElement("a");
+      a.href = url; a.download = "case_file.csv"; a.click();
+      URL.revokeObjectURL(url);
+      toast({ title: "Case file downloaded", lines: ["It holds every case matching your filters. The export is recorded in the audit trail."] });
+    } catch (e) {
+      toast({ title: "Could not download", lines: [e.message], tone: "error" });
+    } finally { setBusy(false); }
+  }
 
   const query = new URLSearchParams();
   FIELDS.forEach((k) => get(k) && query.set(k, get(k)));
@@ -73,7 +96,11 @@ export default function Cases() {
 
       <Loading state={list} />
       {list.data && (
-        <Panel title={list.data.total + " case" + (list.data.total === 1 ? "" : "s")}>
+        <Panel title={list.data.total + " case" + (list.data.total === 1 ? "" : "s")}
+          right={user.permissions.can_export
+            ? <button id="download-case-file" disabled={busy || list.data.total === 0} onClick={downloadCaseFile}
+                className="rounded bg-slate-900 px-3 py-1.5 text-sm text-white disabled:opacity-40">{busy ? "Preparing…" : "Download case file (CSV)"}</button>
+            : <span className="text-xs text-slate-500">Your role cannot export.</span>}>
           <div className="overflow-x-auto">
             <table className="w-full text-sm">
               <thead><tr className="text-left text-xs text-slate-500">
