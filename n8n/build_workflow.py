@@ -135,7 +135,7 @@ def record():
 
 
 def workflow(name, pinned, rec=None):
-    wf = {"name": name, "nodes": nodes(pinned), "connections": connections(), "active": False,
+    wf = {"id": "complaintReplay" + ("Pinned" if pinned else "Live"), "name": name, "nodes": nodes(pinned), "connections": connections(), "active": False,
           "settings": {"executionOrder": "v1"}, "meta": {"templateCredsSetupCompleted": False}, "pinData": {}}
     if pinned:
         for key in ("search", "details", "rb_conf", "rb_otp", "rb_ver", "rb_sub", "pg_conf", "pg_otp", "pg_ver", "pg_sub"):

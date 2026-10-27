@@ -1,8 +1,9 @@
 {
+  "id": "complaintReplayLive",
   "name": "Complaint Journey Replay",
   "nodes": [
     {
-      "id": "239c4591-07aa-4fcc-be93-f422228350f3",
+      "id": "8590df2d-da0b-4e4e-a94e-565b06146af8",
       "name": "Start replay",
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
@@ -13,7 +14,7 @@
       "parameters": {}
     },
     {
-      "id": "e0bd47b0-508b-46a9-894f-1efe475f51fd",
+      "id": "5b6a0336-57c9-4d8a-b15c-1f7033b097f1",
       "name": "Settings",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
@@ -25,37 +26,37 @@
         "assignments": {
           "assignments": [
             {
-              "id": "dc1ed184-2c40-4fe4-8fa5-337927a6ce19",
+              "id": "74511914-7328-4fbc-98d4-4f7eea4c211f",
               "name": "hub_url",
               "value": "http://localhost:8000",
               "type": "string"
             },
             {
-              "id": "67bb61cd-630a-4476-b2af-0c08acad3553",
+              "id": "a5f53b81-4eb0-4299-be28-711e394d2b84",
               "name": "rb_url",
               "value": "http://localhost:8001",
               "type": "string"
             },
             {
-              "id": "482c2d0e-dda7-47f2-bd0a-377038ba97d8",
+              "id": "29aea261-3343-4e3c-a0dd-f6d05abb4fc9",
               "name": "pgrc_url",
               "value": "http://localhost:8002",
               "type": "string"
             },
             {
-              "id": "946c48c2-353e-4008-b067-febc1626a0ca",
+              "id": "08f5b20f-52f3-40f4-9d48-d2149d8febf8",
               "name": "dashboard_url",
               "value": "http://localhost:5173",
               "type": "string"
             },
             {
-              "id": "f2e56f35-6180-46d7-92f8-00cb30180359",
+              "id": "62a5f3d5-f3aa-4904-9a88-b6374ac8a2ae",
               "name": "college_query",
               "value": "Norvella Institute of Applied Sciences",
               "type": "string"
             },
             {
-              "id": "d398e7d5-630e-4431-ab0c-beaa637e3cf1",
+              "id": "786660ef-a343-499e-9302-c64293dca04e",
               "name": "telegram_chat_id",
               "value": "REPLACE_WITH_YOUR_CHAT_ID",
               "type": "string"
@@ -66,7 +67,7 @@
       }
     },
     {
-      "id": "8972cf75-b393-43d0-948c-1995ec27f3c3",
+      "id": "20b0cde9-1cb9-4562-a621-60b3fb3a3557",
       "name": "1 Finder search",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
@@ -90,7 +91,7 @@
       }
     },
     {
-      "id": "8deb3dd3-260d-469c-a201-d810a40c0313",
+      "id": "90aa9901-03d1-45ea-9e17-c950601f3880",
       "name": "2 Institution details",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
@@ -105,7 +106,7 @@
       }
     },
     {
-      "id": "5da2fa30-eeac-4889-91e4-64192f291853",
+      "id": "28984c71-6f61-46eb-9d1b-633b305ff9b3",
       "name": "3 Confirm card + map link",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
@@ -117,25 +118,25 @@
         "assignments": {
           "assignments": [
             {
-              "id": "91fa4f8a-9f24-4ad9-85e4-10422cd9db3f",
+              "id": "85d904e2-fbc4-417b-9ce6-8a31f1ed55d0",
               "name": "college_id",
               "value": "={{ $json.aicte_id }}",
               "type": "string"
             },
             {
-              "id": "79b19f94-9e7f-4851-9128-37cdb71d41ef",
+              "id": "2174a7d2-1835-4736-892d-6cf03111f6c2",
               "name": "college_name",
               "value": "={{ $json.official_name }}",
               "type": "string"
             },
             {
-              "id": "39ad133d-b8a7-4437-be92-def44924ab13",
+              "id": "c40f2d74-11b7-4247-906c-40f394d1f2ca",
               "name": "address",
               "value": "={{ [$json.address_line, $json.area, $json.district, $json.state].filter(Boolean).join(', ') }}",
               "type": "string"
             },
             {
-              "id": "79fc2242-c55d-44ff-a802-1669cd57eccf",
+              "id": "0384934a-0c3c-460e-ad27-49cca1d92b19",
               "name": "map_link",
               "value": "=https://www.openstreetmap.org/?mlat={{ $json.lat }}&mlon={{ $json.lng }}#map=16/{{ $json.lat }}/{{ $json.lng }}",
               "type": "string"
@@ -146,7 +147,7 @@
       }
     },
     {
-      "id": "bc0932e3-60c8-4835-bc5c-76d4bc525630",
+      "id": "8e06461f-fbe9-4bc8-b9c2-a4009efbb9f7",
       "name": "4 RB: confirm institution",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
@@ -164,7 +165,7 @@
       }
     },
     {
-      "id": "6caed808-a12a-436e-92ef-67bde6bc551e",
+      "id": "6ce85d78-c5da-4a01-b23c-865821fc4ffb",
       "name": "5 RB: request OTP",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
@@ -182,7 +183,7 @@
       }
     },
     {
-      "id": "6680171f-fbaf-4ffd-b83d-80b1cdde4d9e",
+      "id": "396ae70e-adfd-4978-b907-67a0b2e10f56",
       "name": "6 RB: verify OTP",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
@@ -200,7 +201,7 @@
       }
     },
     {
-      "id": "9d7b9407-7a24-4ff9-aeda-abb4b2ad52f3",
+      "id": "683776f8-7173-4c84-8469-b1f1ee12b143",
       "name": "7 RB: submit complaint",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
@@ -218,7 +219,7 @@
       }
     },
     {
-      "id": "10d71082-a42d-415b-afc0-4b6550903f8d",
+      "id": "39354e1e-14d5-44ff-86ee-fad280e5909a",
       "name": "8 PGRC: confirm institution",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
@@ -236,7 +237,7 @@
       }
     },
     {
-      "id": "d0bd58c7-3ede-4c96-9551-e167d94c4f6c",
+      "id": "e7f91bcb-80f2-4ca9-9372-4d72da15b68a",
       "name": "9 PGRC: request OTP",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
@@ -254,7 +255,7 @@
       }
     },
     {
-      "id": "b1315aa6-caba-4af7-9e7d-f01796fa3bed",
+      "id": "262510ed-90a6-47a6-8cb4-4e5bbb6f6b41",
       "name": "10 PGRC: verify OTP",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
@@ -272,7 +273,7 @@
       }
     },
     {
-      "id": "53062ce8-a853-4568-824e-8a4a60e5089f",
+      "id": "38af7b69-809d-45d0-bc4c-ff15148f22a8",
       "name": "11 PGRC: submit complaint",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
@@ -290,7 +291,7 @@
       }
     },
     {
-      "id": "69f64215-ac46-4fc2-8190-35ac4dcf6eb2",
+      "id": "e693b01f-7e70-4462-b5ce-72a899432a00",
       "name": "12 Overlap alert raised?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
@@ -307,7 +308,7 @@
           },
           "conditions": [
             {
-              "id": "c7f08cb2-1e4c-4c70-9f44-8b6ecbd65b0f",
+              "id": "3d55280a-64c7-473e-81e5-11a05d196191",
               "leftValue": "={{ $json.alerts_created.length }}",
               "rightValue": 0,
               "operator": {
@@ -322,7 +323,7 @@
       }
     },
     {
-      "id": "3ef58bb3-640e-4e96-a549-a8b8792eb4b2",
+      "id": "bcf5deff-fed0-4171-9bd9-673c3e911e7c",
       "name": "13 Build alert message",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
@@ -334,7 +335,7 @@
         "assignments": {
           "assignments": [
             {
-              "id": "c518a712-f1a3-4c65-bd47-f17c9e248db8",
+              "id": "87b2a80e-38f6-4221-85cd-5ada02723d64",
               "name": "text",
               "value": "={{ '🚨 ' + $json.alerts_created[0].message + '\\n\\nCollege: ' + $json.alerts_created[0].institution + '\\nCases: ' + $json.alerts_created[0].cases.join(', ') + '\\nSuggested lead bureau (suggestion only): ' + ($json.alerts_created[0].suggested_lead.bureau || 'none') + '\\nOpen on the dashboard: ' + $('Settings').first().json.dashboard_url + $json.alerts_created[0].dashboard_link + '\\n\\nDemo replay: production portals call the hub directly. Officers decide.' }}",
               "type": "string"
@@ -345,7 +346,7 @@
       }
     },
     {
-      "id": "78a63014-c1d3-4093-a725-f93d22020a73",
+      "id": "5c705d0a-e7cf-4c8c-8455-cf490e0c77c9",
       "name": "14 Telegram: notify officer",
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
@@ -362,7 +363,7 @@
       }
     },
     {
-      "id": "3f5b2e07-eec7-49f0-8cdc-103cd2e1c3e6",
+      "id": "da186372-208f-4123-80b7-d74805801a3f",
       "name": "No overlap, nothing to send",
       "type": "n8n-nodes-base.noOp",
       "typeVersion": 1,
@@ -373,7 +374,7 @@
       "parameters": {}
     },
     {
-      "id": "c31b276f-5013-4d79-aa6c-48cbb14a107a",
+      "id": "6541fd89-74d7-4069-9e6a-eda08a0fe7cf",
       "name": "Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,

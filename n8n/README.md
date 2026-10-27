@@ -31,4 +31,15 @@ Notes
 - `complaint_journey_replay.json`: the live workflow. n8n menu, Import from file. Open the **Settings** node and set the URLs and `telegram_chat_id`
   (inside Docker use `host.docker.internal` instead of `localhost`). Open the **14 Telegram** node and choose your Telegram credential. Run `python reset_demo.py` first, then Execute workflow.
 - `complaint_journey_replay_pinned.json`: the fallback. Same nodes with real recorded answers pinned, so it runs without the hub. It is labelled "Illustrative replay".
-- Not yet run inside a real n8n (the build sandbox could not install n8n). The calls themselves are proven by `replay_check.py`. If an import complains about a node, rebuild that node by hand from the table above (it is the same call).
+- **Tested in real n8n (27 Oct, n8n 2.x installed locally):** both files import, and the live workflow ran end to end against the hub and both portals: finder search, details, RB confirm/OTP/submit, PGRC confirm/OTP/submit, IF alert raised, message built ("Potential Overlapping Cases - Coordination Required ... Suggested lead bureau (suggestion only): RB ... dashboard link"). The only step that stops it is the last Telegram node, because it needs YOUR Telegram credential (below). The pinned file's recorded answers are used only when you press Execute workflow in the n8n editor (the command line ignores pinned data).
+
+## Telegram setup (5 minutes, once)
+1. In Telegram open @BotFather, send `/newbot`, copy the bot token.
+2. Send any message to your new bot, then open `https://api.telegram.org/bot<TOKEN>/getUpdates` in a browser and copy `chat.id` from the result.
+3. In n8n: Credentials, new "Telegram API", paste the token. Open the **14 Telegram** node and select that credential.
+4. In the **Settings** node, set `telegram_chat_id` to the chat id.
+5. `python reset_demo.py`, then Execute workflow. After recording, run `python reset_demo.py` again.
+No Telegram? Delete node 14 and show node 13's output (the alert message) on screen, or use the pinned file.
+
+## Run n8n on Windows
+`npx n8n` (needs Node 22, which you have) then open http://localhost:5678. Import from file: `complaint_journey_replay.json`. n8n runs on your laptop, so the URLs `localhost:8000/8001/8002` work as they are.

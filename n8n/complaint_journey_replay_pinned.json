@@ -1,8 +1,9 @@
 {
+  "id": "complaintReplayPinned",
   "name": "Complaint Journey Replay (pinned, illustrative)",
   "nodes": [
     {
-      "id": "37de050c-25c9-48a6-ba37-65bd2bb35338",
+      "id": "ae03c711-8ea3-4dde-8fd8-4bbd5c724e0d",
       "name": "Start replay",
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
@@ -13,7 +14,7 @@
       "parameters": {}
     },
     {
-      "id": "7340a539-5d1c-4805-a29b-de606fb33530",
+      "id": "58e0eda5-d4bc-40f1-a94a-62078416d8a1",
       "name": "Settings",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
@@ -25,37 +26,37 @@
         "assignments": {
           "assignments": [
             {
-              "id": "1af62118-8217-458d-93bc-b7e870c2f26c",
+              "id": "a75fed89-21a4-4899-8efd-6d846ac895de",
               "name": "hub_url",
               "value": "http://localhost:8000",
               "type": "string"
             },
             {
-              "id": "2e23fa79-4b7f-42e9-adde-1856d29e3911",
+              "id": "c9c904ce-0913-4ba9-aa9e-e48b6d5c5621",
               "name": "rb_url",
               "value": "http://localhost:8001",
               "type": "string"
             },
             {
-              "id": "aa823de2-f2af-4e4f-9a05-3604fa611807",
+              "id": "8bd3650e-d01f-4073-ba68-77022766c31f",
               "name": "pgrc_url",
               "value": "http://localhost:8002",
               "type": "string"
             },
             {
-              "id": "87a08de6-e1ec-47ce-887e-adc70b227a35",
+              "id": "2b37aa4d-62e9-4b00-9cd0-bede1a0d4300",
               "name": "dashboard_url",
               "value": "http://localhost:5173",
               "type": "string"
             },
             {
-              "id": "547eeed3-2deb-4358-a7e1-10ee9bdde1d1",
+              "id": "499d621f-aef8-46ee-9ae7-5377a489ab8f",
               "name": "college_query",
               "value": "Norvella Institute of Applied Sciences",
               "type": "string"
             },
             {
-              "id": "2af71ff4-f2bd-43a2-8e7b-e6679d63d77c",
+              "id": "acdb48bd-971a-4aba-a0cd-33ae89cd9be9",
               "name": "telegram_chat_id",
               "value": "REPLACE_WITH_YOUR_CHAT_ID",
               "type": "string"
@@ -66,7 +67,7 @@
       }
     },
     {
-      "id": "73bc267b-a5fa-48d4-825c-28b9602d439b",
+      "id": "5304cabc-03c6-428a-aa42-a5d262c483f5",
       "name": "1 Finder search",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
@@ -90,7 +91,7 @@
       }
     },
     {
-      "id": "f7ba8b2f-7aab-48d9-9c77-fd0ffa2a3bc6",
+      "id": "35c8f758-d7f2-4252-9d0c-443b9aa1ab09",
       "name": "2 Institution details",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
@@ -105,7 +106,7 @@
       }
     },
     {
-      "id": "2b584606-d0ca-4bdb-aa15-b7cf0846bfd5",
+      "id": "8925a9e4-cfa2-4529-bfe2-79fa53d7bb7b",
       "name": "3 Confirm card + map link",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
@@ -117,25 +118,25 @@
         "assignments": {
           "assignments": [
             {
-              "id": "4989132c-285e-46e4-81ca-96ebebad0157",
+              "id": "59f7d83e-f724-4a80-ae6b-57baaf5882ef",
               "name": "college_id",
               "value": "={{ $json.aicte_id }}",
               "type": "string"
             },
             {
-              "id": "dabf8bd5-7484-46fc-a860-e493edc6e894",
+              "id": "10d896d3-1c33-4e3a-9d4a-3034c758826a",
               "name": "college_name",
               "value": "={{ $json.official_name }}",
               "type": "string"
             },
             {
-              "id": "92c95555-b106-4aca-90c7-5635970717aa",
+              "id": "e27dd375-a96a-409c-982e-5c97eaf88d2d",
               "name": "address",
               "value": "={{ [$json.address_line, $json.area, $json.district, $json.state].filter(Boolean).join(', ') }}",
               "type": "string"
             },
             {
-              "id": "84e5eb03-290d-4e19-b1b8-fa25fb03a497",
+              "id": "d5e240f2-0328-479b-8d19-98143e35f2d9",
               "name": "map_link",
               "value": "=https://www.openstreetmap.org/?mlat={{ $json.lat }}&mlon={{ $json.lng }}#map=16/{{ $json.lat }}/{{ $json.lng }}",
               "type": "string"
@@ -146,7 +147,7 @@
       }
     },
     {
-      "id": "daa9e6c1-970c-425a-97ce-11304d6d945b",
+      "id": "6540902d-a9b2-4331-8a1e-17edf1876449",
       "name": "4 RB: confirm institution",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
@@ -164,7 +165,7 @@
       }
     },
     {
-      "id": "05df0cf2-660e-48b4-b280-7dafddc71aae",
+      "id": "0aa7a014-39c8-43f5-955a-50dc4ef62c60",
       "name": "5 RB: request OTP",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
@@ -182,7 +183,7 @@
       }
     },
     {
-      "id": "4a029e9e-e5eb-434e-8dd2-b6071601d4e7",
+      "id": "3b3d21d3-38a3-47ca-85a4-1cbf46c0ff6d",
       "name": "6 RB: verify OTP",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
@@ -200,7 +201,7 @@
       }
     },
     {
-      "id": "6c6b6cfa-098e-4ee8-9c8b-70a650f80586",
+      "id": "74cdea67-26dc-4631-99ea-992419197674",
       "name": "7 RB: submit complaint",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
@@ -218,7 +219,7 @@
       }
     },
     {
-      "id": "9dd56017-7a3b-4458-90cd-dc19aea5e9de",
+      "id": "77e25b89-0138-4242-980e-6e48b5c7dfee",
       "name": "8 PGRC: confirm institution",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
@@ -236,7 +237,7 @@
       }
     },
     {
-      "id": "668ffa33-d2da-4b21-a786-8eb3e88ae561",
+      "id": "0408b771-f120-4744-9680-daa944be8d65",
       "name": "9 PGRC: request OTP",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
@@ -254,7 +255,7 @@
       }
     },
     {
-      "id": "df0d587a-cf29-4c5d-ad09-f371eb547d1f",
+      "id": "13fc5dee-b2d6-440b-94ec-927e320fd3f0",
       "name": "10 PGRC: verify OTP",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
@@ -272,7 +273,7 @@
       }
     },
     {
-      "id": "bd91a060-dc11-4e20-b499-ec21d3328bbc",
+      "id": "d9c9bf85-fdc2-4034-a904-a3454b3349ba",
       "name": "11 PGRC: submit complaint",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
@@ -290,7 +291,7 @@
       }
     },
     {
-      "id": "b230b2b3-e45b-42aa-a953-618400b3478a",
+      "id": "8803f3ff-1533-4b01-990d-2153e9ffbb7c",
       "name": "12 Overlap alert raised?",
       "type": "n8n-nodes-base.if",
       "typeVersion": 2,
@@ -307,7 +308,7 @@
           },
           "conditions": [
             {
-              "id": "8fed893c-73c2-407c-9806-a030dd24ee3d",
+              "id": "4d066892-b244-4c1c-8dc0-fbb725d9e34b",
               "leftValue": "={{ $json.alerts_created.length }}",
               "rightValue": 0,
               "operator": {
@@ -322,7 +323,7 @@
       }
     },
     {
-      "id": "c8ef2d26-10bd-4792-b0b4-4259b5167e35",
+      "id": "4bff5dc6-ac91-4f47-a0ea-8172ca3577d0",
       "name": "13 Build alert message",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
@@ -334,7 +335,7 @@
         "assignments": {
           "assignments": [
             {
-              "id": "21715a92-04f9-43e7-bc4c-8b74a19386b1",
+              "id": "936f7f3d-97e9-48f5-870e-d41a36df8c5d",
               "name": "text",
               "value": "={{ '🚨 ' + $json.alerts_created[0].message + '\\n\\nCollege: ' + $json.alerts_created[0].institution + '\\nCases: ' + $json.alerts_created[0].cases.join(', ') + '\\nSuggested lead bureau (suggestion only): ' + ($json.alerts_created[0].suggested_lead.bureau || 'none') + '\\nOpen on the dashboard: ' + $('Settings').first().json.dashboard_url + $json.alerts_created[0].dashboard_link + '\\n\\nIllustrative replay (pinned data, the hub is not contacted). Officers decide.' }}",
               "type": "string"
@@ -345,7 +346,7 @@
       }
     },
     {
-      "id": "9f82a7df-d838-400c-acba-2d0c8bbab425",
+      "id": "c59712e8-f607-4703-b610-63372f2062ea",
       "name": "14 Telegram: notify officer",
       "type": "n8n-nodes-base.telegram",
       "typeVersion": 1.2,
@@ -362,7 +363,7 @@
       }
     },
     {
-      "id": "5d4e83d3-2fe5-4906-9a4c-7e450e3a52eb",
+      "id": "f85cb6bf-65ca-49ab-b27b-af1c083e72a2",
       "name": "No overlap, nothing to send",
       "type": "n8n-nodes-base.noOp",
       "typeVersion": 1,
@@ -373,7 +374,7 @@
       "parameters": {}
     },
     {
-      "id": "b57a38bf-1048-4bd5-91c5-b91c30657b07",
+      "id": "8027147d-7f5b-4854-8da6-39b103030f61",
       "name": "Note",
       "type": "n8n-nodes-base.stickyNote",
       "typeVersion": 1,
@@ -631,7 +632,7 @@
     "4 RB: confirm institution": [
       {
         "json": {
-          "institution_token": "eyJraW5kIjoiaW5zdCIsImlpZCI6IlNZTi0wMDQwIiwiaW5hbWUiOiJOb3J2ZWxsYSBJbnN0aXR1dGUgb2YgQXBwbGllZCBTY2llbmNlcyIsIm1ldGhvZCI6IlJFUE9SVEVSX0NPTkZJUk1FRCIsImFuc3dlcnMiOm51bGwsInBvcnRhbCI6IlJCIiwiZXhwIjoxNzkzMDQxNzU3LjU0MDU0OH0.5b91382dc8095990022d93bb2206349f4c1cb85972c4622fc39e02de787c8b92",
+          "institution_token": "eyJraW5kIjoiaW5zdCIsImlpZCI6IlNZTi0wMDQwIiwiaW5hbWUiOiJOb3J2ZWxsYSBJbnN0aXR1dGUgb2YgQXBwbGllZCBTY2llbmNlcyIsIm1ldGhvZCI6IlJFUE9SVEVSX0NPTkZJUk1FRCIsImFuc3dlcnMiOm51bGwsInBvcnRhbCI6IlJCIiwiZXhwIjoxNzkzMDgzNTU0Ljk0Mzc0NTZ9.061ad76cf1d8d31a6e9d68ebfd788b51b8d25c0fdeb535faac8f8e1ad87b76dc",
           "resolution_method": "REPORTER_CONFIRMED",
           "institution": {
             "aicte_id": "SYN-0040",
@@ -646,7 +647,7 @@
       {
         "json": {
           "demo_mode": true,
-          "demo_otp": "430037",
+          "demo_otp": "878498",
           "expires_in_minutes": 5,
           "message": "Demo mode: no SMS is sent, the code is shown here."
         }
@@ -655,7 +656,7 @@
     "6 RB: verify OTP": [
       {
         "json": {
-          "verification_token": "eyJraW5kIjoiY29udGFjdCIsImMiOiI5MDAwMDAwMjAxIiwicG9ydGFsIjoiUkIiLCJleHAiOjE3OTMwNDE3NTcuNjI4MDIzMX0.23a0ed3232297f53f6f025157289b73a42a6e0e2e4ba4650bb51cde91042b289",
+          "verification_token": "eyJraW5kIjoiY29udGFjdCIsImMiOiI5MDAwMDAwMjAxIiwicG9ydGFsIjoiUkIiLCJleHAiOjE3OTMwODM1NTQuOTU4MTg0N30.b8bc1323fa9c2d46b2ea7332c27375c695a63e40ab12a5c5af94aa43463fa652",
           "expires_in_minutes": 30
         }
       }
@@ -664,7 +665,7 @@
       {
         "json": {
           "portal_case_no": "RB-2026-1001",
-          "hub_case_id": "HUB-0151",
+          "hub_case_id": "HUB-0163",
           "sync_status": "synced",
           "hub_status": "Pending",
           "institution": {
@@ -680,7 +681,7 @@
     "8 PGRC: confirm institution": [
       {
         "json": {
-          "institution_token": "eyJraW5kIjoiaW5zdCIsImlpZCI6IlNZTi0wMDQwIiwiaW5hbWUiOiJOb3J2ZWxsYSBJbnN0aXR1dGUgb2YgQXBwbGllZCBTY2llbmNlcyIsIm1ldGhvZCI6IlJFUE9SVEVSX0NPTkZJUk1FRCIsImFuc3dlcnMiOm51bGwsInBvcnRhbCI6IlBHUkMiLCJleHAiOjE3OTMwNDE3NTcuNjkwODQ4fQ.47d954162542e4dae86b174e7fb1a1468b97c0f538cd5e513d68da3b55d5c039",
+          "institution_token": "eyJraW5kIjoiaW5zdCIsImlpZCI6IlNZTi0wMDQwIiwiaW5hbWUiOiJOb3J2ZWxsYSBJbnN0aXR1dGUgb2YgQXBwbGllZCBTY2llbmNlcyIsIm1ldGhvZCI6IlJFUE9SVEVSX0NPTkZJUk1FRCIsImFuc3dlcnMiOm51bGwsInBvcnRhbCI6IlBHUkMiLCJleHAiOjE3OTMwODM1NTQuOTkzMTAxMX0.e56d94a040bb7ef659fed5e0070701de22993270d0f79c07558500f7e039d751",
           "resolution_method": "REPORTER_CONFIRMED",
           "institution": {
             "aicte_id": "SYN-0040",
@@ -695,7 +696,7 @@
       {
         "json": {
           "demo_mode": true,
-          "demo_otp": "264437",
+          "demo_otp": "379461",
           "expires_in_minutes": 5,
           "message": "Demo mode: no SMS is sent, the code is shown here."
         }
@@ -704,7 +705,7 @@
     "10 PGRC: verify OTP": [
       {
         "json": {
-          "verification_token": "eyJraW5kIjoiY29udGFjdCIsImMiOiI5MDAwMDAwMjAyIiwicG9ydGFsIjoiUEdSQyIsImV4cCI6MTc5MzA0MTc1Ny42OTg4MjMyfQ.c7aa238399fb8d887ddfa270d41f58ea750cd2028a503d58fd97bd6aa9015bd8",
+          "verification_token": "eyJraW5kIjoiY29udGFjdCIsImMiOiI5MDAwMDAwMjAyIiwicG9ydGFsIjoiUEdSQyIsImV4cCI6MTc5MzA4MzU1NS4wMDA5MTY3fQ.6fd7c36594793ac28ce02d46230d8bb7cd67508de9db452b1b0460a910b82ae2",
           "expires_in_minutes": 30
         }
       }
@@ -713,7 +714,7 @@
       {
         "json": {
           "portal_case_no": "PGRC-2026-1001",
-          "hub_case_id": "HUB-0152",
+          "hub_case_id": "HUB-0164",
           "sync_status": "synced",
           "hub_status": "Pending",
           "institution": {
@@ -729,8 +730,8 @@
               "link_type": "CROSS_BUREAU",
               "institution": "Norvella Institute of Applied Sciences",
               "cases": [
-                "HUB-0152",
-                "HUB-0151"
+                "HUB-0164",
+                "HUB-0163"
               ],
               "reasons": {
                 "institution": "Norvella Institute of Applied Sciences",
@@ -744,8 +745,8 @@
                 ],
                 "same_category": false,
                 "open_since": {
-                  "HUB-0152": "2026-10-26",
-                  "HUB-0151": "2026-10-26"
+                  "HUB-0164": "2026-10-27",
+                  "HUB-0163": "2026-10-27"
                 },
                 "suggested_lead": {
                   "bureau": "RB",
@@ -758,7 +759,7 @@
                 "rule": "Rule 3: the older open case leads",
                 "decided_by": "rules"
               },
-              "dashboard_link": "/overlaps?link=143"
+              "dashboard_link": "/overlaps?link=151"
             }
           ],
           "last_error": null
