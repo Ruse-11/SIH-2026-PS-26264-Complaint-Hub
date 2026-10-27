@@ -58,7 +58,9 @@ function LeadPanel({ link, onChanged }) {
 function Reasons({ link }) {
   const r = link.reasons || {};
   return (
-    <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-slate-700">
+    <div className="mt-3 rounded border border-slate-200 bg-slate-50 p-3">
+    <div className="text-xs font-semibold uppercase tracking-wide text-slate-500">{r.manual ? "Why these are linked" : "Why the system suggests this"}</div>
+    <ul className="mt-1 list-disc space-y-1 pl-5 text-sm text-slate-700">
       {r.manual ? (
         <>
           <li>Linked by {r.created_by} (an officer's own decision, not a system suggestion).</li>
@@ -84,6 +86,7 @@ function Reasons({ link }) {
         </>
       )}
     </ul>
+    </div>
   );
 }
 
