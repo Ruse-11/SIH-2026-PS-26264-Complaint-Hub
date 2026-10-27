@@ -1,0 +1,11 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Government fit</title><link rel="stylesheet" href="slides.css">
+<style>.grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; } .wide { grid-column: span 3; } .later { border-top-color: #9ca3af; }</style></head><body>
+<div class="tri"><i></i><i></i><i></i></div>
+<header><h1>Built for government servers and legacy systems</h1><p>Light, local, no paid cloud services, and nothing existing has to change.</p></header>
+<div class="mock">PROTOTYPE<br>synthetic data</div>
+<main><div class="grid">
+ <div class="card"><span class="tag">SPEED</span><h3>Fast on modest servers</h3><ul><li>Matching only inside one institution</li><li>Lookups by institution ID; SQLite now, PostgreSQL later</li><li>Text similarity runs locally (small ONNX model); simple keyword scoring if the model is unavailable</li><li>Heavy checks run when a complaint arrives, not on every page view</li></ul></div>
+ <div class="card"><span class="tag">LEGACY</span><h3>Works with what exists</h3><ul><li>Portals are not modified; they send one JSON call with an API key</li><li>Each portal keeps its own database and case numbers</li><li>Bureau systems can post actions to the hub (<code>POST /api/actions</code>)</li><li>Rules (category owner, SLA, action stance) are tables an administrator can edit</li></ul></div>
+ <div class="card"><span class="tag">TRUST</span><h3>Private and accountable</h3><ul><li>Synthetic data only; reporter phone stored only as a hash</li><li>Role-based views; signed login tokens</li><li>Every decision and case-file download is in the audit trail</li><li>No external AI service; humans decide</li></ul></div>
+ <div class="card wide later"><span class="tag" style="background:#eee;color:#444">FUTURE SCOPE</span><h3>Next steps for a real rollout</h3><ul style="columns:2"><li>Aadhaar / DigiLocker verification instead of mock OTP</li><li>Government single sign-on for officers</li><li>Email / SMS notifications</li><li>PostgreSQL and a queue for very high volume</li><li>Integration with the live AICTE portal</li><li>Multilingual matching; case graph view</li></ul></div>
+</div></main></body></html>

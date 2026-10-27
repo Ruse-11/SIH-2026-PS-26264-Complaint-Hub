@@ -1,0 +1,39 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><title>Architecture</title><link rel="stylesheet" href="slides.css">
+<style>
+.flow { display: grid; grid-template-columns: 1fr 60px 1.1fr 60px 1.5fr 60px 1fr; align-items: center; gap: 0; margin-top: 8px; }
+.arrow { text-align: center; color: var(--saffron); font-size: 34px; font-weight: 700; }
+.arrow small { display: block; font-size: 11px; color: var(--muted); font-weight: 600; line-height: 1.2; }
+.stack { display: grid; gap: 14px; }
+.hub { border-top-color: var(--saffron); background: #fffaf2; } .hub .step { display: flex; gap: 8px; align-items: baseline; font-size: 14px; margin: 4px 0; }
+.hub .step b { background: var(--navy); color: #fff; border-radius: 50%; width: 22px; height: 22px; display: inline-grid; place-items: center; font-size: 12px; flex: none; }
+.rb { border-top-color: #1b3a6b; } .pg { border-top-color: #0b6b4f; } .pg h3 { color: #0b6b4f; }
+.foot { margin-top: 18px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+</style></head><body>
+<div class="tri"><i></i><i></i><i></i></div>
+<header><h1>How it fits: a hub behind the existing portals</h1><p>The two government portals are not modified. The hub is the "brain" that sees every complaint about every institution.</p></header>
+<div class="mock">PROTOTYPE<br>synthetic data</div>
+<main>
+ <div class="flow">
+  <div class="card"><h3>Reporter</h3><p>Student, parent, alumni or faculty.</p><p>Picks the institution first (Institution Finder + map), verifies mobile (mock OTP).</p></div>
+  <div class="arrow">&rarr;</div>
+  <div class="stack">
+    <div class="card rb"><span class="tag">:8001 · own database</span><h3>RB portal</h3><p>Regulation Bureau</p></div>
+    <div class="card pg"><span class="tag">:8002 · own database</span><h3>PGRC portal</h3><p>Public Grievance Redressal Cell</p></div>
+  </div>
+  <div class="arrow">&rarr;<small>POST /api/intake<br>API key per portal</small></div>
+  <div class="card hub"><span class="tag">:8000 · hub database</span><h3>Complaint Monitoring Hub</h3>
+    <div class="step"><b>1</b> Check the confirmed institution ID exists (never guesses)</div>
+    <div class="step"><b>2</b> Reporter fingerprint (hash only, no raw phone)</div>
+    <div class="step"><b>3</b> Match within the same institution: duplicate, corroboration, cross-bureau overlap, conflict</div>
+    <div class="step"><b>4</b> Priority, SLA, stalled-case alerts, lead-bureau suggestion</div>
+    <div class="step"><b>5</b> Audit trail of every decision</div>
+  </div>
+  <div class="arrow">&harr;</div>
+  <div class="card"><h3>Officer dashboard</h3><p>Role-based: RB, PGRC, other bureaus, regional, senior management, competent authority.</p><p><b>Officers confirm or reject. The system only suggests.</b></p></div>
+ </div>
+ <div class="foot">
+  <div class="card"><h3>Why a hub?</h3><p>Portals stay untouched, so there is no risk to live systems. One place sees all bureaus.</p></div>
+  <div class="card"><h3>Why per institution?</h3><p>Every comparison is inside one college: small, fast and fewer false matches.</p></div>
+  <div class="card"><h3>If the hub is down</h3><p>The portal keeps the complaint and retries automatically (outbox). Nothing is lost.</p></div>
+ </div>
+</main></body></html>
