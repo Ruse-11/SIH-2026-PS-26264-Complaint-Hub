@@ -168,10 +168,10 @@ def main():
         # ---- 1. Member 1 (about 17 s): the problem and the architecture ----
         if 1 in want:
             s = Scene(browser, "1_member1_architecture", "1 · One hub behind the two existing portals")
-            s.go(SLIDES + "/architecture.html", wait=8)
-            s.go(RB, wait=2.5)
+            s.go(SLIDES + "/architecture.html", wait=10)
+            s.go(RB, wait=1.4)
             s.caption("1 · Regulation Bureau portal")
-            s.go(PGRC, wait=2.5)
+            s.go(PGRC, wait=1.9)
             s.caption("1 · Public Grievance Redressal Cell portal: a different portal and database")
             s.finish()
 

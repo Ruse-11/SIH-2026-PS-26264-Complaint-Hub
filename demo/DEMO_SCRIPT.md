@@ -1,18 +1,21 @@
-# Demo voice-over script (6 members, total 2:57, limit 3:00)
+# Demo voice-over script (6 members, total 2:58, limit 3:00)
 
 Record your voice while watching the matching clip. Speak at a calm pace, about 2 words per second. Clips are in `demo/output/`; `demo_full.mp4` is all six joined.
 
 | # | Member | Clip | Length |
 |---|--------|------|--------|
-| 1 | Member 1 | 1_member1_architecture | 15 s |
+| 1 | Member 1 | 1_member1_architecture | 16 s |
 | 2 | Member 2 | 2_member2_finder_and_map | 38 s |
 | 3 | Member 3 | 3_member3_corroboration_live | 63 s |
 | 4 | Member 4 | 4_member4_officer_actions | 23 s |
 | 5 | Member 5 | 5_member5_dashboard_and_reports | 23 s |
 | 6 | Member 6 | 6_member6_government_fit | 16 s |
 
-## 1. Member 1: the problem and the architecture (15 s, about 30 words)
+## 1. Member 1: the problem and the architecture (16 s, about 36 words)
+Architecture slide (0:00-0:10):
 "Complaints about one college reach different AICTE bureaus separately, so nobody sees the full picture. We add one hub behind the existing portals. The portals stay untouched, and the hub does the analysis."
+Portals on screen (0:10-0:15):
+"Here are the two portals, the Regulation Bureau and the Public Grievance Cell, each with its own database."
 
 ## 2. Member 2: Institution Finder, map, verification (38 s, about 75 words)
 "Every reporter starts by finding the college. If unsure, a few questions narrow it down, and if it is not listed, the reporter says so and an officer assigns it later. Our search forgives mistakes: 'kstora' and 'estora' both find Kestora, and typos in a full name still work. The reporter confirms the college on a card with its location from the registry, so it can be verified. Verification here is a mock OTP; in production it would be Aadhaar through DigiLocker."
