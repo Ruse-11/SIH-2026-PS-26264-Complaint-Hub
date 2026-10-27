@@ -1,4 +1,4 @@
-# Demo voice-over script (6 members, total 2:54, limit 3:00)
+# Demo voice-over script (6 members, total 2:57, limit 3:00)
 
 Record your voice while watching the matching clip. Speak at a calm pace, about 2 words per second. Clips are in `demo/output/`; `demo_full.mp4` is all six joined.
 
@@ -6,7 +6,7 @@ Record your voice while watching the matching clip. Speak at a calm pace, about 
 |---|--------|------|--------|
 | 1 | Member 1 | 1_member1_architecture | 15 s |
 | 2 | Member 2 | 2_member2_finder_and_map | 38 s |
-| 3 | Member 3 | 3_member3_corroboration_live | 59 s |
+| 3 | Member 3 | 3_member3_corroboration_live | 63 s |
 | 4 | Member 4 | 4_member4_officer_actions | 23 s |
 | 5 | Member 5 | 5_member5_dashboard_and_reports | 23 s |
 | 6 | Member 6 | 6_member6_government_fit | 16 s |
@@ -17,7 +17,7 @@ Record your voice while watching the matching clip. Speak at a calm pace, about 
 ## 2. Member 2: Institution Finder, map, verification (38 s, about 75 words)
 "Every reporter starts by finding the college. If unsure, a few questions narrow it down, and if it is not listed, the reporter says so and an officer assigns it later. Our search forgives mistakes: 'kstora' and 'estora' both find Kestora, and typos in a full name still work. The reporter confirms the college on a card with its location from the registry, so it can be verified. Verification here is a mock OTP; in production it would be Aadhaar through DigiLocker."
 
-## 3. Member 3: the complaint hub and live corroboration (59 s, about 115 words)
+## 3. Member 3: the complaint hub and live corroboration (63 s, about 115 words)
 "Now a second, independent reporter files on the other portal about the same lab problem. Next, the hub: sign-in is role based, with one account per role. Here is our core idea, corroboration. Two different reporters, same college, same problem, and the hub suggests linking them, with the reasons shown. It only suggests. The officer reads the reasons, adds a note and confirms; that is the human in the loop. Only after confirmation does the priority rise, and the boost is capped so fake complaints cannot game it. The case file can be downloaded for the record. The other overlap types, cross-bureau, conflicting actions and same-reporter duplicates, are in the same screen."
 
 ## 4. Member 4: officer actions (23 s, about 45 words)
