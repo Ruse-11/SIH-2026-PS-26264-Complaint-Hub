@@ -28,3 +28,7 @@ main table tbody tr:nth-child(even) { background: #f8fafc; }
 main table tbody tr:hover { background: #eef3fb; }
 a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 3px solid #f59e0b; outline-offset: 2px; }
 main table td:first-child a { white-space: nowrap; }
+
+/* Cases table: every cell has the same padding and starts at the top, so rows line up */
+.cases-table th, .cases-table td { padding: 10px 10px; text-align: left; vertical-align: top; overflow-wrap: anywhere; }
+.cases-table td a { white-space: nowrap; }

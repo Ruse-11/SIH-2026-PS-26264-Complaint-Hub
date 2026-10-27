@@ -102,23 +102,24 @@ export default function Cases() {
                 className="rounded bg-slate-900 px-3 py-1.5 text-sm text-white disabled:opacity-40">{busy ? "Preparing…" : "Download case file (CSV)"}</button>
             : <span className="text-xs text-slate-500">Your role cannot export.</span>}>
           <div className="overflow-x-auto">
-            <table className="w-full text-sm">
+            <table className="cases-table w-full table-fixed text-sm">
+              <colgroup><col style={{ width: "11%" }} /><col style={{ width: "16%" }} /><col style={{ width: "11%" }} /><col style={{ width: "9%" }} /><col style={{ width: "9%" }} /><col style={{ width: "8%" }} /><col style={{ width: "13%" }} /><col style={{ width: "17%" }} /><col style={{ width: "6%" }} /></colgroup>
               <thead><tr className="text-left text-xs text-slate-500">
                 <th>Case</th><th>Institution</th><th>Category</th><th>Status</th><th>Bureau / officer</th><th>Received</th><th>Last action</th><th>Next action</th><th>Priority</th>
               </tr></thead>
               <tbody>{list.data.items.map((c) => (
-                <tr key={c.hub_case_id} className="border-t align-top">
-                  <td className="py-2"><Link className="font-medium text-blue-700 hover:underline" to={"/cases/" + c.hub_case_id}>{c.source_case_no}</Link>
+                <tr key={c.hub_case_id} className="border-t">
+                  <td><Link className="font-medium text-blue-700 hover:underline" to={"/cases/" + c.hub_case_id}>{c.source_case_no}</Link>
                     <div className="text-xs text-slate-400">{c.hub_case_id}</div></td>
                   <td>{c.institution_name || <em className="text-slate-500">not identified</em>}<div className="text-xs text-slate-400">{c.institution_id}</div></td>
                   <td>{c.category}</td>
                   <td><StatusBadge status={c.status} />{c.overdue && <div className="mt-1 text-xs font-medium text-red-700">beyond timeline</div>}</td>
                   <td>{c.assigned_bureau}<div className="text-xs text-slate-400">{c.assigned_officer}</div></td>
-                  <td>{fmtDate(c.received_at)}</td>
+                  <td className="whitespace-nowrap">{fmtDate(c.received_at)}</td>
                   <td>{c.last_action || "–"}<div className="text-xs text-slate-400">{fmtDate(c.last_action_at)}</div></td>
                   <td>{c.next_action || <span className="text-slate-400">–</span>}
                     {c.next_action && <div className={"text-xs " + (c.next_action_overdue ? "font-medium text-red-700" : "text-slate-400")}>due {fmtDate(c.next_action_due)}{c.next_action_overdue ? " (overdue)" : ""}</div>}</td>
-                  <td>{c.priority_score}{c.suggestions_waiting > 0 && <div className="text-xs text-amber-700">{c.suggestions_waiting} suggestion(s)</div>}</td>
+                  <td>{c.priority_score}{c.suggestions_waiting > 0 && <div className="whitespace-nowrap text-xs text-amber-700">{c.suggestions_waiting} to review</div>}</td>
                 </tr>
               ))}</tbody>
             </table>

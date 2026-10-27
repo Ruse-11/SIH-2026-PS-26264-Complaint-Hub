@@ -23,13 +23,13 @@ export default function Dashboard() {
       </div>
 
       <div className="grid grid-cols-2 gap-3 md:grid-cols-4 xl:grid-cols-8">
-        <Tile label="Total cases" value={t.total} to="/cases" />
-        <Tile label="Pending" value={t.pending} tone="amber" to="/cases?status=Pending" />
-        <Tile label="Under process" value={t.under_process} tone="blue" to="/cases?status=Under Process" />
-        <Tile label="Disposed" value={t.disposed} tone="green" to="/cases?status=Disposed" />
-        <Tile label="Transferred" value={t.transferred} tone="purple" to="/cases?status=Transferred" />
-        <Tile label="Escalated" value={t.escalated} tone="red" to="/cases?status=Escalated" />
-        <Tile label="Beyond timeline" value={t.overdue} tone="red" to="/cases?overdue=true" hint="open past expected date" />
+        <Tile label="Total cases" value={t.total} to="/cases" hint="all cases in your view" />
+        <Tile label="Pending" value={t.pending} tone="amber" to="/cases?status=Pending" hint="not started" />
+        <Tile label="Under process" value={t.under_process} tone="blue" to="/cases?status=Under Process" hint="being handled" />
+        <Tile label="Disposed" value={t.disposed} tone="green" to="/cases?status=Disposed" hint="closed" />
+        <Tile label="Transferred" value={t.transferred} tone="purple" to="/cases?status=Transferred" hint="handed to another bureau" />
+        <Tile label="Escalated" value={t.escalated} tone="red" to="/cases?status=Escalated" hint="with the competent authority" />
+        <Tile label="Beyond timeline" value={t.overdue} tone="red" to="/cases?overdue=true" hint="open, past expected date" />
         <Tile label="Needs review" value={t.unverified} to="/needs-review" hint="college not identified" />
       </div>
 
@@ -130,8 +130,8 @@ export default function Dashboard() {
 }
 
 function Mini({ label, value, to, tone }) {
-  const body = <div className="rounded-lg border p-3"><div className={"text-2xl font-semibold " + (tone === "red" && value > 0 ? "text-red-700" : "")}>{value}</div><div className="text-xs text-slate-500">{label}</div></div>;
-  return to ? <Link to={to}>{body}</Link> : body;
+  const body = <div className="h-full rounded-lg border p-3"><div className={"text-2xl font-semibold " + (tone === "red" && value > 0 ? "text-red-700" : "")}>{value}</div><div className="text-xs text-slate-500">{label}</div></div>;
+  return to ? <Link to={to} className="block h-full">{body}</Link> : body;
 }
 
 function Watch({ title, total, rows, detail }) {

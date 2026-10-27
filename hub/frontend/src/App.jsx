@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
-import InstitutionSuggest from "./components/InstitutionSuggest.jsx";
 import { ToastProvider } from "./components/ui.jsx";
-import { Navigate, NavLink, Outlet, Route, Routes, useNavigate } from "react-router-dom";
+import { Navigate, NavLink, Outlet, Route, Routes } from "react-router-dom";
 import { useAuth } from "./auth.jsx";
 import Login from "./pages/Login.jsx";
 import Dashboard from "./pages/Dashboard.jsx";
@@ -59,18 +58,6 @@ const SCOPE_TEXT = {
 // Permissions that change data. A role with none of them is read-only.
 const ACTIONS = ["can_log_actions", "can_decide_links", "can_transfer", "can_escalate", "can_decide_lead"];
 
-// Search box in the header: jumps to the case list filtered by what was typed (name, AICTE ID or case ID).
-function HeaderSearch() {
-  const navigate = useNavigate();
-  const [text, setText] = useState("");
-  return (
-    <InstitutionSuggest id="header-search" className="max-w-md flex-1" value={text} onChange={setText}
-      placeholder="Search institution, AICTE ID or case ID…"
-      onPick={(c) => { setText(""); navigate("/cases?institution_id=" + c.aicte_id); }}
-      onSubmit={(t) => t && navigate("/cases?q=" + encodeURIComponent(t))} />
-  );
-}
-
 // Sidebar + header around every page after login.
 function Shell() {
   const { user, logout } = useAuth();
@@ -116,9 +103,6 @@ function Shell() {
           ))}
         </div>
       </nav>
-      <div className="border-b bg-white px-6 py-2">
-        <div className="mx-auto max-w-screen-2xl"><HeaderSearch /></div>
-      </div>
       <main className="mx-auto max-w-screen-2xl p-6">
         <Outlet />
       </main>

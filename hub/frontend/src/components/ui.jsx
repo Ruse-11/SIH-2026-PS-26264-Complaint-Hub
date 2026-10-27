@@ -71,13 +71,13 @@ const BORDER = { slate: "border-l-slate-500", red: "border-l-red-600", amber: "b
 export function Tile({ label, value, tone = "slate", to, hint }) {
   const tones = { slate: "text-slate-900", red: "text-red-700", amber: "text-amber-700", green: "text-green-700", blue: "text-blue-700", purple: "text-purple-700" };
   const body = (
-    <div className={"rounded-xl border border-l-4 bg-white p-4 hover:bg-slate-50 " + (BORDER[tone] || "border-l-slate-500")}>
+    <div className={"flex h-full flex-col rounded-xl border border-l-4 bg-white p-4 hover:bg-slate-50 " + (BORDER[tone] || "border-l-slate-500")}>
       <div className="text-xs uppercase tracking-wide text-slate-500">{label}</div>
       <div className={"mt-1 text-3xl font-semibold " + tones[tone]}>{value}</div>
-      {hint && <div className="mt-1 text-xs text-slate-500">{hint}</div>}
+      <div className="mt-1 min-h-8 text-xs text-slate-500">{hint}</div>
     </div>
   );
-  return to ? <Link to={to}>{body}</Link> : body;
+  return to ? <Link to={to} className="block h-full">{body}</Link> : body;
 }
 
 export function Panel({ title, right, children }) {
