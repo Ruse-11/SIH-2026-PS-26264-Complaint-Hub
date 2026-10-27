@@ -24,7 +24,7 @@ OUT = ROOT / "demo" / "output"
 SLIDES = (ROOT / "demo" / "slides").as_uri()
 HUB, RB, PGRC = "http://localhost:5173", "http://localhost:8001", "http://localhost:8002"
 COLLEGE = "Norvella Institute of Applied Sciences"  # SYN-0040, the clean demo college
-SIZE = {"width": 1280, "height": 720}
+SIZE = {"width": 1920, "height": 1080}  # full page visible (no zoomed or cropped look)
 
 CURSOR_JS = """
 (() => {
@@ -120,28 +120,37 @@ def check_ready():
             sys.exit(f"The {name} is not running ({e}). Start it with: python run_all.py")
 
 
-def post(base, path, body):
-    req = urllib.request.Request(base + path, data=json.dumps(body).encode(), headers={"Content-Type": "application/json"})
+def post(base, path, body, token=None):
+    headers = {"Content-Type": "application/json", **({"Authorization": "Bearer " + token} if token else {})}
+    req = urllib.request.Request(base + path, data=json.dumps(body).encode(), headers=headers)
     return json.load(urllib.request.urlopen(req, timeout=20))
 
 
-def file_by_api(base, phone, category, title, text):
-    """The second reporter's complaint, sent to the portal without filming it (the same calls the portal page makes)."""
-    inst = post(base, "/institution/confirm", {"institution_id": "SYN-0040", "resolution_method": "REPORTER_CONFIRMED"})
-    otp = post(base, "/otp/request", {"contact": phone})
-    ver = post(base, "/otp/verify", {"contact": phone, "code": otp["demo_otp"]})
-    return post(base, "/submit", {"institution_token": inst["institution_token"], "verification_token": ver["verification_token"],
-                                  "reporter_type": "student", "category": category, "title": title, "description": text, "severity": 3})
-
-
-def overlap_link():
-    """The dashboard link of the waiting overlap at the demo college, read from the hub API."""
+def link_id(kind):
+    """The id of the waiting suggestion of this kind (CORROBORATION, CROSS_BUREAU...) at the demo college SYN-0040."""
     token = post("http://localhost:8000", "/api/auth/login", {"username": "rb.officer", "password": "demo123"})["token"]
     req = urllib.request.Request("http://localhost:8000/api/matching/links?status=SUGGESTED", headers={"Authorization": "Bearer " + token})
     for l in json.load(urllib.request.urlopen(req, timeout=10)):
-        if l["institution"]["aicte_id"] == "SYN-0040" and l["link_type"] == "CROSS_BUREAU":
-            return f"/overlaps?link={l['id']}"
-    sys.exit("No overlap found at SYN-0040. Run python reset_demo.py and record again from scene 1.")
+        if l["institution"]["aicte_id"] == "SYN-0040" and l["link_type"] == kind:
+            return l["id"]
+    sys.exit(f"No {kind} suggestion at SYN-0040. Run python reset_demo.py and record again from scene 1.")
+
+
+RB_TEXT = "The laboratory equipment has been out of order for months and students cannot do practicals."
+PG_TEXT = "Laboratory equipment has been broken for months and the students are unable to do their practicals."
+
+
+def fill_form_and_submit(s, phone, text, title, wait_after=2.0, d=12):
+    """Steps 1 to 4 of the reporter journey once the college has been confirmed on the card."""
+    s.click("#finder-yes", wait=0.4)
+    s.type("#contact", phone, delay=20, wait=0.2)
+    s.click("#send-otp", wait=0.5)
+    s.click("#use-code", wait=0.3)
+    s.click("#verify-otp", wait=0.6)
+    s.page.select_option("#f-category", "Infrastructure/Lab")
+    s.type("#f-title", title, delay=d, wait=0.1)
+    s.type("#f-description", text, delay=4, wait=0.3)
+    s.click("#submit-complaint", wait=wait_after)
 
 
 def main():
@@ -151,77 +160,78 @@ def main():
     for f in OUT.glob("*"):
         if f.is_file() and f.name[0].isdigit() and int(f.name[0]) in want:
             f.unlink()
-        elif f.is_file() and f.name == "demo_full.mp4":
+        elif f.is_file() and f.name.startswith("demo_full"):
             f.unlink()
     with sync_playwright() as p:
         browser = p.chromium.launch()
 
-        # ---- 1. Member 1 (about 26 s): the problem and the architecture ----
+        # ---- 1. Member 1 (about 17 s): the problem and the architecture ----
         if 1 in want:
             s = Scene(browser, "1_member1_architecture", "1 · One hub behind the two existing portals")
-            s.go(SLIDES + "/architecture.html", wait=18)
-            s.go(RB, wait=5)
+            s.go(SLIDES + "/architecture.html", wait=8)
+            s.go(RB, wait=2.5)
             s.caption("1 · Regulation Bureau portal")
-            s.go(PGRC, wait=5)
-            s.caption("1 · Public Grievance Redressal Cell portal: a different portal, a different database")
+            s.go(PGRC, wait=2.5)
+            s.caption("1 · Public Grievance Redressal Cell portal: a different portal and database")
             s.finish()
 
-        # ---- 2. Member 2 (about 28 s): Institution Finder, map, verification ----
+        # ---- 2. Member 2 (about 38 s): search power, guided questions, map, verification ----
         if 2 in want:
-            s = Scene(browser, "2_member2_finder_and_map", "2 · Institution Finder: the reporter confirms the exact college")
-            s.go(RB, wait=1)
-            s.type("input[type=text]", COLLEGE, delay=30, wait=1.5)
-            s.click(".fcard", wait=13)  # confirm card with the map: the key moment
-            s.caption("2 · The hub never guesses the college. Then mobile verification (demo OTP)")
-            s.click("#finder-yes", wait=0.5)
-            s.type("#contact", "9000000301", delay=20, wait=0.2)
-            s.click("#send-otp", wait=0.5)
-            s.click("#use-code", wait=0.3)
-            s.click("#verify-otp", wait=0.6)
-            s.page.select_option("#f-category", "Infrastructure/Lab")
-            s.type("#f-title", "Laboratory equipment not working", delay=12, wait=0.1)
-            s.type("#f-description", "The laboratory equipment has been out of order for months and students cannot do practicals.", delay=4, wait=0.3)
-            s.click("#submit-complaint", wait=5)
-            s.finish()
-
-        # ---- 3. Member 3 (about 30 s): overlap types ----
-        if 3 in want:
-            s = Scene(browser, "3_member3_overlap_detection", "3 · A second reporter files on the other portal")
-            s.go(PGRC, wait=0.5)
-            result = file_by_api(PGRC, "9000000302", "Fee/Refund", "Refund not returned",
-                                 "The refundable deposit has not been returned after I withdrew from the programme.")
-            alerts = result.get("alerts_created") or []
-            link = alerts[0]["dashboard_link"] if alerts else "/overlaps"
-            s.pause(2.5)
-            s.caption("3 · Instantly: Potential Overlapping Cases – Coordination Required")
-            s.login("rb.officer", link)
-            s.page.locator("#link-" + link.split("=")[-1]).scroll_into_view_if_needed()
-            s.pause(8)
-            s.caption("3 · Corroboration: independent reporters, same problem")
-            s.click("button:has-text('Corroboration')", wait=1)
-            s.scroll(200, 1.5)
-            s.pause(2)
-            s.caption("3 · Conflict: show-cause by one bureau, closure by another")
-            s.click("button:has-text('Conflicting actions')", wait=1)
-            s.scroll(200, 1.5)
-            s.pause(3)
-            s.caption("3 · Same reporter on both portals = duplicate")
-            s.click("button:has-text('Same reporter')", wait=1)
-            s.pause(3)
-            s.finish()
-
-        # ---- 4. Member 4 (about 32 s): what officers do ----
-        if 4 in want:
-            s = Scene(browser, "4_member4_officer_actions", "4 · The officer decides: confirm the link")
-            link = overlap_link()
-            card = "#link-" + link.split("=")[-1]  # the overlap at the demo college (not the first card on the page)
-            s.login("rb.officer", link)
-            s.page.locator(card).scroll_into_view_if_needed()
+            s = Scene(browser, "2_member2_finder_and_map", "2 · Institution Finder: not sure? Answer a few questions")
+            s.go(RB, wait=0.8)
+            s.click("text=Not sure? Answer a few questions", wait=2.5)
+            s.click("button:has-text('Back to search')", wait=0.5)
+            s.caption("2 · Not listed? The reporter says so, and an officer assigns it later")
+            s.click("text=My institution isn't listed", wait=2.2)
+            s.click("button:has-text('Back to search')", wait=0.5)
+            s.caption("2 · Search power: a missing first letter ('kstora') still finds the college")
+            s.type("input[type=text]", "kstora", delay=70, wait=1.6)
+            s.caption("2 · Or a spelling slip ('estora')")
+            s.page.fill("input[type=text]", "")
+            s.type("input[type=text]", "estora", delay=70, wait=1.6)
+            s.caption("2 · Typing the college name with typos")
+            s.page.fill("input[type=text]", "")
+            s.type("input[type=text]", "norvela institue of applied", delay=30, wait=1.6)
+            s.click(".fcard", wait=6)  # the confirm card with the location
+            s.caption("2 · The college's location is shown from the registry, for verification")
             s.pause(1.5)
-            s.type(card + " input[placeholder='Note (optional)']", "Same college, two bureaus. Coordinate.", delay=25, wait=0.4)
-            s.click(card + " button:has-text('Confirm link')", wait=3.5)
-            s.caption("4 · Log an action. The hub checks it against the other bureau")
+            s.caption("2 · Mock OTP in the prototype. In production: Aadhaar through DigiLocker")
+            fill_form_and_submit(s, "9000000301", RB_TEXT, "Laboratory equipment not working", wait_after=2.5)
+            s.finish()
+
+        # ---- 3. Member 3 (about 55 s): live corroboration, human in the loop ----
+        if 3 in want:
+            s = Scene(browser, "3_member3_corroboration_live", "3 · A second, independent reporter files on the other portal")
+            s.go(PGRC, wait=0.5)
+            s.type("input[type=text]", COLLEGE, delay=12, wait=1.2)
+            s.click(".fcard", wait=1.2)
+            fill_form_and_submit(s, "9000000302", PG_TEXT, "Lab equipment broken for months", wait_after=2)
+            s.caption("3 · The complaint hub: role-based sign-in, one account per role")
+            s.go(HUB + "/login", wait=3)
+            s.click("button:has-text('RB officer')", wait=2.5)
+            s.caption("3 · Corroboration: independent reporters, same problem (potential priority boost)")
+            s.go(HUB + f"/overlaps?link={link_id('CORROBORATION')}", wait=1.5)
+            s.page.locator("#link-" + str(link_id("CORROBORATION"))).scroll_into_view_if_needed()
+            s.pause(9)
+            s.caption("3 · Human in the loop: the officer confirms, and only then does priority rise")
+            card = "#link-" + str(link_id("CORROBORATION"))
+            s.type(card + " input[placeholder='Note (optional)']", "Two reporters, same lab problem.", delay=25, wait=0.4)
+            s.click(card + " button:has-text('Confirm link')", wait=4)
+            s.caption("3 · Priority updated. The case file downloads for the record")
             s.go(HUB + "/cases?q=RB-2026-1001", wait=1.5)
+            s.click("a:has-text('RB-2026-1001')", wait=3)
+            s.click("#download-case-file", wait=3)
+            s.caption("3 · Other overlap types: cross-bureau, conflicting actions, same-reporter duplicates")
+            s.go(HUB + "/overlaps", wait=1)
+            s.click("button:has-text('Conflicting actions')", wait=2)
+            s.click("button:has-text('Same reporter')", wait=2)
+            s.finish()
+
+        # ---- 4. Member 4 (about 26 s): officer actions, audit ----
+        if 4 in want:
+            s = Scene(browser, "4_member4_officer_actions", "4 · Officer actions: the hub checks them against the other bureau")
+            s.login("rb.officer", "/cases?q=RB-2026-1001")
+            s.pause(0.8)
             s.click("a:has-text('RB-2026-1001')", wait=1.2)
             s.scroll(450, 1.2)
             s.click("button:has-text('Take enforcement action')", wait=0.8)
@@ -229,44 +239,44 @@ def main():
             s.type("#action-remarks", "Notice issued on the lab conditions.", delay=20, wait=0.2)
             s.type("#next-step", "Review the institution's reply", delay=20, wait=0.3)
             s.click("button:has-text('Log action')", wait=2.5)
-            s.caption("4 · Action history and next action; every decision is in the audit trail")
+            s.caption("4 · Action history and next action. Also: transfer, escalate, link related cases")
             s.scroll(-700, 1)
             s.pause(2.5)
             s.login("senior.mgmt", "/audit")
+            s.caption("4 · Audit trail: every decision is recorded")
             s.pause(3.5)
             s.finish()
 
-        # ---- 5. Member 5 (about 30 s): dashboard, search, alerts, reports ----
+        # ---- 5. Member 5 (about 26 s): dashboard, search, alerts, reports ----
         if 5 in want:
             s = Scene(browser, "5_member5_dashboard_and_reports", "5 · Dashboard for senior management: live numbers")
             s.login("senior.mgmt", "/")
-            s.pause(4)
-            s.scroll(560, 2.5)
-            s.pause(2)
+            s.pause(2.5)
+            s.scroll(560, 2)
+            s.pause(1)
             s.caption("5 · Search and filters: institution, AICTE ID, case ID, bureau, region, status, date")
-            s.go(HUB + "/cases?q=Maventra", wait=4)
+            s.go(HUB + "/cases?q=Maventra", wait=3)
             s.caption("5 · Alerts: what needs a decision, and the time watch")
             s.go(HUB + "/alerts", wait=1)
-            s.click("text=Time watch", wait=3)
+            s.click("text=Time watch", wait=2.5)
             s.caption("5 · Reports with CSV export")
-            s.go(HUB + "/reports", wait=4)
+            s.go(HUB + "/reports", wait=3)
             s.caption("5 · Insights: plain rules over live data")
-            s.go(HUB + "/insights", wait=4)
+            s.go(HUB + "/insights", wait=3)
             s.finish()
 
-        # ---- 6. Member 6 (about 28 s): government fit and close ----
+        # ---- 6. Member 6 (about 20 s): government fit and close ----
         if 6 in want:
             s = Scene(browser, "6_member6_government_fit", "6 · Built for government servers and legacy systems")
-            s.go(SLIDES + "/govfit.html", wait=19)
-            s.caption("6 · One login and one view for each target user. Humans decide.")
-            s.go(HUB + "/login", wait=5)
+            s.go(SLIDES + "/govfit.html", wait=12)
+            s.caption("6 · One hub, one view, and officers decide")
             s.login("competent.authority", "/")
-            s.pause(3)
+            s.pause(2)
             s.finish()
         browser.close()
 
     shutil.rmtree(OUT / "_raw", ignore_errors=True)
-    clips = sorted(OUT.glob("*.webm"))  # all six, including ones recorded in an earlier run
+    clips = sorted(OUT.glob("[1-6]_*.webm"))  # all six, including ones recorded in an earlier run
     if shutil.which("ffmpeg"):
         mp4s = []
         for c in clips:

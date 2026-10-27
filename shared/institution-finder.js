@@ -126,7 +126,7 @@
       box.className = "panel fdetail";
       box.appendChild(h("h2", null, "Please confirm this is your institution"));
       var rows = [["Official name", c.official_name], ["AICTE ID", c.aicte_id], ["Address", address],
-                  ["Region", c.region], ["Type", c.type], ["Programmes", c.programs && c.programs.split(";").join(", ")],
+                  ["Location", c.lat && c.lng ? c.lat.toFixed(4) + ", " + c.lng.toFixed(4) + " (from the official registry)" : ""], ["Region", c.region], ["Type", c.type], ["Programmes", c.programs && c.programs.split(";").join(", ")],
                   ["Part of", c.parent_name]];
       var dl = h("dl");
       rows.forEach(function (r) { if (r[1]) { dl.appendChild(h("dt", null, r[0])); dl.appendChild(h("dd", null, r[1])); } });
@@ -134,8 +134,13 @@
       if (c.lat && c.lng) {  // OpenStreetMap embed with a pin (needs internet; the rest works offline)
         var dx = 0.012, dy = 0.007;
         var bbox = [c.lng - dx, c.lat - dy, c.lng + dx, c.lat + dy].join(",");
-        box.appendChild(h("iframe", { class: "fmap", title: "Map", loading: "lazy",
-          src: "https://www.openstreetmap.org/export/embed.html?bbox=" + bbox + "&layer=mapnik&marker=" + c.lat + "," + c.lng }));
+        // Behind the live map sits a plain location panel (pin + coordinates), so the location is still visible offline.
+        box.appendChild(h("div", { class: "fmapwrap" },
+          h("div", { class: "fmapfallback" }, h("div", { class: "pin" }, "\uD83D\uDCCD"),
+            h("div", { class: "coords" }, Math.abs(c.lat).toFixed(4) + "\u00B0 " + (c.lat >= 0 ? "N" : "S") + ", " + Math.abs(c.lng).toFixed(4) + "\u00B0 " + (c.lng >= 0 ? "E" : "W")),
+            h("div", { class: "where" }, [c.district, c.state].filter(Boolean).join(", "))),
+          h("iframe", { class: "fmap", title: "Map", loading: "lazy",
+            src: "https://www.openstreetmap.org/export/embed.html?bbox=" + bbox + "&layer=mapnik&marker=" + c.lat + "," + c.lng })));
         box.appendChild(h("a", { class: "link", target: "_blank", rel: "noopener",
           href: "https://www.openstreetmap.org/?mlat=" + c.lat + "&mlon=" + c.lng + "#map=16/" + c.lat + "/" + c.lng },
           "Open larger map"));

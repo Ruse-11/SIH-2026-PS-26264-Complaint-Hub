@@ -35,7 +35,11 @@ button:disabled { opacity: .5; cursor: default; }
 .fdetail dl { display: grid; grid-template-columns: 130px 1fr; gap: 4px 12px; margin: 12px 0; font-size: 14px; }
 .fdetail dt { color: var(--muted); }
 .fdetail dd { margin: 0; }
-.fmap { width: 100%; height: 220px; border: 1px solid var(--line); border-radius: 8px; }
+.fmapwrap { position: relative; height: 220px; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; background-color: #e8eef5;
+  background-image: linear-gradient(#d3dce8 1px, transparent 1px), linear-gradient(90deg, #d3dce8 1px, transparent 1px); background-size: 32px 32px; }
+.fmapfallback { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; color: #334155; }
+.fmapfallback .pin { font-size: 40px; line-height: 1; } .fmapfallback .coords { font-weight: 700; margin-top: 4px; } .fmapfallback .where { font-size: 13px; color: var(--muted); }
+.fmap { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; background: transparent; }
 .fgrid { display: grid; gap: 0 12px; grid-template-columns: 1fr 1fr; }
 @media (max-width: 560px) { .fgrid { grid-template-columns: 1fr; } .fdetail dl { grid-template-columns: 1fr; } }
 .banner { background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 10px 12px; font-size: 14px; }

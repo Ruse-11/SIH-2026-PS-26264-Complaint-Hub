@@ -1,58 +1,41 @@
-# SIH 2026 · PS 26264 · Demo video: voice-over script (6 members, about 3 minutes)
+# Demo voice-over script (6 members, total 2:54, limit 3:00)
 
-Each member speaks for about 28 seconds (55 to 65 words) over a silent screen clip of the same length. Total about 3 minutes.
-Read slowly and clearly. Record each part separately in a quiet room, then place it on its clip. Every sentence is something the prototype really does; if you change a line, keep it true.
+Record your voice while watching the matching clip. Speak at a calm pace, about 2 words per second. Clips are in `demo/output/`; `demo_full.mp4` is all six joined.
 
-| Order | Member | Topic | Clip file |
-|---|---|---|---|
-| 1 | Member 1 (opener) | Problem, idea, architecture | `1_member1_architecture` |
-| 2 | Member 2 | Institution Finder, map, verification | `2_member2_finder_and_map` |
-| 3 | Member 3 | Types of overlap, corroboration, conflict | `3_member3_overlap_detection` |
-| 4 | Member 4 | What officers do | `4_member4_officer_actions` |
-| 5 | Member 5 | Dashboard, search, alerts, reports | `5_member5_dashboard_and_reports` |
-| 6 | Member 6 (closer) | Government fit, privacy, future, close | `6_member6_government_fit` |
+| # | Member | Clip | Length |
+|---|--------|------|--------|
+| 1 | Member 1 | 1_member1_architecture | 15 s |
+| 2 | Member 2 | 2_member2_finder_and_map | 38 s |
+| 3 | Member 3 | 3_member3_corroboration_live | 59 s |
+| 4 | Member 4 | 4_member4_officer_actions | 23 s |
+| 5 | Member 5 | 5_member5_dashboard_and_reports | 23 s |
+| 6 | Member 6 | 6_member6_government_fit | 16 s |
 
-Suggestion: the person who understands the matching rules best takes part 3. Swap members freely; keep the order of topics.
+## 1. Member 1: the problem and the architecture (15 s, about 30 words)
+"Complaints about one college reach different AICTE bureaus separately, so nobody sees the full picture. We add one hub behind the existing portals. The portals stay untouched, and the hub does the analysis."
 
----
+## 2. Member 2: Institution Finder, map, verification (38 s, about 75 words)
+"Every reporter starts by finding the college. If unsure, a few questions narrow it down, and if it is not listed, the reporter says so and an officer assigns it later. Our search forgives mistakes: 'kstora' and 'estora' both find Kestora, and typos in a full name still work. The reporter confirms the college on a card with its location from the registry, so it can be verified. Verification here is a mock OTP; in production it would be Aadhaar through DigiLocker."
 
-## Part 1 · Member 1: problem, idea, architecture
-*Screen: architecture diagram, the RB portal, the PGRC portal.*
+## 3. Member 3: the complaint hub and live corroboration (59 s, about 115 words)
+"Now a second, independent reporter files on the other portal about the same lab problem. Next, the hub: sign-in is role based, with one account per role. Here is our core idea, corroboration. Two different reporters, same college, same problem, and the hub suggests linking them, with the reasons shown. It only suggests. The officer reads the reasons, adds a note and confirms; that is the human in the loop. Only after confirmation does the priority rise, and the boost is capped so fake complaints cannot game it. The case file can be downloaded for the record. The other overlap types, cross-bureau, conflicting actions and same-reporter duplicates, are in the same screen."
 
-"We are Team ____, with our prototype for problem statement 26264. The Regulation Bureau and the Grievance Cell run separate portals, so complaints about the same college overlap, duplicate or conflict, and nobody sees it. Our answer is a hub behind both portals, which stay unchanged. It checks every complaint, compares it within that one institution, and gives officers a single view. Officers decide; the system only suggests."
+## 4. Member 4: officer actions (23 s, about 45 words)
+"Officers act inside the hub: enforcement actions, transfer, escalation, remarks and next action. Each action is checked against the other bureau's actions for conflicts. The history shows who did what and when, and the audit trail records every decision."
 
-## Part 2 · Member 2: Institution Finder, map, verification
-*Screen: typing the college name, confirmation card with map, mobile verification, complaint, receipt.*
+## 5. Member 5: dashboard, search, alerts, reports (23 s, about 45 words)
+"Senior management sees live numbers: pending, disposed, transferred, escalated and overdue. Search works by college name, AICTE ID or case ID, with filters. Alerts show what needs a decision and what is running late. Reports export to CSV, and Insights uses plain rules."
 
-"Every complaint starts with our Institution Finder. The reporter types a name, even with a spelling mistake, and confirms the exact college: official name, AICTE ID, address and its location on a map. If unsure, simple questions narrow it down. The hub never guesses a college. Next comes mobile verification, a demo code here and Aadhaar or DigiLocker in production, then the receipt. The map can grow into 'colleges near me'."
+## 6. Member 6: government fit and close (16 s, about 30 words)
+"The hub reads from existing systems, so legacy portals keep their own pace and databases. It scales by moving to PostgreSQL and a queue. The system suggests, officers decide. Thank you."
 
-## Part 3 · Member 3: overlaps, corroboration, conflict
-*Screen: PGRC portal, then the hub Overlaps page and its filters.*
-
-"A second reporter now files on the other portal. Instantly the hub raises: Potential Overlapping Cases, Coordination Required, with reasons and a suggested lead bureau. Matching runs only inside one institution. Other types: corroboration by independent reporters, capped, and counted only after an officer confirms; the same reporter filing twice; and conflicts, like a show-cause notice from one bureau and a closure from another."
-
-## Part 4 · Member 4: what officers do
-*Screen: confirm the link with a note, log a show-cause action with a next step, action history, audit trail.*
-
-"The officer reads the reasons, adds a note and confirms the link; a rejected pair never returns. Then they log an action: update, ask the institution, enforce, close, transfer or escalate. The hub checks it against what the other bureau has done, and the officer records the next action required. Every action is in the case history, and every decision is in the audit trail."
-
-## Part 5 · Member 5: dashboard, search, alerts, reports
-*Screen: dashboard, Cases search, Alerts, Reports, Insights.*
-
-"For management, the dashboard shows live numbers: cases by status, bureau workload and institution-wise status, refreshed every minute. Search by name, AICTE ID or case ID, and filter by bureau, region, status and date. Alerts show what needs a decision and the stalled or overdue cases. Reports export to CSV, and Insights gives plain findings, each with its rule."
-
-## Part 6 · Member 6: government fit, privacy, future, close
-*Screen: "Built for government servers" slide, the sign-in page with all roles, the dashboard.*
-
-"Built for government servers: matching is per institution, SQLite today and PostgreSQL to scale, text similarity runs locally with no paid cloud. Existing portals stay unchanged, send one call with an API key, and retry if the hub is down. Bureau rules are editable tables, reporter phones are only hashed. Future scope: Aadhaar, DigiLocker, single sign-on, SMS. One hub, one view, and officers decide. Thank you."
-
----
-
-## Optional (10 seconds, only if the total stays under 3 minutes)
-The n8n teammate's Telegram clip can follow Part 3, labelled "Demo replay: production portals call the hub directly".
-
-## Recording tips
-1. Play your clip muted and read your part once while watching.
-2. Record in a quiet room with the mic close; do not read faster than normal.
-3. Keep each member's audio as a separate file, place it on its clip in any editor (Clipchamp, CapCut), then join the six clips in order.
-4. Note for the editor: the map pane is blank in clips recorded without internet. Re-run `python demo/record_demo.py` on a machine with internet to get the real map.
+## Recording the clips again
+On your laptop (the real map needs internet, so the map tile will show properly there):
+```
+python reset_demo.py
+python run_all.py          (leave running; open a second terminal)
+pip install -r demo/requirements-demo.txt
+python -m playwright install chromium
+python demo/record_demo.py
+```
+Run `reset_demo.py` again before any re-run.
